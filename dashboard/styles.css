@@ -1,0 +1,53 @@
+/* Layout and typography. Native Streamlit controls retain their semantics. */
+:root { --ink:#202428; --muted:#626970; --line:#e1e5e8; --accent:#285c50; }
+html, body, [data-testid="stApp"] { font-family:Arial,Helvetica,system-ui,sans-serif; }
+[data-testid="stAppViewContainer"] { background:#fff; color:var(--ink); }
+.block-container { max-width:1440px; padding:3.8rem 2.5rem 3rem; }
+h1 { font-size:1.65rem!important; font-weight:600!important; letter-spacing:-.035rem; line-height:1.3!important; padding-bottom:.25rem!important; }
+h2 { font-size:1.2rem!important; font-weight:600!important; letter-spacing:-.015rem; }
+h3 { font-size:1.05rem!important; font-weight:600!important; }
+h4 { font-size:.95rem!important; font-weight:600!important; line-height:1.45!important; }
+p, label { line-height:1.5; }
+[data-testid="stCaptionContainer"] { color:var(--muted); font-size:.78rem; }
+hr { margin:1.15rem 0!important; border-color:var(--line)!important; }
+[data-testid="stSidebar"] { background:#f7f8f8; border-right:1px solid var(--line); }
+[data-testid="stSidebar"] > div:first-child { padding-top:1.5rem; }
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p { font-size:.8rem; }
+[data-testid="stSidebar"] [role="radiogroup"] { gap:.2rem; }
+[data-testid="stSidebar"] [role="radiogroup"] label { padding:.35rem 0; }
+[data-testid="stSidebar"] [role="radiogroup"] label p { font-size:.85rem; }
+[data-testid="stMetric"] { background:#fff; border:1px solid var(--line); border-radius:5px; padding:1rem; font-variant-numeric:tabular-nums; }
+[data-testid="stMetricLabel"] { color:#4f565d; min-height:2.6rem; }
+[data-testid="stMetricLabel"] p { font-size:.8rem; white-space:normal; overflow:visible; }
+[data-testid="stMetricValue"] { font-size:1.85rem; font-weight:600; letter-spacing:-.045rem; }
+[data-testid="stMetricValue"] > div { white-space:normal; overflow:visible; text-overflow:clip; }
+[data-testid="stMetricDelta"] { font-size:.76rem; color:var(--muted); }
+[data-testid="stMetricDelta"] > div { white-space:normal; overflow:visible; text-overflow:clip; }
+[data-testid="stWidgetLabel"] p { font-size:.8rem; font-weight:500; }
+[data-baseweb="select"] > div, [data-baseweb="input"] { border-radius:5px; }
+[data-baseweb="tag"] { background:#edf2f0; color:var(--accent); border-radius:3px; }
+.stButton button, .stDownloadButton button { border-radius:5px; font-size:.82rem; box-shadow:none; }
+button:focus-visible, a:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+[data-testid="stDataFrame"] { font-variant-numeric:tabular-nums; border:1px solid var(--line); border-radius:4px; }
+[data-testid="stAlert"] { border-radius:4px; border:1px solid var(--line); background:#f7f8f8; color:var(--ink); }
+[data-testid="stAlert"] p { font-size:.83rem; }
+[data-testid="stExpander"] { border-color:var(--line); border-radius:4px; }
+/* Prevent columns from squeezing numbers and long chart headings on notebooks. */
+@media (max-width:1200px) {
+  .block-container { padding-left:1.5rem; padding-right:1.5rem; }
+  [data-testid="stHorizontalBlock"]:has([data-testid="stMetric"]) { flex-wrap:wrap; }
+  [data-testid="stHorizontalBlock"]:has([data-testid="stMetric"]) > [data-testid="stColumn"] { flex:1 1 calc(50% - 1rem); min-width:0; }
+}
+@media (max-width:1000px) {
+  [data-testid="stHorizontalBlock"]:has([data-testid="stPlotlyChart"]) { flex-wrap:wrap; }
+  [data-testid="stHorizontalBlock"]:has([data-testid="stPlotlyChart"]) > [data-testid="stColumn"] { flex:1 1 100%; min-width:0; }
+}
+@media (max-width:700px) {
+  .block-container { padding:3.8rem 1rem 2rem; }
+  h1 { font-size:1.4rem!important; }
+  [data-testid="stHorizontalBlock"] { flex-wrap:wrap; }
+  [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] { flex:1 1 100%; min-width:0; }
+}
+@media (max-width:480px) {
+  [data-testid="stHorizontalBlock"]:has([data-testid="stMetric"]) > [data-testid="stColumn"] { flex:1 1 100%; }
+}
