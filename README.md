@@ -1,28 +1,25 @@
-# Observatório de Crédito — versão online
+# Observatório de Crédito do Brasil
 
-Dashboard Python de Lukas Monken com 24 séries oficiais BCB/SGS.
-Esta distribuição contém o snapshot real de 26/10/2026 e não depende de PostgreSQL, SQLite ou do computador do autor para exibir os dados.
+[Abrir painel](https://observatorio-credito-brasil.streamlit.app/)
 
-## Publicar no Streamlit Community Cloud
-1. Crie um repositório GitHub chamado `observatorio-credito-brasil` e envie o CONTEÚDO desta pasta, preservando suas subpastas. Não envie apenas o ZIP.
-2. Entre em https://share.streamlit.io com sua conta e conecte o repositório GitHub conforme solicitado pela plataforma.
-3. Clique em **Create app** → **Yup, I have an app**.
-4. Selecione o repositório e a branch `main`.
-5. Em **Main file path**, use `dashboard/app.py`.
-6. Em **Advanced settings**, selecione **Python 3.14**. Não são necessários secrets.
-7. Escolha um subdomínio disponível e clique em **Deploy**.
-8. Ao abrir, confira as seis páginas e o download CSV. Configure o acesso para permitir visitantes se for compartilhar no portfólio.
+Dashboard de Lukas Monken com 24 séries oficiais BCB/SGS e seis páginas de análise. Python, Pandas, SQL e Streamlit.
 
-O link definitivo só existe após a publicação bem-sucedida. Não há URL publicada nesta entrega.
+## Atualização diária
 
-## Atualização dos dados
-Os dados são um snapshot, com corte identificado na interface. Não há atualização agendada nesta distribuição.
-No projeto completo, execute a coleta, depois `python scripts/prepare_streamlit_cloud.py`. Envie os arquivos atualizados ao mesmo repositório para republicar. Não publique `.env`, `.venv`, senhas ou bancos locais.
+O workflow **Atualizar dados do Bacen** roda todos os dias às **19h17 de Brasília** (22h17 UTC), além de permitir execução manual em Actions → Run workflow. O agendamento do GitHub pode atrasar em períodos de alta demanda.
 
-## Execução local
-```bash
-python -m pip install -r requirements.txt
-streamlit run dashboard/app.py
-```
+A rotina coleta novamente o histórico desde 2010, incluindo revisões, em um banco SQLite temporário. Séries mensais usam o histórico completo do endpoint oficial; séries diárias usam janelas inferiores a dez anos. Todos os indicadores são recalculados com as regras documentadas em `docs/metodologia.md`.
 
-Fonte: https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy
+Somente uma coleta bem-sucedida das 24 séries, sem perda de cobertura da base publicada, pode atualizar o snapshot. Se ocorrer falha, o workflow termina com erro e a última base válida permanece online. Evidências brutas e diagnóstico ficam nos artifacts do Actions por sete dias. O histórico de commits preserva as versões publicadas.
+
+O bot publica em `data/processed/current` e atualiza `latest.json`; o Streamlit acompanha os commits na branch main. A atualização é diária, mas a frequência e a defasagem das observações continuam sendo as do Bacen. A Selic é agregada apenas para meses concluídos neste painel mensal.
+
+Em repositórios públicos, o GitHub pode desativar agendamentos após 60 dias sem atividade. Consulte a aba Actions se a data de coleta deixar de avançar. As notificações de falha dependem das preferências da sua conta GitHub.
+
+## Execução
+
+Interface: `pip install -r requirements.txt` e `streamlit run dashboard/app.py`.
+
+Coleta: `pip install -r requirements-update.txt` e `python scripts/update_data.py`.
+
+Entrypoint no Streamlit: `dashboard/app.py`; Python 3.14. Sem secrets ou banco externo. Não publique `.env`, credenciais ou o diretório temporário `work/`.
