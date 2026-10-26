@@ -1,0 +1,195 @@
+{
+  "snapshot_id": "7fdc181e-b3da-422f-a3a7-6ae1f15209a7",
+  "created_at": "2026-10-26T15:45:08.787187+00:00",
+  "as_of": "2026-10-26",
+  "price_base_month": "2026-09-01",
+  "rows": 4590,
+  "series": 24,
+  "summary": {
+    "results": [
+      {
+        "code": 20539,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20540,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20541,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20631,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20632,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20633,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20714,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20715,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20716,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20740,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20741,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20742,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20743,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20783,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20784,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 20785,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 21082,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 21083,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 21084,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 24364,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-02-01"
+      },
+      {
+        "code": 29034,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-01-01"
+      },
+      {
+        "code": 29037,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-01-01"
+      },
+      {
+        "code": 432,
+        "status": "success",
+        "rows": 574,
+        "revisions": 0,
+        "start": "2025-04-01"
+      },
+      {
+        "code": 433,
+        "status": "success",
+        "rows": 19,
+        "revisions": 0,
+        "start": "2025-03-01"
+      }
+    ],
+    "start": "2010-01-01",
+    "end": "2026-10-26",
+    "requery_months": 18,
+    "status": "success",
+    "successes": 24,
+    "failures": 0,
+    "requested_series": 24,
+    "catalog_series": 24
+  },
+  "files": {
+    "analytics.csv": "7c27e212da2013fa8522cb2f2fff3d9c9365b8e4834f77f23d9315445ee2735e",
+    "latest.csv": "010fb3fd5dbffe46f504a5f427fc8b2981bb7a0428060c0e348b71e8bb99fe9e",
+    "quality.csv": "19405cf7e126affeca457785f5531d9bd34721da3fc9d7e6dac93fb86067a477",
+    "coverage.csv": "ed73d08d8780b82cc601fedcd4860ece268647c8d989469920d6ffad64362d7e",
+    "catalog.csv": "a50bba69aa0ca997c1bc18ba52f89cfa84fb3433bd3c2f59c2c584ff4e210aee"
+  }
+}
