@@ -4,6 +4,7 @@ on:
     - cron: '17 22 * * *' # 19h17 em Brasília (UTC-3)
   workflow_dispatch:
   push:
+    branches: [main]
     paths:
       - '.github/workflows/update-data.yml'
       - 'scripts/update_data.py'
@@ -39,7 +40,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/processed/current data/processed/latest.json
+          git add data/processed
           if ! git diff --cached --quiet; then
             git commit -m 'Atualizar snapshot diário do Bacen'
             git push origin HEAD:main
@@ -50,8 +51,8 @@ jobs:
         with:
           name: coleta-bacen-${{ github.run_id }}
           path: |
-            work/data/raw
-            work/reports/runs
-            work/data/processed/last_attempt.json
+            work/collection-*/data/raw
+            work/collection-*/reports/runs
+            work/collection-*/data/processed/last_attempt.json
           retention-days: 7
           if-no-files-found: ignore

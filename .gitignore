@@ -4,3 +4,13 @@ __pycache__/
 .streamlit/secrets.toml
 work/
 .pytest_cache/
+
+.env.*
+!.env.example
+*.pipeline.lock
+.pipeline.lock
+.publish.lock
+.ruff_cache/
+.mypy_cache/
+.coverage*
+htmlcov/
