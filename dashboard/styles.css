@@ -8,7 +8,7 @@ h2 { font-size:1.2rem!important; font-weight:600!important; letter-spacing:-.015
 h3 { font-size:1.05rem!important; font-weight:600!important; }
 h4 { font-size:.95rem!important; font-weight:600!important; line-height:1.45!important; }
 p, label { line-height:1.5; }
-[data-testid="stCaptionContainer"] { color:var(--muted); font-size:.78rem; }
+[data-testid="stCaptionContainer"], [data-testid="stCaptionContainer"] p { color:var(--muted)!important; font-size:.8rem; }
 hr { margin:1.15rem 0!important; border-color:var(--line)!important; }
 [data-testid="stSidebar"] { background:#f7f8f8; border-right:1px solid var(--line); }
 [data-testid="stSidebar"] > div:first-child { padding-top:1.5rem; }
