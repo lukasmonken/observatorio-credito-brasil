@@ -1,0 +1,197 @@
+{
+  "snapshot_id": "9b249392-f1df-4f12-a801-179a3b741268",
+  "created_at": "2026-10-27T13:53:28.306262+00:00",
+  "as_of": "2026-10-27",
+  "price_base_month": "2026-09-01",
+  "rows": 4590,
+  "series": 24,
+  "summary": {
+    "results": [
+      {
+        "code": 20539,
+        "status": "success",
+        "rows": 200,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20540,
+        "status": "success",
+        "rows": 200,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20541,
+        "status": "success",
+        "rows": 200,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20631,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20632,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20633,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20714,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20715,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20716,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20740,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20741,
+        "status": "success",
+        "rows": 200,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20742,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20743,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20783,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20784,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20785,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 21082,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 21083,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 21084,
+        "status": "success",
+        "rows": 186,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 24364,
+        "status": "success",
+        "rows": 200,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 29034,
+        "status": "success",
+        "rows": 199,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 29037,
+        "status": "success",
+        "rows": 199,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 432,
+        "status": "success",
+        "rows": 6144,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 433,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      }
+    ],
+    "source_replay": null,
+    "start": "2010-01-01",
+    "end": "2026-10-27",
+    "requery_months": 18,
+    "status": "success",
+    "successes": 24,
+    "failures": 0,
+    "requested_series": 24,
+    "catalog_series": 24
+  },
+  "files": {
+    "analytics.csv": "5f1b8bd32290575af1e6e7ecb25137fe3279b74f7c6f7f419b7cf2e38c7fdcb4",
+    "latest.csv": "43ed267ea0a34bfbdd4ffc7a1bdede489bdf94a86b5c896c17eb0cdbe8f73571",
+    "quality.csv": "42909bd62c609cddc316f8dc77a1b0ec3c761aeb5d63ca52fc4cfb63645048e7",
+    "coverage.csv": "ed73d08d8780b82cc601fedcd4860ece268647c8d989469920d6ffad64362d7e",
+    "catalog.csv": "a50bba69aa0ca997c1bc18ba52f89cfa84fb3433bd3c2f59c2c584ff4e210aee",
+    "catalog.json": "5b21ca878bed949b4f0d974aa53690ff2294e3fb541f9537bdb68d9751dab0a1"
+  }
+}
