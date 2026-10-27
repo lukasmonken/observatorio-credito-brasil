@@ -41,4 +41,4 @@ python -m coverage report
 
 O workflow `Verificar aplicação` adiciona um PostgreSQL 17 descartável para a integração. Sem `TEST_DATABASE_URL`, esse teste é ignorado localmente. A coleta diária continua às 19h17 de Brasília.
 
-Leia [auditoria](docs/auditoria.md) antes de promover as alterações. Os testes locais não certificam disponibilidade da hospedagem nem substituem a execução de CI. Snapshots por execução crescem no repositório; retenção e arquivamento devem ser definidos antes de operação prolongada.
+As correções foram homologadas e publicadas; os links das execuções estão na [auditoria](docs/auditoria.md). A CI validou PostgreSQL e a coleta real, sem certificar disponibilidade contínua da hospedagem. Snapshots por execução crescem no repositório; retenção e arquivamento devem ser definidos antes de operação prolongada.
