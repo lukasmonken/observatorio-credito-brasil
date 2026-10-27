@@ -7,3 +7,5 @@ textColor = "#202428"
 font = "sans serif"
 [browser]
 gatherUsageStats = false
+[client]
+showErrorDetails = "none"

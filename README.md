@@ -12,7 +12,7 @@ A rotina coleta novamente o histórico desde 2010, incluindo revisões, em um ba
 
 Somente uma coleta bem-sucedida das 24 séries, sem perda de cobertura da base publicada, pode atualizar o snapshot. Se ocorrer falha, o workflow termina com erro e a última base válida permanece online. Evidências brutas e diagnóstico ficam nos artifacts do Actions por sete dias. O histórico de commits preserva as versões publicadas.
 
-O bot publica em `data/processed/current` e atualiza `latest.json`; o Streamlit acompanha os commits na branch main. A atualização é diária, mas a frequência e a defasagem das observações continuam sendo as do Bacen. A Selic é agregada apenas para meses concluídos neste painel mensal.
+O bot publica em `data/processed/<id-da-execução>` e atualiza `latest.json` somente depois da verificação de integridade; o Streamlit acompanha os commits na branch main. A atualização é diária, mas a frequência e a defasagem das observações continuam sendo as do Bacen. A Selic é agregada apenas para meses concluídos neste painel mensal.
 
 Em repositórios públicos, o GitHub pode desativar agendamentos após 60 dias sem atividade. Consulte a aba Actions se a data de coleta deixar de avançar. As notificações de falha dependem das preferências da sua conta GitHub.
 
@@ -23,3 +23,22 @@ Interface: `pip install -r requirements.txt` e `streamlit run dashboard/app.py`.
 Coleta: `pip install -r requirements-update.txt` e `python scripts/update_data.py`.
 
 Entrypoint no Streamlit: `dashboard/app.py`; Python 3.14. Sem secrets ou banco externo. Não publique `.env`, credenciais ou o diretório temporário `work/`.
+
+## Arquitetura e validação
+
+`observatorio/client.py` coleta e preserva respostas; `transform.py` trata o calendário e calcula indicadores; `db.py` persiste com upsert; `pipeline.py` produz snapshots; `snapshot.py` valida a leitura; `dashboard/app.py` exibe os dados. O job diário usa uma pasta exclusiva dentro de `work/` e nunca sobrescreve o snapshot ativo.
+
+Não há login, dados privados nem uploads de usuários. A aplicação é deliberadamente pública e somente de leitura. `DATABASE_URL` é configuração do pipeline completo; o job diário escolhe seu próprio SQLite isolado. `TEST_DATABASE_URL` é reservado ao banco descartável de testes.
+
+```bash
+python -m pip install -r requirements-update.txt -r requirements-dev.txt
+python -m pytest -q
+ruff check observatorio dashboard scripts tests
+mypy observatorio scripts/update_data.py
+python -m coverage run -m pytest -q
+python -m coverage report
+```
+
+O workflow `Verificar aplicação` adiciona um PostgreSQL 17 descartável para a integração. Sem `TEST_DATABASE_URL`, esse teste é ignorado localmente. A coleta diária continua às 19h17 de Brasília.
+
+Leia [auditoria](docs/auditoria.md) antes de promover as alterações. Os testes locais não certificam disponibilidade da hospedagem nem substituem a execução de CI. Snapshots por execução crescem no repositório; retenção e arquivamento devem ser definidos antes de operação prolongada.

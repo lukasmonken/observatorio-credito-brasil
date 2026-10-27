@@ -1,0 +1,26 @@
+[project]
+name = "observatorio-credito-brasil"
+version = "0.1.0"
+description = "Observatório de Crédito e Conjuntura Econômica do Brasil"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = ["integration: requer PostgreSQL real e DATABASE_URL"]
+
+[tool.ruff.lint]
+select = ["F", "E9", "S"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S608"]
+
+[tool.mypy]
+ignore_missing_imports = true
+check_untyped_defs = true
+
+[tool.coverage.run]
+source = ["observatorio", "dashboard", "scripts"]
+
+[tool.coverage.report]
+show_missing = true

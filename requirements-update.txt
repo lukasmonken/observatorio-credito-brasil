@@ -2,3 +2,5 @@
 requests==2.34.2
 SQLAlchemy==2.1.6
 pytest==9.1.1
+filelock==4.2.4
+psycopg[binary]==3.3.6
