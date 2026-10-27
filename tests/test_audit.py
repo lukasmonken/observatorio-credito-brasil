@@ -301,3 +301,49 @@ def test_analysis_uses_observed_snapshot(snapshot_root):
         "atividade_credito",
     }
     assert correlations.n.ge(12).all()
+
+
+def test_invalid_json_retries_then_recovers_with_evidence(tmp_path):
+    invalid = Mock(
+        status_code=200,
+        ok=True,
+        content=b"<html>unavailable</html>",
+        url="https://api.bcb.gov.br/",
+        headers={},
+    )
+    invalid.json.side_effect = ValueError("invalid JSON")
+    rows = [{"data": "01/01/2020", "valor": "1"}]
+    valid = Mock(
+        status_code=200,
+        ok=True,
+        content=json.dumps(rows).encode(),
+        url="https://api.bcb.gov.br/",
+        headers={},
+    )
+    valid.json.return_value = rows
+    session = Mock()
+    session.get.side_effect = [invalid, valid]
+    sleep = Mock()
+    client = SGSClient(tmp_path, "recover", session=session, sleeper=sleep)
+    assert client.fetch(433, date(2020, 1, 1), date(2020, 2, 1)) == rows
+    assert session.get.call_count == 2 and sleep.call_count == 1
+    assert len(list((tmp_path / "recover").glob("*.body"))) == 2
+
+
+def test_invalid_json_never_retries_indefinitely(tmp_path):
+    invalid = Mock(
+        status_code=200,
+        ok=True,
+        content=b"not JSON",
+        url="https://api.bcb.gov.br/",
+        headers={},
+    )
+    invalid.json.side_effect = ValueError("invalid JSON")
+    session = Mock()
+    session.get.return_value = invalid
+    sleep = Mock()
+    with pytest.raises(APIError, match="3 tentativas: JSON inválido"):
+        SGSClient(tmp_path, "invalid", session=session, sleeper=sleep).fetch(
+            433, date(2020, 1, 1), date(2020, 2, 1)
+        )
+    assert session.get.call_count == 3 and sleep.call_count == 2
