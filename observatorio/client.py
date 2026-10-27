@@ -15,6 +15,10 @@ class APIError(RuntimeError):
     pass
 
 
+class TransientAPIError(APIError):
+    pass
+
+
 def windows(start: date, end: date):
     if start > end:
         raise ValueError("Início posterior ao fim")
@@ -86,7 +90,7 @@ class SGSClient:
                         json.dumps(evidence, indent=2)
                     )
                     if response.status_code == 429 or response.status_code >= 500:
-                        raise requests.exceptions.ConnectionError(
+                        raise TransientAPIError(
                             f"HTTP transitório {response.status_code}"
                         )
                     if not response.ok:
@@ -94,7 +98,7 @@ class SGSClient:
                     try:
                         rows = response.json()
                     except ValueError as exc:
-                        raise APIError("JSON inválido") from exc
+                        raise TransientAPIError("JSON inválido") from exc
                     if not isinstance(rows, list):
                         raise APIError("Resposta não é lista SGS")
                     for row in rows:
@@ -120,6 +124,7 @@ class SGSClient:
                     all_rows.extend(rows)
                     break
                 except (
+                    TransientAPIError,
                     requests.exceptions.Timeout,
                     requests.exceptions.ConnectionError,
                 ) as exc:

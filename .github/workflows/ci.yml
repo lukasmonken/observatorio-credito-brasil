@@ -52,3 +52,14 @@ jobs:
       - name: Homologar coleta sem publicar
         if: github.event_name == 'push' && github.ref != 'refs/heads/main'
         run: python scripts/update_data.py
+      - name: Preservar diagnóstico da homologação
+        if: always() && github.event_name == 'push' && github.ref != 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: homologacao-${{ github.run_id }}
+          path: |
+            work/collection-*/data/raw
+            work/collection-*/reports/runs
+            work/collection-*/data/processed/last_attempt.json
+          retention-days: 7
+          if-no-files-found: ignore
