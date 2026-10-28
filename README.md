@@ -57,3 +57,7 @@ python -m coverage report
 O workflow `Verificar aplicação` adiciona um PostgreSQL 17 descartável para a integração. Sem `TEST_DATABASE_URL`, esse teste é ignorado localmente. A coleta diária continua às 19h17 de Brasília.
 
 As correções foram homologadas e publicadas; os links das execuções estão na [auditoria](docs/auditoria.md). A CI validou PostgreSQL e a coleta real, sem certificar disponibilidade contínua da hospedagem. Snapshots por execução crescem no repositório; retenção e arquivamento devem ser definidos antes de operação prolongada.
+
+## Monitoramento operacional
+
+A página **Fontes e qualidade** mostra última tentativa, último sucesso, duração e séries com falha. Há alerta após 30 horas sem atualização validada e um workflow independente verifica a coleta e a publicação a cada seis horas. A defasagem das séries é apresentada separadamente. Veja [funcionamento, alertas e recuperação](docs/monitoramento.md).

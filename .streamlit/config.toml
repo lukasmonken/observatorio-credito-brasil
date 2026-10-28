@@ -4,7 +4,8 @@ primaryColor = "#285c50"
 backgroundColor = "#ffffff"
 secondaryBackgroundColor = "#f7f8f8"
 textColor = "#202428"
-font = "sans serif"
+font = "Times New Roman, Times, serif"
+headingFont = "Times New Roman, Times, serif"
 [browser]
 gatherUsageStats = false
 [client]

@@ -1,0 +1,27 @@
+name: Monitorar atualização do Bacen
+on:
+  schedule:
+    - cron: '47 0,6,12,18 * * *'
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Atualizar dados do Bacen"]
+    types: [completed]
+    branches: [main]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: bacen-monitor
+  cancel-in-progress: false
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+      - name: Verificar coleta, publicação e ausência de execução
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/monitor_update.py check

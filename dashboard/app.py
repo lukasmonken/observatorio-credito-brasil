@@ -4,10 +4,13 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import json
 import logging
+from datetime import datetime
+from zoneinfo import ZoneInfo
 import pandas as pd
 import plotly.express as px
 import streamlit as st
 from observatorio.config import ROOT
+from observatorio.monitoring import collection_health, read_status, source_freshness
 from observatorio.snapshot import load_snapshot
 from observatorio.transform import lag_pairs
 
@@ -20,6 +23,7 @@ st.title("Observatório de Crédito Brasil")
 st.caption("Dados e indicadores do mercado de crédito brasileiro")
 
 ACCENT = "#285c50"
+SERIES_COLORS = [ACCENT, "#526f9d", "#a16b36", "#805b83", "#637445", "#9b5555"]
 
 
 def number(value, decimals=2, signed=False):
@@ -35,7 +39,7 @@ def style_chart(fig, height=340):
     fig.update_layout(
         template="plotly_white",
         height=height,
-        font=dict(family="Arial, Helvetica, sans-serif", size=12, color="#24292e"),
+        font=dict(family="Times New Roman, Times, serif", size=14, color="#24292e"),
         margin=dict(l=12, r=20, t=16, b=28),
         paper_bgcolor="#ffffff",
         plot_bgcolor="#ffffff",
@@ -126,6 +130,22 @@ if attempt_path.exists():
         st.error(
             "A última tentativa de atualização falhou. Esta tela mantém o último snapshot válido; confira reports/runs."
         )
+try:
+    operational = read_status(ROOT)
+    health, health_message = collection_health(operational, manifest)
+except (OSError, ValueError, TypeError, KeyError):
+    logging.getLogger(__name__).exception("Falha ao ler monitoramento operacional")
+    operational = None
+    health, health_message = (
+        "unknown",
+        "Monitoramento indisponível. Os dados exibidos pertencem ao snapshot validado.",
+    )
+if health in ("stale", "failed"):
+    st.warning(health_message)
+    st.caption(
+        "Consulte Fontes e qualidade para separar falhas de coleta de defasagens da fonte."
+    )
+
 st.caption(
     f"Fonte: Banco Central do Brasil · Coleta: {pd.Timestamp(manifest['as_of']):%d/%m/%Y} · Histórico: {df.date.min():%m/%Y}–{df.date.max():%m/%Y}"
 )
@@ -165,7 +185,7 @@ def unit_for(code, metric):
     return by_code[code]["unit"]
 
 
-def chart(codes, metric="original", data=None, title=None):
+def chart(codes, metric="original", data=None, title=None, color=ACCENT):
     data = df if data is None else data
     for code in codes:
         if code not in by_code:
@@ -181,7 +201,7 @@ def chart(codes, metric="original", data=None, title=None):
             x="date",
             y=metric,
             labels={"date": "Referência mensal", metric: unit_for(code, metric)},
-            color_discrete_sequence=[ACCENT],
+            color_discrete_sequence=[color],
         )
         fig.update_traces(
             connectgaps=False,
@@ -279,10 +299,19 @@ elif page == "Juros e crédito":
             available,
             default=available[:3],
             format_func=lambda x: names[x],
+            key=f"credit_indicators_{segment}",
         )
     data = date_filter(df, "credit_dates")
+    if not selection:
+        st.info("Selecione ao menos um indicador para exibir os gráficos.")
+    else:
+        st.caption(
+            f"{len(selection)} indicador(es) selecionado(s). Cada indicador tem seu próprio gráfico e unidade; remova-o no filtro para ocultar o gráfico."
+        )
     for c in selection:
-        chart([c], data=data)
+        chart(
+            [c], data=data, color=SERIES_COLORS[available.index(c) % len(SERIES_COLORS)]
+        )
     st.caption(
         "Modalidades PF com recursos livres podem ser comparadas em % a.a.; garantias, prazos e composição diferem. Agregados não devem ser somados às modalidades."
     )
@@ -454,6 +483,52 @@ elif page == "Relações e defasagens":
         "Exploração, não causalidade. Tendência, sazonalidade, autocorrelação, janelas de 12 meses sobrepostas e quebras metodológicas afetam as correlações. Prefira mudanças ou crescimento real a níveis. Não há teste de significância ajustado para dependência temporal."
     )
 else:
+    st.subheader("Monitoramento da atualização")
+    st.write(health_message)
+
+    def local_time(value):
+        return (
+            pd.Timestamp(value)
+            .tz_convert("America/Sao_Paulo")
+            .strftime("%d/%m/%Y %H:%M")
+            if value
+            else "Não registrado"
+        )
+
+    monitor = operational or {}
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Última tentativa · Brasília", local_time(monitor.get("started_at")))
+    c2.metric(
+        "Último sucesso · Brasília",
+        local_time(monitor.get("last_success_at") or manifest["created_at"]),
+    )
+    duration = monitor.get("duration_seconds")
+    c3.metric(
+        "Duração da tentativa",
+        f"{duration} s" if duration is not None else "Não registrada",
+    )
+    if monitor.get("failed_series"):
+        st.warning(
+            "Séries com falha na última tentativa: "
+            + ", ".join(str(code) for code in monitor["failed_series"])
+        )
+    if monitor.get("stage"):
+        st.caption("Etapa registrada: " + monitor["stage"])
+    st.caption(
+        "Coleta diária prevista às 19h17 de Brasília. Alerta operacional após 30 horas sem sucesso. A duração inclui preparação, testes e coleta, até a validação; não inclui o envio ao GitHub."
+    )
+    st.markdown(
+        "[Consultar execuções e diagnóstico no GitHub Actions](https://github.com/lukasmonken/observatorio-credito-brasil/actions)"
+    )
+    st.subheader("Atualidade das séries")
+    freshness = source_freshness(
+        df, specs, datetime.now(ZoneInfo("America/Sao_Paulo")).date()
+    )
+    st.dataframe(pd.DataFrame(freshness), hide_index=True, width="stretch")
+    st.caption(
+        "Dias desde o início do mês de referência. Limites específicos do catálogo são critérios operacionais, não prazos oficiais de divulgação. Uma coleta bem-sucedida pode retornar a mesma referência; isso não comprova falha nem atraso do Bacen."
+    )
+    st.subheader("Base publicada")
     st.write(
         f"Execução: {manifest['summary']['successes']} séries atualizadas; {manifest['summary']['failures']} falhas. Mês-base dos valores reais: {manifest['price_base_month']}."
     )

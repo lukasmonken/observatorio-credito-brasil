@@ -100,3 +100,61 @@ def test_filter_between_monthly_references_has_empty_state():
     app.date_input[0].set_value((date(2020, 1, 2), date(2020, 1, 20))).run()
     assert not app.exception
     assert any("Não há observações" in x.value for x in app.info)
+
+
+def test_credit_selection_changes_charts_and_preserves_colors():
+    import json
+
+    app = AppTest.from_file(str(ROOT / "dashboard/app.py"), default_timeout=30).run()
+    app.sidebar.radio[0].set_value("Juros e crédito").run()
+    selected = list(app.multiselect[0].value)
+    charts = app.get("plotly_chart")
+    assert len(charts) == len(selected) == 3
+    colors = [
+        json.loads(chart.proto.spec)["data"][0]["line"]["color"] for chart in charts
+    ]
+    assert len(set(colors)) == 3
+    app.multiselect[0].set_value(selected[1:]).run()
+    assert not app.exception
+    assert len(app.get("plotly_chart")) == 2
+    assert [
+        json.loads(chart.proto.spec)["data"][0]["line"]["color"]
+        for chart in app.get("plotly_chart")
+    ] == colors[1:]
+    app.multiselect[0].set_value([]).run()
+    assert not app.get("plotly_chart")
+    assert any("Selecione ao menos" in item.value for item in app.info)
+
+
+def test_monitoring_failure_is_visible_without_hiding_snapshot(tmp_path, monkeypatch):
+    import shutil
+    from datetime import datetime, timezone
+    import observatorio.config
+    from observatorio.monitoring import write_status
+
+    shutil.copytree(ROOT / "data/processed", tmp_path / "data/processed")
+    (tmp_path / "docs").mkdir()
+    shutil.copy2(ROOT / "docs/metodologia.md", tmp_path / "docs/metodologia.md")
+    now = datetime.now(timezone.utc).isoformat()
+    write_status(
+        tmp_path,
+        {
+            "status": "failed",
+            "last_success_at": now,
+            "started_at": now,
+            "duration_seconds": 25,
+            "failed_series": [432],
+        },
+    )
+    monkeypatch.setattr(observatorio.config, "ROOT", tmp_path)
+    app = AppTest.from_file(str(ROOT / "dashboard/app.py"), default_timeout=30).run()
+    assert not app.exception
+    assert any("última tentativa" in item.value for item in app.warning)
+    assert len(app.get("plotly_chart")) == 2
+    app.sidebar.radio[0].set_value("Fontes e qualidade").run()
+    assert not app.exception
+    assert any("432" in item.value for item in app.warning)
+    assert any(
+        item.label == "Duração da tentativa" and item.value == "25 s"
+        for item in app.metric
+    )

@@ -11,6 +11,8 @@ on:
       - 'requirements*.txt'
       - 'pyproject.toml'
       - '.github/workflows/ci.yml'
+      - '.github/workflows/monitor-data.yml'
+      - '.github/workflows/update-data.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -44,7 +46,7 @@ jobs:
       - name: Análise estática
         run: |
           ruff check observatorio dashboard scripts tests
-          mypy observatorio scripts/update_data.py
+          mypy observatorio scripts/update_data.py scripts/monitor_update.py
       - name: Testes e cobertura
         run: |
           python -m coverage run -m pytest -q
