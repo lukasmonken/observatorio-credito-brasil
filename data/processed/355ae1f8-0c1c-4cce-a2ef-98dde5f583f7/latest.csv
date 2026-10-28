@@ -1,0 +1,25 @@
+code,name,unit,segment,date,value,run_id
+432,Taxa de juros - Meta Selic definida pelo Copom,% a.a.,Total,2026-09-01,13.75,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+433,Índice nacional de preços ao consumidor-amplo (IPCA),% a.m.,Total,2026-09-01,0.82,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20539,Saldo - Total,R$ milhões,Total,2026-08-01,7397669.0,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20540,Saldo - Pessoas jurídicas - Total,R$ milhões,PJ,2026-08-01,2727499.0,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20541,Saldo - Pessoas físicas - Total,R$ milhões,PF,2026-08-01,4670170.0,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20631,Concessões de crédito - Total,R$ milhões,Total,2026-08-01,729247.0,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20632,Concessões de crédito - Pessoas jurídicas - Total,R$ milhões,PJ,2026-08-01,334993.0,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20633,Concessões de crédito - Pessoas físicas - Total,R$ milhões,PF,2026-08-01,394254.0,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20714,Juros - Total,% a.a.,Total,2026-08-01,32.26,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20715,Juros - Pessoas jurídicas - Total,% a.a.,PJ,2026-08-01,19.75,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20716,Juros - Pessoas físicas - Total,% a.a.,PF,2026-08-01,38.18,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20740,Juros com recursos livres - Pessoas físicas - Total,% a.a.,PF,2026-08-01,61.74,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20741,Juros com recursos livres - Pessoas físicas - Cheque especial,% a.a.,PF,2026-08-01,136.41,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20742,Juros com recursos livres - Pessoas físicas - Crédito pessoal não consignado,% a.a.,PF,2026-08-01,110.22,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20743,Juros com recursos livres - Pessoas físicas - Crédito pessoal não consignado vinculado à composição de dívidas,% a.a.,PF,2026-08-01,40.69,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20783,Spread médio das operações de crédito - Total,p.p.,Total,2026-08-01,21.16,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20784,Spread médio das operações de crédito - Pessoas jurídicas - Total,p.p.,PJ,2026-08-01,7.81,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+20785,Spread médio das operações de crédito - Pessoas físicas - Total,p.p.,PF,2026-08-01,27.48,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+21082,Inadimplência da carteira de crédito - Total,%,Total,2026-08-01,5.04,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+21083,Inadimplência da carteira de crédito - Pessoas jurídicas - Total,%,PJ,2026-08-01,3.35,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+21084,Inadimplência da carteira de crédito - Pessoas físicas - Total,%,PF,2026-08-01,6.03,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+24364,Índice de Atividade Econômica do Banco Central (IBC-Br) - com ajuste sazonal,índice,Total,2026-08-01,110.40624,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+29034,"Comprometimento de renda (RNDBF, dessaz.)",%,PF,2026-07-01,28.72,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7
+29037,Endividamento das famílias (RNDBF),%,PF,2026-07-01,49.86,355ae1f8-0c1c-4cce-a2ef-98dde5f583f7

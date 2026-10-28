@@ -1,0 +1,249 @@
+code,official_name,name,description,source,source_url,unit,official_unit,frequency,classification,measure_type,segment,modality,resources,aggregation,allowed_transforms,limitations,metadata_verified_at,coverage_observed,metadata_evidence,max_lag_days,months
+20539,Saldo da carteira de crédito - Total,Saldo - Total,"
+
+ Conceito: Saldo em final de período das operações de crédito contratadas no Sistema Financeiro Nacional. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20539",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20539-saldo-da-carteira-de-credito---total,R$ milhões,Unidades monetárias correntes,M,Estoque,stock,Total,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""mom_pct"", ""yoy_pct"", ""base100"", ""real"", ""real_yoy_pct""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."", ""Ficha CKAN usa unidade genérica; SGS confirma R$ milhões. Série revisada em fevereiro de 2017.""]",2026-10-26,"{""start"": ""2010-01-01"", ""end"": ""2026-08-01""}",data/metadata/20539.json,90,200
+20540,Saldo da carteira de crédito - Pessoas jurídicas - Total,Saldo - Pessoas jurídicas - Total,"
+
+ Conceito: Saldo em final de período das operações de crédito contratadas no Sistema Financeiro Nacional. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20540",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20540-saldo-da-carteira-de-credito---pessoas-juridicas---total,R$ milhões,Milhões de reais,M,Estoque,stock,PJ,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""mom_pct"", ""yoy_pct"", ""base100"", ""real"", ""real_yoy_pct""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2010-01-01"", ""end"": ""2026-08-01""}",data/metadata/20540.json,90,200
+20541,Saldo da carteira de crédito - Pessoas físicas - Total,Saldo - Pessoas físicas - Total,"
+
+ Conceito: Saldo em final de período das operações de crédito contratadas no Sistema Financeiro Nacional. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20541",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20541-saldo-da-carteira-de-credito---pessoas-fisicas---total,R$ milhões,Milhões de reais,M,Estoque,stock,PF,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""mom_pct"", ""yoy_pct"", ""base100"", ""real"", ""real_yoy_pct""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2010-01-01"", ""end"": ""2026-08-01""}",data/metadata/20541.json,90,200
+20631,Concessões de crédito - Total,Concessões de crédito - Total,"
+
+ Conceito: Valor das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20631",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20631-concessoes-de-credito---total,R$ milhões,Milhões de reais,M,Concessões,flow,Total,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""mom_pct"", ""yoy_pct"", ""base100"", ""real"", ""real_yoy_pct""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/20631.json,90,186
+20632,Concessões de crédito - Pessoas jurídicas - Total,Concessões de crédito - Pessoas jurídicas - Total,"
+
+ Conceito: Valor das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20632",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20632-concessoes-de-credito---pessoas-juridicas---total,R$ milhões,Milhões de reais,M,Concessões,flow,PJ,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""mom_pct"", ""yoy_pct"", ""base100"", ""real"", ""real_yoy_pct""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/20632.json,90,186
+20633,Concessões de crédito - Pessoas físicas - Total,Concessões de crédito - Pessoas físicas - Total,"
+
+ Conceito: Valor das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20633",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20633-concessoes-de-credito---pessoas-fisicas---total,R$ milhões,Milhões de reais,M,Concessões,flow,PF,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""mom_pct"", ""yoy_pct"", ""base100"", ""real"", ""real_yoy_pct""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/20633.json,90,186
+20714,Taxa média de juros das operações de crédito - Total,Juros - Total,"
+
+ Conceito: Taxa média de juros das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional. Taxa ponderada pelo valor das concessões. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20714",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20714-taxa-media-de-juros-das-operacoes-de-credito---total,% a.a.,Percentual ao ano,M,Juros,rate,Total,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/20714.json,90,186
+20715,Taxa média de juros das operações de crédito - Pessoas jurídicas - Total,Juros - Pessoas jurídicas - Total,"
+
+ Conceito: Taxa média de juros das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional. Taxa ponderada pelo valor das concessões. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20715",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20715-taxa-media-de-juros-das-operacoes-de-credito---pessoas-juridicas---total,% a.a.,Percentual ao ano,M,Juros,rate,PJ,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/20715.json,90,186
+20716,Taxa média de juros das operações de crédito - Pessoas físicas - Total,Juros - Pessoas físicas - Total,"
+
+ Conceito: Taxa média de juros das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional. Taxa ponderada pelo valor das concessões. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20716",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20716-taxa-media-de-juros-das-operacoes-de-credito---pessoas-fisicas---total,% a.a.,Percentual ao ano,M,Juros,rate,PF,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/20716.json,90,186
+20740,Taxa média de juros das operações de crédito com recursos livres - Pessoas físicas - Total,Juros com recursos livres - Pessoas físicas - Total,"
+
+ Conceito: Taxa média de juros das novas operações de crédito livre contratadas no período de referência. Taxa ponderada pelo valor das concessões. Não inclui operações referenciadas em taxas regulamentadas, operações vinculadas a recursos do Banco Nacional de Desenvolvimento Econômico e Social (BNDES) ou quaisquer outras lastreadas em recursos compulsórios ou governamentais.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20740",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20740-taxa-media-de-juros-das-operacoes-de-credito-com-recursos-livres---pessoas-fisicas---total,% a.a.,Percentual ao ano,M,Juros,rate,PF,Agregado,Livres,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/20740.json,90,186
+20741,Taxa média de juros das operações de crédito com recursos livres - Pessoas físicas - Cheque especial,Juros com recursos livres - Pessoas físicas - Cheque especial,"
+
+ Conceito: Taxa média de juros das novas operações de crédito livre contratadas no período de referência. Taxa ponderada pelo valor das concessões. Não inclui operações referenciadas em taxas regulamentadas, operações vinculadas a recursos do Banco Nacional de Desenvolvimento Econômico e Social (BNDES) ou quaisquer outras lastreadas em recursos compulsórios ou governamentais.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20741",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20741-taxa-media-de-juros-das-operacoes-de-credito-com-recursos-livres---pessoas-fisicas---cheque-e,% a.a.,Percentual ao ano,M,Juros,rate,PF,Cheque especial,Livres,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2010-01-01"", ""end"": ""2026-08-01""}",data/metadata/20741.json,90,200
+20742,Taxa média de juros das operações de crédito com recursos livres - Pessoas físicas - Crédito pessoal não consignado,Juros com recursos livres - Pessoas físicas - Crédito pessoal não consignado,"
+
+ Conceito: Taxa média de juros das novas operações de crédito livre contratadas no período de referência. Taxa ponderada pelo valor das concessões. Não inclui operações referenciadas em taxas regulamentadas, operações vinculadas a recursos do Banco Nacional de Desenvolvimento Econômico e Social (BNDES) ou quaisquer outras lastreadas em recursos compulsórios ou governamentais.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20742",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20742-taxa-media-de-juros-das-operacoes-de-credito-com-recursos-livres---pessoas-fisicas---credito-,% a.a.,Percentual ao ano,M,Juros,rate,PF,Crédito pessoal não consignado,Livres,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/20742.json,90,186
+20743,Taxa média de juros das operações de crédito com recursos livres - Pessoas físicas - Crédito pessoal não consignado vinculado à composição de dívidas,Juros com recursos livres - Pessoas físicas - Crédito pessoal não consignado vinculado à composição de dívidas,"
+
+ Conceito: Taxa média de juros das novas operações de crédito livre contratadas no período de referência. Taxa ponderada pelo valor das concessões. Não inclui operações referenciadas em taxas regulamentadas, operações vinculadas a recursos do Banco Nacional de Desenvolvimento Econômico e Social (BNDES) ou quaisquer outras lastreadas em recursos compulsórios ou governamentais.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20743",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20743-taxa-media-de-juros-das-operacoes-de-credito-com-recursos-livres---pessoas-fisicas---credito-,% a.a.,Percentual ao ano,M,Juros,rate,PF,Crédito pessoal não consignado vinculado à composição de dívidas,Livres,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."", ""Subconjunto do crédito pessoal não consignado; não somar à série 20742.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/20743.json,90,186
+20783,Spread médio das operações de crédito - Total,Spread médio das operações de crédito - Total,"
+
+ Conceito: Diferença entre a taxa média de juros das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional e o custo de captação referencial médio. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20783",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20783-spread-medio-das-operacoes-de-credito---total,p.p.,Pontos percentuais,M,Spread,rate,Total,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/20783.json,90,186
+20784,Spread médio das operações de crédito - Pessoas jurídicas - Total,Spread médio das operações de crédito - Pessoas jurídicas - Total,"
+
+ Conceito: Diferença entre a taxa média de juros das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional e o custo de captação referencial médio. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20784",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20784-spread-medio-das-operacoes-de-credito---pessoas-juridicas---total,p.p.,Pontos percentuais,M,Spread,rate,PJ,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/20784.json,90,186
+20785,Spread médio das operações de crédito - Pessoas físicas - Total,Spread médio das operações de crédito - Pessoas físicas - Total,"
+
+ Conceito: Diferença entre a taxa média de juros das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional e o custo de captação referencial médio. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20785",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/20785-spread-medio-das-operacoes-de-credito---pessoas-fisicas---total,p.p.,Pontos percentuais,M,Spread,rate,PF,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/20785.json,90,186
+21082,Inadimplência da carteira de crédito - Total,Inadimplência da carteira de crédito - Total,"
+
+ Conceito: Percentual da carteira de crédito do Sistema Financeiro Nacional com pelo menos uma parcela com atraso superior a 90 dias. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=21082",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/21082-inadimplencia-da-carteira-de-credito---total,%,Percentual,M,Inadimplência,rate,Total,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/21082.json,90,186
+21083,Inadimplência da carteira de crédito - Pessoas jurídicas - Total,Inadimplência da carteira de crédito - Pessoas jurídicas - Total,"
+
+ Conceito: Percentual da carteira de crédito do Sistema Financeiro Nacional com pelo menos uma parcela com atraso superior a 90 dias. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=21083",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/21083-inadimplencia-da-carteira-de-credito---pessoas-juridicas---total,%,Percentual,M,Inadimplência,rate,PJ,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/21083.json,90,186
+21084,Inadimplência da carteira de crédito - Pessoas físicas - Total,Inadimplência da carteira de crédito - Pessoas físicas - Total,"
+
+ Conceito: Percentual da carteira de crédito do Sistema Financeiro Nacional com pelo menos uma parcela com atraso superior a 90 dias. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.
+
+ Fonte: Banco Central do Brasil – Departamento de Estatísticas
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=21084",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/21084-inadimplencia-da-carteira-de-credito---pessoas-fisicas---total,%,Percentual,M,Inadimplência,rate,PF,Agregado,Livres e direcionados,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico."", ""Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.""]",2026-10-26,"{""start"": ""2011-03-01"", ""end"": ""2026-08-01""}",data/metadata/21084.json,90,186
+24364,Índice de Atividade Econômica do Banco Central (IBC-Br) - com ajuste sazonal,Índice de Atividade Econômica do Banco Central (IBC-Br) - com ajuste sazonal,"
+
+ Conceito:    Indicador mensal contemporâneo da atividade econômica nacional.      
+
+ Fonte: Banco Central do Brasil – Departamento Econômico
+
+__Para mais informações sobre a série, clique no link abaixo:__
+
+https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=24364",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/24364-indice-de-atividade-economica-do-banco-central-ibc-br---com-ajuste-sazonal,índice,Índice,M,Atividade,index,Total,Agregado,Não aplicável,identity_month,"[""original"", ""ma3"", ""mom_pct"", ""yoy_pct"", ""base100""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""IBC-Br com ajuste sazonal; não equivale ao PIB. Base original mantida.""]",2026-10-26,"{""start"": ""2010-01-01"", ""end"": ""2026-08-01""}",data/metadata/24364.json,90,200
+29034,Comprometimento de renda das famílias com o serviço da dívida com o Sistema Financeiro Nacional - Com ajuste sazonal (RNDBF),"Comprometimento de renda (RNDBF, dessaz.)","Conceito:  Comprometimento de renda - Relação entre o valor correspondente aos pagamentos esperados para o serviço da dívida com o Sistema Financeiro Nacional e a renda mensal das famílias, em média móvel trimestral, ajustado sazonalmente.   Endividamento - Relação entre o valor atual das dívidas das famílias com o Sistema Financeiro Nacional e a renda das famílias acumulada nos últimos doze meses. 
+
+* Tipo da série: __Série temporal mensal__
+
+* Unidade de medida: __Percentual__
+
+* Tempestividade: __ Até oito semanas após o mês de referência. O calendário de divulgação dos dados mensais encontra-se no endereço eletrônico  https://www.bcb.gov.br/estatisticas/notas_calendario  __
+
+* Fonte: __Banco Central do Brasil - Departamento de Estatísticas__
+
+Temas: 
+
+    - Indicadores de crédito
+        - Endividamento das famílias
+
+
+
+
+",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/29034-comprometimento-de-renda-das-familias-com-o-servico-da-divida-com-o-sistema-financeiro-nacion,%,Percentual,M,Famílias,rate,PF,Agregado,Não aplicável,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."", ""Indicador oficial já é média móvel trimestral com ajuste sazonal; não representa proporção de famílias inadimplentes.""]",2026-10-26,"{""start"": ""2010-01-01"", ""end"": ""2026-07-01""}",data/metadata/29034.json,100,199
+29037,Endividamento das famílias com o Sistema Financeiro Nacional em relação à renda acumulada dos últimos doze meses (RNDBF),Endividamento das famílias (RNDBF),"Conceito:  Comprometimento de renda - Relação entre o valor correspondente aos pagamentos esperados para o serviço da dívida com o Sistema Financeiro Nacional e a renda mensal das famílias, em média móvel trimestral, ajustado sazonalmente.   Endividamento - Relação entre o valor atual das dívidas das famílias com o Sistema Financeiro Nacional e a renda das famílias acumulada nos últimos doze meses. 
+
+* Tipo da série: __Série temporal mensal__
+
+* Unidade de medida: __Percentual__
+
+* Tempestividade: __ Até oito semanas após o mês de referência. O calendário de divulgação dos dados mensais encontra-se no endereço eletrônico  https://www.bcb.gov.br/estatisticas/notas_calendario  __
+
+* Fonte: __Banco Central do Brasil - Departamento de Estatísticas__
+
+Temas: 
+
+    - Indicadores de crédito
+        - Endividamento das famílias
+
+
+
+
+",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/29037-endividamento-das-familias-com-o-sistema-financeiro-nacional-em-relacao-a-renda-acumulada-dos,%,Percentual,M,Famílias,rate,PF,Agregado,Não aplicável,identity_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.""]",2026-10-26,"{""start"": ""2010-01-01"", ""end"": ""2026-07-01""}",data/metadata/29037.json,100,199
+432,Taxa de juros - Meta Selic definida pelo Copom,Taxa de juros - Meta Selic definida pelo Copom,"---
+```A partir de 26 de março de 2025, para consultas que retornam informações nos formatos JSON e CSV de séries históricas diárias, o volume de dados retornados será limitado, tornando-se obrigatório o uso de filtros para a recuperação das informações. 
+Consultas por período de datas serão limitadas a 10 anos, retornando erro caso não satisfaça essa condição. 
+Para mais detalhes, consulte as informações dos recursos que retornam os formatos JSON e CSV.
+``` 
+--- 
+
+Conceito: Taxa de juros que representa a meta, definida pelo Copom, para a taxa Selic. Divulgação em % a.a.
+
+* Tipo da série: __Série temporal diária__
+
+* Unidade de medida: __Percentual ao ano__
+
+* Tempestividade: __Não se aplica__
+
+* Fonte: __Comitê de Política Monetária__
+
+* Base de dados de origem: __SGS - Sistema Gerenciador de Séries Temporais__
+
+Temas: 
+
+    - Estatísticas monetárias
+        - Política monetária
+            - Taxa SELIC
+
+
+
+
+",BCB/SGS (IBGE para IPCA),https://dadosabertos.bcb.gov.br/dataset/432-taxa-de-juros---meta-selic-definida-pelo-copom,% a.a.,Percentual ao ano,D,Juros,rate,Total,Agregado,Não aplicável,last_complete_month,"[""original"", ""ma3"", ""diff_pp"", ""diff12_pp""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.""]",2026-10-26,"{""start"": ""2010-01-01"", ""end"": ""2026-09-01""}",data/metadata/432.json,40,201
+433,Índice nacional de preços ao consumidor-amplo (IPCA),Índice nacional de preços ao consumidor-amplo (IPCA),"Variação mensal do índice de preços ao consumidor amplo. Fonte primária: IBGE. Redistribuição: SGS/BCB. Metadados conferidos nos documentos cmiDadosBasicos e cmiMetadados, preservados nesta pasta.",BCB/SGS (IBGE para IPCA),https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=433,% a.m.,Variação percentual mensal,M,Inflação,variation,Total,Agregado,Não aplicável,identity_month,"[""original"", ""inflation12""]","[""Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.""]",2026-10-26,"{""start"": ""2010-01-01"", ""end"": ""2026-09-01""}",data/metadata/433.json,90,201
