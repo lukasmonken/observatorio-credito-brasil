@@ -4,6 +4,21 @@
 
 Dashboard de Lukas Monken com 24 séries oficiais BCB/SGS e seis páginas de análise. Python, Pandas, SQL e Streamlit.
 
+## Tecnologias utilizadas
+
+| Tecnologia | Uso efetivo |
+|---|---|
+| Python / Pandas / NumPy | Coleta, validação, cálculos e preparação dos dados |
+| SQL / SQLAlchemy | Persistência, revisões, consultas e controles de integridade |
+| SQLite | Banco local padrão e banco temporário do job diário |
+| PostgreSQL | Alternativa suportada e testada na CI; não utilizado pelo site público |
+| Streamlit / Plotly | Interface e gráficos do dashboard publicado |
+| GitHub Actions | Atualização diária e testes automáticos |
+| Power BI | Não implementado neste projeto |
+| Tableau | Exportação CSV preparada; sem workbook criado ou publicado |
+
+O painel lê snapshots CSV; o SQL é executado no pipeline. Veja o [mapa das tecnologias e exemplos SQL](docs/tecnologias.md) para os arquivos, responsabilidades e limites de cada ferramenta.
+
 ## Atualização diária
 
 O workflow **Atualizar dados do Bacen** roda todos os dias às **19h17 de Brasília** (22h17 UTC), além de permitir execução manual em Actions → Run workflow. O agendamento do GitHub pode atrasar em períodos de alta demanda.
