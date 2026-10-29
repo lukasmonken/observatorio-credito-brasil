@@ -8,6 +8,9 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+from html import escape
 import streamlit as st
 from observatorio.config import ROOT
 from observatorio.monitoring import collection_health, read_status, source_freshness
@@ -305,16 +308,43 @@ elif page == "Juros e crédito":
             key=f"credit_indicators_{segment}",
         )
     data = date_filter(df, "credit_dates")
+    colors = {c: SERIES_COLORS[available.index(c) % len(SERIES_COLORS)] for c in available}
+    if selection:
+        st.markdown(
+            " · ".join(
+                f'<span style="color:{colors[c]};font-weight:600">━ {escape(names[c])}</span>'
+                for c in selection
+            ), unsafe_allow_html=True,
+        )
+    view = st.radio("Visualização", ["Gráficos separados", "Comparar no mesmo gráfico"], horizontal=True, key="credit_view")
     if not selection:
         st.info("Selecione ao menos um indicador para exibir os gráficos.")
+    elif view == "Gráficos separados":
+        for c in selection:
+            chart([c], data=data, color=colors[c])
     else:
-        st.caption(
-            f"{len(selection)} indicador(es) selecionado(s). Cada indicador tem seu próprio gráfico e unidade; remova-o no filtro para ocultar o gráfico."
-        )
-    for c in selection:
-        chart(
-            [c], data=data, color=SERIES_COLORS[available.index(c) % len(SERIES_COLORS)]
-        )
+        units = list(dict.fromkeys(by_code[c]["unit"] for c in selection))
+        if len(units) > 2:
+            st.info("Para manter os eixos legíveis, selecione indicadores com até duas unidades diferentes ou use os gráficos separados.")
+        else:
+            fig = make_subplots(specs=[[{"secondary_y": True}]])
+            for c in selection:
+                values = data.loc[data.code == c].sort_values("date")
+                unit = by_code[c]["unit"]
+                fig.add_trace(go.Scatter(
+                    x=values.date, y=values.original, name=names[c],
+                    mode="lines", connectgaps=False,
+                    line={"color": colors[c], "width": 2},
+                    hovertemplate="%{x|%m/%Y}<br>%{y:,.2f} " + unit + "<extra>%{fullData.name}</extra>",
+                ), secondary_y=unit != units[0])
+            style_chart(fig, height=440)
+            fig.update_yaxes(title_text=units[0], secondary_y=False)
+            fig.update_yaxes(title_text=units[1] if len(units) == 2 else None,
+                             visible=len(units) == 2, showgrid=False, secondary_y=True)
+            fig.update_layout(hovermode="x unified", legend={"itemclick": "toggle", "itemdoubleclick": "toggleothers"})
+            st.plotly_chart(fig, width="stretch", theme=None, key="credit_combined",
+                            config={"displaylogo": False, "scrollZoom": False})
+            st.caption("Valores originais, sem normalização. Eixos com escalas independentes: cruzamentos e inclinações entre unidades diferentes não indicam igualdade de valores. Clique na legenda para ocultar ou reexibir uma série.")
     st.caption(
         "Modalidades PF com recursos livres podem ser comparadas em % a.a.; garantias, prazos e composição diferem. Agregados não devem ser somados às modalidades."
     )

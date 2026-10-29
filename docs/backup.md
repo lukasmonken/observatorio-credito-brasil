@@ -51,7 +51,7 @@ com status de falha. As notificações dependem da configuração da conta GitHu
    na etapa de envio e verificação. Só então considere a automação operacional.
 
 Destino: `Observatorio-Credito-Brasil/<run_id>-<tentativa>/` no Drive autorizado.
-Cada execução cria um diretório distinto. A rotina não apaga cópias anteriores.
+Cada execução cria um diretório distinto. Após a verificação, aplica a política de retenção abaixo.
 Há também um artefato auxiliar no GitHub por sete dias; ele não substitui o Drive.
 Revogar o acesso OAuth, esgotar a quota ou perder autorização causa falha explícita.
 Se usar um cliente OAuth próprio em modo de teste, verifique a expiração da
@@ -59,3 +59,27 @@ credencial: ela pode exigir nova autorização. A conexão do Drive no ChatGPT
 não fornece a credencial do runner.
 
 Referências: https://rclone.org/drive/ e https://rclone.org/commands/rclone_check/.
+
+## Retenção aprovada
+
+Depois de um novo backup conferido, a rotina preserva todas as cópias dos últimos
+30 dias (janela de 720 horas) e a mais recente de cada um dos últimos 12 meses
+civis, incluindo o mês corrente, no horário de Brasília. A cópia atual e a mais
+recente são sempre preservadas. Meses sem cópias não são preenchidos artificialmente.
+A idade é a data de modificação do ZIP criado pelo workflow, não a referência
+econômica das séries. Cada ZIP contém todo o histórico acumulado de revisões.
+
+A limpeza é restrita à pasta Observatorio-Credito-Brasil e a subpastas no padrão
+run_id-tentativa com exatamente os três arquivos conhecidos. Cópias incompletas,
+nomes duplicados, datas inválidas, futuras ou arquivos desconhecidos são ignorados.
+Uma nova conferência do backup atual é obrigatória antes de planejar a limpeza.
+O plano é salvo antes da exclusão e as pastas são relidas para detectar mudanças.
+Os arquivos elegíveis são enviados à lixeira do Drive, nunca apagados definitivamente
+pela rotina. Ela não esvazia a lixeira; a liberação de espaço depende do Drive.
+Se uma exclusão falhar no meio, o relatório registra os arquivos já removidos;
+restos incompletos ficam preservados para revisão manual.
+
+O relatório report.json acompanha o artefato auxiliar do workflow por sete dias.
+Para simular, execute scripts/retain_backups.py com --config, --current,
+--verified-local e --report, sem --apply. A simulação também exige uma cópia
+atual conferida e não altera o Drive.
