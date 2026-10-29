@@ -2,7 +2,7 @@
 
 [Abrir painel](https://observatorio-credito-brasil.streamlit.app/)
 
-Dashboard de Lukas Monken com 24 séries oficiais BCB/SGS e seis páginas de análise. Python, Pandas, SQL e Streamlit.
+Dashboard de Lukas Monken com 24 séries oficiais BCB/SGS e sete páginas de análise. Python, Pandas, SQL e Streamlit.
 
 ## Tecnologias utilizadas
 
@@ -61,3 +61,7 @@ As correções foram homologadas e publicadas; os links das execuções estão n
 ## Monitoramento operacional
 
 A página **Fontes e qualidade** mostra última tentativa, último sucesso, duração e séries com falha. Há alerta após 30 horas sem atualização validada e um workflow independente verifica a coleta e a publicação a cada seis horas. A defasagem das séries é apresentada separadamente. Veja [funcionamento, alertas e recuperação](docs/monitoramento.md).
+
+## Histórico de revisões
+
+A página **Histórico de revisões** distingue mudanças de valores já publicados, novas referências e preenchimentos históricos. A atualização diária preserva os eventos entre coletas, com valores anterior/novo, diferença, data de detecção e IDs dos snapshots. Inclui filtros e exportação CSV. O acompanhamento começa na primeira publicação após a implantação; consulte [regras e limites](docs/revisoes.md).

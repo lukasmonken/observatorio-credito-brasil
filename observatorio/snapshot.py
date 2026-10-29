@@ -37,6 +37,12 @@ def load_snapshot(root=ROOT, pointer=None):
             raise ValueError("Arquivo fora do snapshot")
         if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             raise ValueError(f"Checksum divergente: {name}")
+    if "revision_history_version" in manifest or any(
+        name.startswith("revision_history.") for name in manifest["files"]
+    ):
+        from .revisions import read_history
+
+        read_history(directory, manifest)
     df = pd.read_csv(directory / "analytics.csv")
     catalog = json.loads((directory / "catalog.json").read_text())
     quality = pd.read_csv(directory / "quality.csv")

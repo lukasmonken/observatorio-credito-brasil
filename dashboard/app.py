@@ -11,6 +11,7 @@ import plotly.express as px
 import streamlit as st
 from observatorio.config import ROOT
 from observatorio.monitoring import collection_health, read_status, source_freshness
+from observatorio.revisions import EVENT_LABELS, read_history
 from observatorio.snapshot import load_snapshot
 from observatorio.transform import lag_pairs
 
@@ -95,6 +96,7 @@ pages = [
     "Famílias e inadimplência",
     "Explorador de indicadores",
     "Relações e defasagens",
+    "Histórico de revisões",
     "Fontes e qualidade",
 ]
 st.sidebar.markdown("**OBSERVATÓRIO / BRASIL**")
@@ -482,6 +484,153 @@ elif page == "Relações e defasagens":
     st.warning(
         "Exploração, não causalidade. Tendência, sazonalidade, autocorrelação, janelas de 12 meses sobrepostas e quebras metodológicas afetam as correlações. Prefira mudanças ou crescimento real a níveis. Não há teste de significância ajustado para dependência temporal."
     )
+elif page == "Histórico de revisões":
+    directory = ROOT / json.loads(pointer)["path"]
+    history, history_meta = read_history(directory, manifest)
+    st.caption(
+        "Compara valores originais entre coletas publicadas. A data de detecção não é a data oficial de divulgação ou revisão pelo Bacen."
+    )
+    if history_meta is None:
+        st.info(
+            "O histórico entre coletas começa na próxima atualização validada. Esta base ainda não contém comparações registradas."
+        )
+    else:
+        comparison = history_meta["comparisons"][-1]
+        detected = pd.Timestamp(comparison["detected_at"]).tz_convert(
+            "America/Sao_Paulo"
+        )
+        st.write(f"Última comparação: {detected:%d/%m/%Y %H:%M} · Brasília")
+        metrics = st.columns(3)
+        metrics[0].metric("Valores revisados", comparison["counts"]["revision"])
+        metrics[1].metric("Novas referências", comparison["counts"]["new_observation"])
+        metrics[2].metric(
+            "Preenchimentos históricos", comparison["counts"]["historical_fill"]
+        )
+        if comparison["counts"]["new_series"]:
+            st.info(
+                f"{comparison['counts']['new_series']} observações de séries incluídas nesta comparação."
+            )
+        st.caption(
+            f"Snapshots: {comparison['previous_snapshot_id']} → {comparison['snapshot_id']}"
+        )
+        st.caption(
+            f"Histórico acompanhado desde a base {history_meta['baseline_snapshot_id']} ({pd.Timestamp(history_meta['baseline_created_at']):%d/%m/%Y}). Comparações registradas: {len(history_meta['comparisons'])}."
+        )
+        if sum(comparison["counts"].values()) == 0:
+            st.info(
+                "Nenhuma mudança nos valores originais na última comparação. Isso não apaga eventos de coletas anteriores."
+            )
+        if history.empty:
+            st.info(
+                "Ainda não foram detectadas revisões, novas referências ou preenchimentos históricos desde o início do acompanhamento."
+            )
+        else:
+            st.subheader("Eventos registrados")
+            left, right = st.columns(2)
+            with left:
+                codes = st.multiselect(
+                    "Séries",
+                    sorted(history.code.unique(), key=int),
+                    default=sorted(history.code.unique(), key=int),
+                    format_func=lambda code: (
+                        f"SGS {code} · {names.get(int(code), code)}"
+                    ),
+                )
+            with right:
+                kinds = st.multiselect(
+                    "Tipo de mudança",
+                    list(EVENT_LABELS),
+                    default=list(EVENT_LABELS),
+                    format_func=lambda kind: EVENT_LABELS[kind],
+                )
+            detected_dates = (
+                pd.to_datetime(history.detected_at, utc=True)
+                .dt.tz_convert("America/Sao_Paulo")
+                .dt.date
+            )
+            period = st.date_input(
+                "Período de detecção",
+                value=(detected_dates.min(), detected_dates.max()),
+                min_value=detected_dates.min(),
+                max_value=detected_dates.max(),
+                format="DD/MM/YYYY",
+            )
+            if len(period) != 2:
+                st.info("Selecione as duas datas do período de detecção.")
+            else:
+                filtered = history[
+                    history.code.isin(codes)
+                    & history.event_type.isin(kinds)
+                    & detected_dates.between(period[0], period[1])
+                ].sort_values(["detected_at", "reference_date"], ascending=False)
+                if filtered.empty:
+                    st.info("Nenhum evento corresponde aos filtros selecionados.")
+                else:
+                    view = filtered.copy()
+                    view["event_type"] = view.event_type.map(EVENT_LABELS)
+                    view["detected_at"] = (
+                        pd.to_datetime(view.detected_at, utc=True)
+                        .dt.tz_convert("America/Sao_Paulo")
+                        .dt.strftime("%d/%m/%Y %H:%M")
+                    )
+                    view["reference_date"] = pd.to_datetime(
+                        view.reference_date
+                    ).dt.strftime("%m/%Y")
+                    for column in ("old_value", "new_value", "difference"):
+                        view[column] = pd.to_numeric(view[column], errors="coerce")
+                    st.dataframe(
+                        view.rename(
+                            columns={
+                                "code": "SGS",
+                                "name": "Indicador",
+                                "event_type": "Mudança",
+                                "reference_date": "Referência",
+                                "old_value": "Valor anterior",
+                                "new_value": "Valor novo",
+                                "difference": "Diferença",
+                                "unit": "Unidade",
+                                "difference_unit": "Unidade da diferença",
+                                "detected_at": "Detectado em · Brasília",
+                                "previous_snapshot_id": "Snapshot anterior",
+                                "snapshot_id": "Snapshot novo",
+                                "event_id": "ID do evento",
+                            }
+                        ),
+                        hide_index=True,
+                        width="stretch",
+                        column_order=[
+                            "Detectado em · Brasília",
+                            "SGS",
+                            "Indicador",
+                            "Mudança",
+                            "Referência",
+                            "Valor anterior",
+                            "Valor novo",
+                            "Diferença",
+                            "Unidade",
+                            "Unidade da diferença",
+                            "Snapshot anterior",
+                            "Snapshot novo",
+                        ],
+                    )
+                    st.download_button(
+                        "Baixar histórico filtrado · CSV",
+                        filtered.to_csv(index=False).encode("utf-8-sig"),
+                        "historico_revisoes.csv",
+                        "text/csv",
+                    )
+            st.caption(
+                "Diferença = valor novo − valor anterior. Para taxas, a diferença é em pontos percentuais; nas demais séries, usa a unidade original. Novas observações não têm valor anterior nem diferença. O CSV preserva os valores decimais e os identificadores completos."
+            )
+        with st.expander("Comparações entre coletas, inclusive sem mudanças"):
+            comparisons = pd.json_normalize(history_meta["comparisons"])
+            st.dataframe(comparisons, hide_index=True, width="stretch")
+            st.download_button(
+                "Baixar registro de comparações · CSV",
+                comparisons.to_csv(index=False).encode("utf-8-sig"),
+                "comparacoes_coletas.csv",
+                "text/csv",
+            )
 else:
     st.subheader("Monitoramento da atualização")
     st.write(health_message)
