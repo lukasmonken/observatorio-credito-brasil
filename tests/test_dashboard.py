@@ -177,3 +177,24 @@ def test_dictionary_search_and_daily_series_metadata():
     app.text_input(key="dictionary_search").set_value("indicador inexistente xyz").run()
     assert not app.exception
     assert any("Nenhum indicador encontrado" in item.value for item in app.info)
+
+
+def test_credit_combined_chart_uses_stable_colors_and_distinct_units():
+    import json
+
+    app = AppTest.from_file(str(ROOT / "dashboard/app.py"), default_timeout=30).run()
+    app.sidebar.radio[0].set_value("Juros e crédito").run()
+    app.multiselect[0].set_value([20539, 20631, 20714]).run()
+    separate = [json.loads(c.proto.spec)["data"][0]["line"]["color"] for c in app.get("plotly_chart")]
+    app.radio(key="credit_view").set_value("Comparar no mesmo gráfico").run()
+    assert not app.exception
+    charts = app.get("plotly_chart")
+    assert len(charts) == 1
+    traces = json.loads(charts[0].proto.spec)["data"]
+    assert len(traces) == 3
+    assert [t["line"]["color"] for t in traces] == separate
+    assert len(set(separate)) == 3
+    assert traces[0]["yaxis"] == traces[1]["yaxis"] != traces[2]["yaxis"]
+    app.multiselect[0].set_value([20631, 20714]).run()
+    traces = json.loads(app.get("plotly_chart")[0].proto.spec)["data"]
+    assert [t["line"]["color"] for t in traces] == separate[1:]

@@ -59,11 +59,14 @@ jobs:
           rclone copy "$RUNNER_TEMP/backup" "$destination" --config "$config" --immutable --retries 3 --low-level-retries 3 --contimeout 30s --timeout 2m
           rclone check "$RUNNER_TEMP/backup" "$destination" --config "$config" --download --one-way --retries 3 --contimeout 30s --timeout 2m
           echo 'Backup enviado e conferido no Google Drive.' >> "$GITHUB_STEP_SUMMARY"
+          python scripts/retain_backups.py --config "$config" --current "${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" --verified-local "$RUNNER_TEMP/backup" --report "$RUNNER_TEMP/retention/report.json" --apply | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Preservar cópia auxiliar por sete dias
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: backup-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/backup/
+          path: |
+            ${{ runner.temp }}/backup/
+            ${{ runner.temp }}/retention/
           retention-days: 7
           if-no-files-found: ignore
