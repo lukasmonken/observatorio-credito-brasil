@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from observatorio.config import catalog
 from observatorio.pipeline import run_pipeline
+from observatorio.revisions import attach_history
 
 
 def validate_candidate(result, previous, candidate, expected):
@@ -63,8 +64,18 @@ def publish_snapshot(source, root, run_id):
     pointer = json.dumps(
         {"snapshot_id": run_id, "path": str(destination.relative_to(root))}
     )
-    load_snapshot(root, pointer=pointer)
+    _, _, _, candidate_manifest = load_snapshot(root, pointer=pointer)
     pointer_path = root / "data/processed/latest.json"
+    if pointer_path.exists():
+        old_pointer = json.loads(pointer_path.read_text())
+        _, _, _, previous_manifest = load_snapshot(root)
+        attach_history(
+            destination,
+            root / old_pointer["path"],
+            previous_manifest,
+            candidate_manifest,
+        )
+        load_snapshot(root, pointer=pointer)
     temporary = pointer_path.with_suffix(".tmp")
     temporary.write_text(pointer)
     os.replace(temporary, pointer_path)

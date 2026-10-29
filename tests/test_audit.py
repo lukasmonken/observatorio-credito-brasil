@@ -246,6 +246,10 @@ def test_daily_main_publishes_validated_run(snapshot_root, monkeypatch):
         manifest_path = dest / "manifest.json"
         manifest = json.loads(manifest_path.read_text())
         manifest["snapshot_id"] = run_id
+        manifest.pop("revision_history_version", None)
+        for name in ("revision_history.csv", "revision_history.json"):
+            manifest["files"].pop(name, None)
+            (dest / name).unlink(missing_ok=True)
         manifest_path.write_text(json.dumps(manifest))
         update_manifest(dest)
         return dict(

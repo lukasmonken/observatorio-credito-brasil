@@ -13,6 +13,7 @@ from observatorio.config import ROOT
         "Famílias e inadimplência",
         "Explorador de indicadores",
         "Relações e defasagens",
+        "Histórico de revisões",
         "Fontes e qualidade",
     ],
 )
