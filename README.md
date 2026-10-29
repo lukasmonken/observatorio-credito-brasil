@@ -65,3 +65,7 @@ A página **Fontes e qualidade** mostra última tentativa, último sucesso, dura
 ## Histórico de revisões
 
 A página **Histórico de revisões** distingue mudanças de valores já publicados, novas referências e preenchimentos históricos. A atualização diária preserva os eventos entre coletas, com valores anterior/novo, diferença, data de detecção e IDs dos snapshots. Inclui filtros e exportação CSV. O acompanhamento começa na primeira publicação após a implantação; consulte [regras e limites](docs/revisoes.md).
+
+### Backup dos dados
+
+Consulte [a rotina de backup](docs/backup.md) para exportar a base validada, o catálogo e o histórico de revisões para um arquivo fora do projeto.
