@@ -1,0 +1,54 @@
+code,check_name,severity,message
+20539,coverage,info,2010-01 a 2026-08; 200 meses observados
+20539,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20540,coverage,info,2010-01 a 2026-08; 200 meses observados
+20540,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20541,coverage,info,2010-01 a 2026-08; 200 meses observados
+20541,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20631,coverage,info,2011-03 a 2026-08; 186 meses observados
+20631,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20632,coverage,info,2011-03 a 2026-08; 186 meses observados
+20632,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20633,coverage,info,2011-03 a 2026-08; 186 meses observados
+20633,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20714,coverage,info,2011-03 a 2026-08; 186 meses observados
+20714,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20715,coverage,info,2011-03 a 2026-08; 186 meses observados
+20715,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20716,coverage,info,2011-03 a 2026-08; 186 meses observados
+20716,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20740,coverage,info,2011-03 a 2026-08; 186 meses observados
+20740,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20741,coverage,info,2010-01 a 2026-08; 200 meses observados
+20741,large_change,warning,1 variações >10x mediana absoluta; observações preservadas
+20741,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20742,coverage,info,2011-03 a 2026-08; 186 meses observados
+20742,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20743,coverage,info,2011-03 a 2026-08; 186 meses observados
+20743,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20783,coverage,info,2011-03 a 2026-08; 186 meses observados
+20783,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20784,coverage,info,2011-03 a 2026-08; 186 meses observados
+20784,schema,info,"Unicidade, calendário mensal e domínio verificados"
+20785,coverage,info,2011-03 a 2026-08; 186 meses observados
+20785,schema,info,"Unicidade, calendário mensal e domínio verificados"
+21082,coverage,info,2011-03 a 2026-08; 186 meses observados
+21082,schema,info,"Unicidade, calendário mensal e domínio verificados"
+21083,coverage,info,2011-03 a 2026-08; 186 meses observados
+21083,schema,info,"Unicidade, calendário mensal e domínio verificados"
+21084,coverage,info,2011-03 a 2026-08; 186 meses observados
+21084,schema,info,"Unicidade, calendário mensal e domínio verificados"
+24364,coverage,info,2010-01 a 2026-08; 200 meses observados
+24364,large_change,warning,2 variações >10x mediana absoluta; observações preservadas
+24364,schema,info,"Unicidade, calendário mensal e domínio verificados"
+29034,coverage,info,2010-01 a 2026-07; 199 meses observados
+29034,freshness,warning,"Última referência há 119 dias; limiar operacional, não calendário oficial"
+29034,schema,info,"Unicidade, calendário mensal e domínio verificados"
+29037,coverage,info,2010-01 a 2026-07; 199 meses observados
+29037,freshness,warning,"Última referência há 119 dias; limiar operacional, não calendário oficial"
+29037,schema,info,"Unicidade, calendário mensal e domínio verificados"
+432,coverage,info,2010-01 a 2026-09; 201 meses observados
+432,freshness,warning,"Última referência há 57 dias; limiar operacional, não calendário oficial"
+432,schema,info,"Unicidade, calendário mensal e domínio verificados"
+433,coverage,info,2010-01 a 2026-09; 201 meses observados
+433,schema,info,"Unicidade, calendário mensal e domínio verificados"
