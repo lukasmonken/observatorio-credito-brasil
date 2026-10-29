@@ -37,3 +37,25 @@ Fontes de contexto: [estatísticas monetárias e de crédito](https://www.bcb.go
 Defasagem positiva k: X(t−k) pareado com Y(t). Primeiro se reindexa o calendário mensal, depois se defasa, por fim se descartam pares incompletos. O período apresentado é o de Y. Cada correlação mostra n e período; n<12 ou variância nula não produz coeficiente.
 
 Análises principais usam diferenças em p.p. ou crescimento real. Séries em nível com tendência podem gerar associações espúrias. Diferenças não eliminam automaticamente autocorrelação; crescimento em 12 meses possui janelas sobrepostas. Concessões são sazonais e não foram dessazonalizadas pelo projeto. Não há testes causais, p-valores corrigidos, previsão, seleção automática da melhor defasagem ou inferência sobre indivíduos.
+
+## Dicionário no painel
+
+A página **Dicionário e metodologia** permite buscar as 24 séries por nome ou
+código SGS. Cada ficha usa o catálogo do snapshot publicado, preservando o conceito
+oficial, unidade, segmento, modalidade, periodicidade, fonte e limitações. O período
+mostrado considera observações originais não ausentes, não a data da coleta. A data
+de conferência dos metadados não representa a última atualização dos valores.
+As fórmulas disponíveis respeitam `allowed_transforms`; não se oferecem variações
+percentuais onde o projeto definiu mudanças em pontos percentuais.
+
+O job diário executa coleta completa do período configurado. A limitação de
+reconsulta de 18 meses presente nos catálogos se aplica ao modo incremental do
+pipeline, não ao job diário atual. O histórico de revisões compara snapshots
+publicados e registra a data de detecção, não a data em que a fonte realizou a
+revisão. Valores anteriores ao início desse registro não são reconstruídos.
+
+A média móvel adicional oferecida para o comprometimento de renda é uma nova
+suavização de uma série que já é média móvel trimestral dessazonalizada na fonte.
+Não deve ser interpretada como o valor original publicado. Para a inflação,
+acumulado de 12 meses exige todos os meses da janela; para crescimento em 12 meses,
+o cálculo exige os valores nos dois extremos, sem imputação dos meses intermediários.

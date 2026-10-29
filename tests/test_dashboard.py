@@ -14,6 +14,7 @@ from observatorio.config import ROOT
         "Explorador de indicadores",
         "Relações e defasagens",
         "Histórico de revisões",
+        "Dicionário e metodologia",
         "Fontes e qualidade",
     ],
 )
@@ -159,3 +160,20 @@ def test_monitoring_failure_is_visible_without_hiding_snapshot(tmp_path, monkeyp
         item.label == "Duração da tentativa" and item.value == "25 s"
         for item in app.metric
     )
+
+
+def test_dictionary_search_and_daily_series_metadata():
+    app = AppTest.from_file(str(ROOT / "dashboard/app.py"), default_timeout=30).run()
+    app.sidebar.radio[0].set_value("Dicionário e metodologia").run()
+    app.text_input(key="dictionary_search").set_value("432").run()
+    assert not app.exception
+    assert app.selectbox(key="dictionary_code").value == 432
+    metadata = app.dataframe[0].value.set_index("Campo")["Informação"]
+    assert metadata["Periodicidade de origem"] == "Diária"
+    assert metadata["Periodicidade no painel"] == "Mensal"
+    transforms = app.dataframe[1].value
+    assert "Mudança mensal (p.p.)" in transforms["Transformação"].tolist()
+    assert "Variação mensal (%)" not in transforms["Transformação"].tolist()
+    app.text_input(key="dictionary_search").set_value("indicador inexistente xyz").run()
+    assert not app.exception
+    assert any("Nenhum indicador encontrado" in item.value for item in app.info)

@@ -97,6 +97,7 @@ pages = [
     "Explorador de indicadores",
     "Relações e defasagens",
     "Histórico de revisões",
+    "Dicionário e metodologia",
     "Fontes e qualidade",
 ]
 st.sidebar.markdown("**OBSERVATÓRIO / BRASIL**")
@@ -631,6 +632,76 @@ elif page == "Histórico de revisões":
                 "comparacoes_coletas.csv",
                 "text/csv",
             )
+elif page == "Dicionário e metodologia":
+    st.caption("Fichas do catálogo associado à base publicada. Nenhum filtro altera os dados de origem.")
+    query = st.text_input("Buscar por nome ou código SGS", key="dictionary_search").strip().casefold()
+    matches = [s for s in specs if query in f"{s['code']} {s['name']} {s.get('official_name', '')}".casefold()]
+    if not matches:
+        st.info("Nenhum indicador encontrado. Tente outro nome ou código SGS.")
+    else:
+        code = st.selectbox(
+            "Indicador", [s["code"] for s in matches],
+            format_func=lambda c: f"{c} · {names[c]}", key="dictionary_code",
+        )
+        spec = by_code[code]
+        st.markdown("#### " + spec.get("official_name", spec["name"]))
+        st.write(spec.get("description") or "Conceito não informado no catálogo.")
+        observed = df.loc[(df.code == code) & df.original.notna(), "date"]
+        period = f"{observed.min():%m/%Y} – {observed.max():%m/%Y}" if not observed.empty else "Sem valores válidos"
+        st.dataframe(pd.DataFrame([
+            {"Campo": "Código SGS", "Informação": str(code)},
+            {"Campo": "Unidade no painel", "Informação": spec["unit"]},
+            {"Campo": "Unidade nos metadados oficiais", "Informação": spec.get("official_unit", "Não informada")},
+            {"Campo": "Periodicidade de origem", "Informação": {"D": "Diária", "M": "Mensal"}.get(spec["frequency"], spec["frequency"])},
+            {"Campo": "Periodicidade no painel", "Informação": "Mensal"},
+            {"Campo": "Tratamento temporal", "Informação": "Última observação de cada mês concluído; não é média mensal." if spec["frequency"] == "D" else "Referência mensal preservada, sem somar ou reponderar."},
+            {"Campo": "Categoria", "Informação": spec["classification"]},
+            {"Campo": "Segmento", "Informação": spec["segment"]},
+            {"Campo": "Modalidade", "Informação": spec.get("modality", "Não informada")},
+            {"Campo": "Recursos", "Informação": spec.get("resources", "Não informado")},
+            {"Campo": "Período com valores na base", "Informação": period},
+            {"Campo": "Metadados conferidos em", "Informação": spec.get("metadata_verified_at", "Não informado")},
+        ]), hide_index=True, width="stretch")
+        st.markdown(f"[Consultar fonte oficial e metadados]({spec['source_url']})")
+        st.caption("Fonte primária: IBGE; distribuição: BCB/SGS." if code == 433 else "Fonte: Banco Central do Brasil / SGS.")
+        st.markdown("#### Como interpretar")
+        interpretations = {
+            "stock": "Mede o saldo da carteira em uma data. Aumento do saldo não equivale ao volume de novos empréstimos do mês.",
+            "flow": "Mede novas operações contratadas no mês. Não representa o saldo em aberto. Dias úteis e sazonalidade afetam comparações mensais.",
+            "rate": "Leia o nível na unidade indicada. Mudanças são expressas em pontos percentuais: de 10% para 12% significa +2 p.p.",
+            "index": "Mede evolução relativa da atividade. Não representa PIB em reais. A série IBC-Br selecionada já tem ajuste sazonal.",
+            "variation": "O IPCA original é a inflação do mês. O acumulado em 12 meses compõe os fatores mensais; não soma as taxas.",
+        }
+        st.write(interpretations.get(spec.get("measure_type"), "Consulte o conceito oficial e a unidade da série."))
+        st.markdown("#### Transformações disponíveis")
+        formulas = {
+            "original": "Valor da série após organização no calendário mensal.",
+            "ma3": "(xₜ + xₜ₋₁ + xₜ₋₂) / 3; exige os três meses presentes.",
+            "mom_pct": "(xₜ / xₜ₋₁ − 1) × 100; denominador zero ou ausente gera ausência.",
+            "yoy_pct": "(xₜ / xₜ₋₁₂ − 1) × 100; compara com o mesmo mês do ano anterior.",
+            "diff_pp": "xₜ − xₜ₋₁, em pontos percentuais.",
+            "diff12_pp": "xₜ − xₜ₋₁₂, em pontos percentuais.",
+            "base100": "100 × xₜ / primeiro valor válido. No explorador, a base é recalculada no intervalo selecionado; base zero gera ausência.",
+            "real": "Nominalₜ × P_base / Pₜ, com índice de preços encadeado pelo IPCA.",
+            "real_yoy_pct": "(realₜ / realₜ₋₁₂ − 1) × 100; crescimento descontada a inflação pelo IPCA.",
+            "inflation12": "[Produto dos 12 fatores (1 + IPCAₘ / 100) − 1] × 100; exige 12 meses presentes.",
+        }
+        st.dataframe(pd.DataFrame([
+            {"Transformação": labels[m], "Unidade": unit_for(code, m), "Cálculo e leitura": formulas[m]}
+            for m in spec["allowed_transforms"]
+        ]), hide_index=True, width="stretch")
+        st.markdown("#### Limitações e comparabilidade")
+        for limitation in spec.get("limitations", []):
+            st.write("• " + limitation)
+        st.caption("A observação do catálogo sobre reconsulta de 18 meses se refere ao modo incremental. O job diário atual faz coleta completa do período configurado. A data da coleta não é a data de publicação original do Bacen.")
+        st.caption(f"Snapshot: {manifest['snapshot_id']} · Mês-base dos valores reais: {manifest.get('price_base_month') or 'Indisponível'}")
+    with st.expander("Metodologia econômica completa", expanded=False):
+        st.markdown((ROOT / "docs/metodologia.md").read_text())
+    st.download_button(
+        "Baixar catálogo da base publicada · JSON",
+        json.dumps(specs, ensure_ascii=False, indent=2).encode("utf-8"),
+        "dicionario_indicadores.json", "application/json",
+    )
 else:
     st.subheader("Monitoramento da atualização")
     st.write(health_message)
