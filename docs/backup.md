@@ -121,3 +121,33 @@ da aplicação em produção e sem baixar/executar código do ZIP. A versão do 
 é identificada por `source-commit.txt`; o teste automático usa o código atual.
 Reverter a aplicação em produção continua sendo uma decisão separada. O teste de
 interface usa AppTest e não substitui uma inspeção visual no navegador.
+
+## Novas tentativas em falhas temporárias
+
+O envio, a conferência e o download para recuperação usam `scripts/retry_backup.py`.
+Cada comando tem até três tentativas, incluindo a inicial, com espera de 30 e 60
+segundos acrescida de 0–10 segundos aleatórios. O processo é reiniciado também
+quando a criação da conexão remota falha antes das tentativas internas do rclone.
+Cada tentativa dura no máximo 120 segundos; cada comando, no máximo 470 segundos
+mais o pequeno custo de inicialização. O job completo tem limite de 35 minutos.
+O rclone usa uma tentativa de alto nível e duas de baixo nível para evitar
+multiplicar tentativas inadvertidamente.
+
+São repetidos limites temporários de requisições (429 ou motivos específicos de
+quota por minuto, inclusive 403), erros de servidor 500/502/503/504, falhas de
+conexão reconhecidas e timeout. Um 403 genérico não é considerado transitório.
+Erros conhecidos de autenticação, armazenamento, configuração ou integridade
+interrompem o comando; erros desconhecidos também não são repetidos automaticamente.
+Os logs registram operação, tentativa, categoria da falha e espera, sem imprimir
+respostas OAuth ou o conteúdo da configuração. Revogação de acesso exige corrigir
+a autorização; espaço esgotado exige intervenção no armazenamento.
+
+As tentativas reutilizam o mesmo ZIP e diretório remoto da execução. O envio
+mantém `--immutable`, e o sucesso só é aceito após conferência remota, SHA256 e
+teste de recuperação. Se as tentativas esgotarem, o workflow falha e não inicia
+a retenção. A limpeza e os testes de integridade não recebem esse novo mecanismo
+de repetição: as proteções de retenção continuam valendo, inclusive em falhas
+parciais. O mecanismo não reexecuta todo o workflow nem cria agendamentos extras.
+
+Referências: [erros do Google Drive](https://developers.google.com/workspace/drive/api/guides/handle-errors)
+e [tentativas do rclone](https://rclone.org/docs/#retries-int).
