@@ -14,7 +14,7 @@ jobs:
   backup:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v7
         with:
@@ -56,11 +56,11 @@ jobs:
           printf '%s' "$DRIVE_CONFIG" > "$config"
           unset DRIVE_CONFIG
           destination="backup:Observatorio-Credito-Brasil/${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          rclone copy "$RUNNER_TEMP/backup" "$destination" --config "$config" --immutable --retries 3 --low-level-retries 3 --contimeout 30s --timeout 2m
-          rclone check "$RUNNER_TEMP/backup" "$destination" --config "$config" --download --one-way --retries 3 --contimeout 30s --timeout 2m
+          python scripts/retry_backup.py copy "$RUNNER_TEMP/backup" "$destination" --config "$config" --immutable
+          python scripts/retry_backup.py check "$RUNNER_TEMP/backup" "$destination" --config "$config" --download --one-way
           echo 'Backup enviado e conferido no Google Drive.' >> "$GITHUB_STEP_SUMMARY"
           mkdir -p "$RUNNER_TEMP/recovery-download"
-          rclone copy "$destination" "$RUNNER_TEMP/recovery-download" --config "$config" --retries 3 --low-level-retries 3 --contimeout 30s --timeout 2m
+          python scripts/retry_backup.py copy "$destination" "$RUNNER_TEMP/recovery-download" --config "$config"
           expected=$(cut -d ' ' -f 1 "$RUNNER_TEMP/backup/SHA256SUMS")
           python scripts/restore_backup.py "$RUNNER_TEMP/recovery-download/credito-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.zip" --destination "$RUNNER_TEMP/recovered" --sha256 "$expected" --check-dashboard --report "$RUNNER_TEMP/recovery-report/result.json"
           echo 'Recuperação isolada e carregamento das páginas do dashboard aprovados.' >> "$GITHUB_STEP_SUMMARY"
