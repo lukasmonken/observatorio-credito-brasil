@@ -59,6 +59,11 @@ jobs:
           rclone copy "$RUNNER_TEMP/backup" "$destination" --config "$config" --immutable --retries 3 --low-level-retries 3 --contimeout 30s --timeout 2m
           rclone check "$RUNNER_TEMP/backup" "$destination" --config "$config" --download --one-way --retries 3 --contimeout 30s --timeout 2m
           echo 'Backup enviado e conferido no Google Drive.' >> "$GITHUB_STEP_SUMMARY"
+          mkdir -p "$RUNNER_TEMP/recovery-download"
+          rclone copy "$destination" "$RUNNER_TEMP/recovery-download" --config "$config" --retries 3 --low-level-retries 3 --contimeout 30s --timeout 2m
+          expected=$(cut -d ' ' -f 1 "$RUNNER_TEMP/backup/SHA256SUMS")
+          python scripts/restore_backup.py "$RUNNER_TEMP/recovery-download/credito-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.zip" --destination "$RUNNER_TEMP/recovered" --sha256 "$expected" --check-dashboard --report "$RUNNER_TEMP/recovery-report/result.json"
+          echo 'Recuperação isolada e carregamento das páginas do dashboard aprovados.' >> "$GITHUB_STEP_SUMMARY"
           python scripts/retain_backups.py --config "$config" --current "${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" --verified-local "$RUNNER_TEMP/backup" --report "$RUNNER_TEMP/retention/report.json" --apply | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Preservar cópia auxiliar por sete dias
         if: always()
@@ -68,5 +73,6 @@ jobs:
           path: |
             ${{ runner.temp }}/backup/
             ${{ runner.temp }}/retention/
+            ${{ runner.temp }}/recovery-report/
           retention-days: 7
           if-no-files-found: ignore

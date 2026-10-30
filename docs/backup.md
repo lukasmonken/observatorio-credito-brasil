@@ -83,3 +83,41 @@ O relatório report.json acompanha o artefato auxiliar do workflow por sete dias
 Para simular, execute scripts/retain_backups.py com --config, --current,
 --verified-local e --report, sem --apply. A simulação também exige uma cópia
 atual conferida e não altera o Drive.
+
+## Recuperação isolada e teste automático
+
+Depois de cada envio conferido, o workflow baixa o backup do Drive novamente,
+verifica o SHA256 contra a cópia original da execução e recupera os dados em uma
+pasta temporária nova. A aplicação atual é executada com essa base recuperada:
+todas as oito páginas precisam carregar sem exceções nem mensagens de erro.
+O teste não lê os dados publicados como alternativa. A retenção só começa depois
+de aprovada a recuperação. Se a verificação falhar, o workflow falha e preserva
+os backups antigos. O relatório `recovery-report/result.json` identifica o snapshot,
+quantidade de registros, séries, checksum e páginas verificadas.
+
+Para recuperar uma cópia manualmente, baixe do Drive o ZIP e seu `SHA256SUMS`.
+Copie os 64 caracteres do checksum correspondente ao ZIP e execute na pasta do
+projeto com suas dependências instaladas:
+
+```sh
+python scripts/restore_backup.py /caminho/credito-RUN-TENTATIVA.zip \
+  --destination /caminho/recuperacao-nova \
+  --sha256 CHECKSUM_DE_64_CARACTERES \
+  --check-dashboard \
+  --report /caminho/relatorio-recuperacao.json
+```
+
+O destino não pode existir, nem estar vazio. ZIPs com caminhos externos, links
+simbólicos, arquivos desconhecidos, nomes duplicados ou mais de 256 MiB compactados
+ou descompactados são rejeitados. Após a extração restrita, os dados passam pelas
+mesmas validações de esquema, hashes e histórico de revisões usadas pelo painel.
+Uma falha de validação dos dados não publica o diretório recuperado. Se o teste da
+interface falhar, a base já validada permanece disponível para diagnóstico, mas não
+há relatório de sucesso. O SHA256 verifica integridade, não autenticidade: use uma
+cópia e um checksum de origem confiável.
+
+Esta operação recupera **os dados**, sem substituir `data/processed/latest.json`
+da aplicação em produção e sem baixar/executar código do ZIP. A versão do código
+é identificada por `source-commit.txt`; o teste automático usa o código atual.
+Reverter a aplicação em produção continua sendo uma decisão separada. O teste de
+interface usa AppTest e não substitui uma inspeção visual no navegador.
