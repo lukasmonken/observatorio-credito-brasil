@@ -1,11 +1,11 @@
 {
   "status": "success",
-  "started_at": "2026-11-03T16:09:21.476989+00:00",
-  "ended_at": "2026-11-03T16:10:25.553430+00:00",
-  "last_success_at": "2026-11-03T16:10:25.553430+00:00",
-  "duration_seconds": 64,
+  "started_at": "2026-11-03T16:22:33.289131+00:00",
+  "ended_at": "2026-11-03T16:23:34.207551+00:00",
+  "last_success_at": "2026-11-03T16:23:34.207551+00:00",
+  "duration_seconds": 61,
   "failed_series": [],
-  "workflow_run_id": "41671217862",
+  "workflow_run_id": "41673485537",
   "stage": "snapshot_validado",
-  "snapshot_id": "070d9fb5-c56c-449c-ad34-30ef4240df31"
+  "snapshot_id": "b4ce9da6-a7ea-4787-98b8-65e982755743"
 }
