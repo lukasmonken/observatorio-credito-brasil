@@ -64,3 +64,22 @@ O backup possui monitor independente, **Monitorar backups no Google Drive**.
 Uma coleta saudável não comprova cópia externa saudável. Consulte
 [Backup dos dados — monitoramento independente](backup.md#monitoramento-independente-do-backup)
 para limites, horários, relatório de última tentativa/sucesso e limitações.
+
+## Resumo da última atualização no painel
+
+Em **Visão geral → O que mudou na última atualização**, o painel compara a base
+publicada com sua antecessora usando o histórico validado já armazenado no
+snapshot. Mostra valores revisados, novas referências, preenchimentos de lacunas
+históricas e observações de séries incluídas, além do número de indicadores
+atingidos e uma tabela por indicador. A exportação CSV contém somente eventos
+dessa comparação, com mês de referência, valores anterior/novo, diferença,
+unidade, data de detecção e identificadores das duas coletas.
+
+As contagens são de observações (série × mês), não de meses únicos nem de séries.
+Uma série pode apresentar novas referências e revisões na mesma coleta. Valores
+derivados não são comparados. Sem mudanças, o resumo mostra zero e informa que a
+comparação foi feita; sem histórico disponível, mostra indisponibilidade, não
+zero. Eventos anteriores continuam na página Histórico de revisões e não entram
+nas contagens da última coleta. O horário é exibido em Brasília e representa a
+detecção, não uma data oficial de divulgação. Uma tentativa que falhou não gera
+um novo resumo: permanece a última base publicada, junto ao alerta operacional.

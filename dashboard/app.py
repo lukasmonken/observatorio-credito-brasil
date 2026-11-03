@@ -14,7 +14,7 @@ from html import escape
 import streamlit as st
 from observatorio.config import ROOT
 from observatorio.monitoring import collection_health, read_status, source_freshness
-from observatorio.revisions import EVENT_LABELS, read_history
+from observatorio.revisions import EVENT_LABELS, latest_changes, read_history
 from observatorio.snapshot import load_snapshot
 from observatorio.transform import lag_pairs
 
@@ -72,13 +72,16 @@ def style_chart(fig, height=340):
 
 @st.cache_data(show_spinner=False)
 def cached_snapshot(pointer, root):
-    return load_snapshot(root, pointer=pointer)
+    snapshot = load_snapshot(root, pointer=pointer)
+    directory = root / json.loads(pointer)["path"]
+    history, history_meta = read_history(directory, snapshot[3])
+    return (*snapshot, history, history_meta)
 
 
 try:
     with st.spinner("Carregando base tratada…"):
         pointer = (ROOT / "data/processed/latest.json").read_text()
-        df, specs, quality, manifest = cached_snapshot(pointer, ROOT)
+        df, specs, quality, manifest, history, history_meta = cached_snapshot(pointer, ROOT)
 except FileNotFoundError:
     st.info(
         "Ainda não há base coletada. Execute `python -m observatorio collect --full` na pasta do projeto."
@@ -276,6 +279,37 @@ if page == "Visão geral":
                 delta_color="off",
             )
             st.caption(f"Referência: {r.date:%m/%Y} · SGS {code}")
+    changes = latest_changes(history, history_meta)
+    with st.expander("O que mudou na última atualização", expanded=False):
+        if changes is None:
+            st.info("Resumo indisponível: esta base ainda não tem comparação com uma coleta anterior.")
+        else:
+            detected = pd.Timestamp(changes["detected_at"]).tz_convert("America/Sao_Paulo")
+            st.caption(f"Comparação detectada em {detected:%d/%m/%Y %H:%M} · Brasília · {changes['series_count']} indicadores com mudanças")
+            counts = changes["counts"]
+            cols = st.columns(4)
+            for col, kind, label in zip(cols, EVENT_LABELS, ["Valores revisados", "Novas referências", "Preenchimentos históricos", "Observações de séries incluídas"]):
+                col.metric(label, counts[kind])
+            if changes["events"].empty:
+                st.info("Nenhuma mudança nos valores originais em relação à coleta anterior. A atualização foi verificada; não houve novos dados nem revisões detectadas.")
+            else:
+                st.dataframe(
+                    changes["by_series"].rename(columns={
+                        "code": "SGS", "name": "Indicador", "revision": "Valores revisados",
+                        "new_observation": "Novas referências", "historical_fill": "Preenchimentos históricos",
+                        "new_series": "Observações de séries incluídas",
+                    }),
+                    hide_index=True, width="stretch",
+                )
+                st.download_button(
+                    "Baixar mudanças da última coleta · CSV",
+                    changes["events"].to_csv(index=False).encode("utf-8-sig"),
+                    file_name=f"mudancas-{changes['snapshot_id']}.csv",
+                    mime="text/csv", key="latest_changes_csv",
+                )
+            st.caption("Contagens de observações (série × mês), não de meses únicos. Novas referências avançam a série; preenchimentos completam lacunas antigas. Valores derivados não entram na comparação.")
+            st.caption(f"Coleta anterior: {changes['previous_snapshot_id']} · Coleta atual: {changes['snapshot_id']}")
+            st.caption("A data de detecção não é a data oficial de divulgação do Bacen. Consulte Histórico de revisões para filtrar eventos de todas as coletas.")
     st.divider()
     left, right = st.columns(2)
     with left:
@@ -516,8 +550,6 @@ elif page == "Relações e defasagens":
         "Exploração, não causalidade. Tendência, sazonalidade, autocorrelação, janelas de 12 meses sobrepostas e quebras metodológicas afetam as correlações. Prefira mudanças ou crescimento real a níveis. Não há teste de significância ajustado para dependência temporal."
     )
 elif page == "Histórico de revisões":
-    directory = ROOT / json.loads(pointer)["path"]
-    history, history_meta = read_history(directory, manifest)
     st.caption(
         "Compara valores originais entre coletas publicadas. A data de detecção não é a data oficial de divulgação ou revisão pelo Bacen."
     )

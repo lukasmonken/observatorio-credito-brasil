@@ -250,3 +250,27 @@ def attach_history(destination, previous_directory, previous_manifest, manifest)
         json.dumps(manifest, ensure_ascii=False, indent=2)
     )
     read_history(destination, manifest)
+
+
+def latest_changes(history, meta):
+    """Resumo da última comparação validada, incluindo comparações sem eventos."""
+    if meta is None:
+        return None
+    comparison = meta["comparisons"][-1]
+    events = history.loc[history.snapshot_id == comparison["snapshot_id"]].copy()
+    counts = {kind: int(events.event_type.eq(kind).sum()) for kind in EVENT_LABELS}
+    by_series = (
+        events.groupby(["code", "name", "event_type"], sort=False)
+        .size().unstack("event_type", fill_value=0)
+        .reindex(columns=list(EVENT_LABELS), fill_value=0)
+        .reset_index()
+    ) if not events.empty else pd.DataFrame(columns=["code", "name", *EVENT_LABELS])
+    if not by_series.empty:
+        by_series = by_series.sort_values("code", key=lambda values: values.astype(int))
+    return {
+        **comparison,
+        "counts": counts,
+        "series_count": int(events.code.nunique()),
+        "events": events,
+        "by_series": by_series,
+    }
