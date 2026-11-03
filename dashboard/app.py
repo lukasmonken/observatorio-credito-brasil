@@ -13,6 +13,7 @@ from plotly.subplots import make_subplots
 from html import escape
 import streamlit as st
 from observatorio.config import ROOT
+from observatorio.excel import METRIC_FORMULAS as formulas, METRIC_LABELS as labels, build_excel
 from observatorio.monitoring import collection_health, read_status, source_freshness
 from observatorio.revisions import EVENT_LABELS, compare_collections, latest_changes, read_history
 from observatorio.snapshot import load_snapshot
@@ -164,18 +165,6 @@ st.caption(
     "As referências variam por indicador. A Selic considera apenas meses concluídos."
 )
 
-labels = {
-    "original": "Valor original",
-    "ma3": "Média móvel de 3 meses",
-    "mom_pct": "Variação mensal (%)",
-    "yoy_pct": "Variação em 12 meses (%)",
-    "diff_pp": "Mudança mensal (p.p.)",
-    "diff12_pp": "Mudança em 12 meses (p.p.)",
-    "base100": "Índice base 100",
-    "real": "Valor real (R$ milhões)",
-    "real_yoy_pct": "Crescimento real em 12 meses (%)",
-    "inflation12": "IPCA acumulado em 12 meses (%)",
-}
 
 
 def unit_for(code, metric):
@@ -436,6 +425,17 @@ elif page == "Explorador de indicadores":
         file_name=f"sgs_{code}_{metric}.csv",
         mime="text/csv",
     )
+    excel_data = build_excel(
+        data, by_code[code], manifest, metric, unit_for(code, metric),
+        st.session_state["explorer_dates"], (ROOT / "docs/metodologia.md").read_text(),
+    )
+    st.download_button(
+        "Baixar dados filtrados · Excel", excel_data,
+        file_name=f"sgs_{code}_{metric}_{manifest['snapshot_id'][:8]}.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        key="explorer_excel",
+    )
+    st.caption("O Excel inclui o recorte exibido, unidades, fonte, metodologia e identificação da coleta.")
     with st.expander("Ver tabela"):
         st.dataframe(download, width="stretch", hide_index=True)
 elif page == "Relações e defasagens":
@@ -782,18 +782,6 @@ elif page == "Dicionário e metodologia":
         }
         st.write(interpretations.get(spec.get("measure_type"), "Consulte o conceito oficial e a unidade da série."))
         st.markdown("#### Transformações disponíveis")
-        formulas = {
-            "original": "Valor da série após organização no calendário mensal.",
-            "ma3": "(xₜ + xₜ₋₁ + xₜ₋₂) / 3; exige os três meses presentes.",
-            "mom_pct": "(xₜ / xₜ₋₁ − 1) × 100; denominador zero ou ausente gera ausência.",
-            "yoy_pct": "(xₜ / xₜ₋₁₂ − 1) × 100; compara com o mesmo mês do ano anterior.",
-            "diff_pp": "xₜ − xₜ₋₁, em pontos percentuais.",
-            "diff12_pp": "xₜ − xₜ₋₁₂, em pontos percentuais.",
-            "base100": "100 × xₜ / primeiro valor válido. No explorador, a base é recalculada no intervalo selecionado; base zero gera ausência.",
-            "real": "Nominalₜ × P_base / Pₜ, com índice de preços encadeado pelo IPCA.",
-            "real_yoy_pct": "(realₜ / realₜ₋₁₂ − 1) × 100; crescimento descontada a inflação pelo IPCA.",
-            "inflation12": "[Produto dos 12 fatores (1 + IPCAₘ / 100) − 1] × 100; exige 12 meses presentes.",
-        }
         st.dataframe(pd.DataFrame([
             {"Transformação": labels[m], "Unidade": unit_for(code, m), "Cálculo e leitura": formulas[m]}
             for m in spec["allowed_transforms"]
