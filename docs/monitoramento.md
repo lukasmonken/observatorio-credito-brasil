@@ -83,3 +83,32 @@ zero. Eventos anteriores continuam na página Histórico de revisões e não ent
 nas contagens da última coleta. O horário é exibido em Brasília e representa a
 detecção, não uma data oficial de divulgação. Uma tentativa que falhou não gera
 um novo resumo: permanece a última base publicada, junto ao alerta operacional.
+
+## Comparar duas coletas escolhidas
+
+Em **Histórico de revisões → Comparar duas coletas**, selecione a coleta inicial
+e a final e clique em **Comparar coletas**. A inicial precisa preceder a final.
+As opções cobrem a base inicial do acompanhamento e todas as comparações
+registradas desde então. Os horários de registro aparecem em Brasília; não são
+horários oficiais de divulgação. Não há reconstrução de coletas anteriores à
+base inicial acompanhada.
+
+A comparação usa a cadeia validada de eventos do snapshot atual. Para cada
+série/mês que mudou no intervalo, usa o valor anterior ao primeiro evento e o
+valor final do último. Verifica a continuidade dos valores intermediários e faz
+a subtração decimal exata. Não exige cópias antigas de analytics.csv e continua
+disponível em um backup restaurado que contenha esse histórico.
+
+O resultado separa **revisões líquidas** (observação existente na coleta inicial)
+e **observações adicionadas** (ausentes na inicial, presentes na final). Adições
+incluem novos meses, preenchimentos históricos e séries novas; uma observação
+adicionada e revisada no intervalo continua sendo uma adição. Não se infere a
+classificação de avanço/lacuna a partir de um evento intermediário, pois a última
+referência da série pode ter avançado durante o intervalo.
+
+Se um valor foi de 1 para 2 e depois voltou a 1, não há diferença líquida entre
+as pontas. As duas revisões continuam no histórico completo. A tabela e o CSV
+mostram referência, valores inicial/final, diferença, unidades e identificadores
+das duas coletas. O CSV mantém precisão decimal e pode ser exportado mesmo sem
+alterações, nesse caso apenas com o cabeçalho. O horário de consulta não é
+registrado como nova detecção da fonte. Nenhum dado publicado é alterado.

@@ -14,7 +14,7 @@ from html import escape
 import streamlit as st
 from observatorio.config import ROOT
 from observatorio.monitoring import collection_health, read_status, source_freshness
-from observatorio.revisions import EVENT_LABELS, latest_changes, read_history
+from observatorio.revisions import EVENT_LABELS, compare_collections, latest_changes, read_history
 from observatorio.snapshot import load_snapshot
 from observatorio.transform import lag_pairs
 
@@ -694,6 +694,52 @@ elif page == "Histórico de revisões":
                 "comparacoes_coletas.csv",
                 "text/csv",
             )
+        with st.expander("Comparar duas coletas"):
+            collection_dates = {
+                history_meta["baseline_snapshot_id"]: history_meta["baseline_created_at"],
+                **{item["snapshot_id"]: item["detected_at"] for item in history_meta["comparisons"]},
+            }
+            identifiers = list(collection_dates)
+            def collection_label(identifier):
+                moment = pd.Timestamp(collection_dates[identifier]).tz_convert("America/Sao_Paulo")
+                return f"{moment:%d/%m/%Y %H:%M} · {identifier[:8]}"
+            st.caption("Diferença líquida dos valores originais entre duas bases. Revisões intermediárias que se anulam não aparecem aqui. Horários de registro em Brasília.")
+            with st.form("compare_collections_form"):
+                left, right = st.columns(2)
+                earlier = left.selectbox("Coleta inicial", identifiers[:-1], index=len(identifiers) - 2, format_func=collection_label, key="comparison_earlier")
+                later = right.selectbox("Coleta final", identifiers[1:], index=len(identifiers) - 2, format_func=collection_label, key="comparison_later")
+                compare_requested = st.form_submit_button("Comparar coletas", key="compare_collections_submit")
+            if compare_requested:
+                if identifiers.index(earlier) >= identifiers.index(later):
+                    st.info("Escolha uma coleta inicial anterior à coleta final.")
+                else:
+                    try:
+                        compared = compare_collections(history, history_meta, earlier, later)
+                    except ValueError:
+                        logging.getLogger(__name__).exception("Falha ao comparar coletas")
+                        st.error("Não foi possível validar a comparação. Confira o histórico de revisões.")
+                    else:
+                        counts = st.columns(4)
+                        counts[0].metric("Observações com diferença líquida", len(compared))
+                        counts[1].metric("Indicadores afetados", compared.code.nunique())
+                        counts[2].metric("Revisões líquidas", int(compared.event_type.eq("revision").sum()))
+                        counts[3].metric("Observações adicionadas", int(compared.event_type.eq("added_observation").sum()))
+                        if compared.empty:
+                            st.info("Nenhuma diferença nos valores originais entre as duas coletas. Podem existir revisões intermediárias que se anularam.")
+                        else:
+                            view = compared.copy()
+                            view["event_type"] = view.event_type.map({"revision": "Revisão líquida", "added_observation": "Observação adicionada"})
+                            view["reference_date"] = pd.to_datetime(view.reference_date).dt.strftime("%m/%Y")
+                            st.dataframe(view.rename(columns={
+                                "code": "SGS", "name": "Indicador", "reference_date": "Referência",
+                                "event_type": "Mudança", "old_value": "Valor inicial", "new_value": "Valor final",
+                                "difference": "Diferença líquida", "unit": "Unidade", "difference_unit": "Unidade da diferença",
+                                "previous_snapshot_id": "Coleta inicial", "snapshot_id": "Coleta final",
+                            }), hide_index=True, width="stretch")
+                        st.download_button("Baixar comparação · CSV", compared.to_csv(index=False).encode("utf-8-sig"),
+                                           file_name=f"comparacao-{earlier}-{later}.csv", mime="text/csv", key="comparison_csv")
+                        st.caption(f"Coleta inicial: {earlier} · Coleta final: {later}")
+                        st.caption("Diferença = valor final − valor inicial. Taxas em p.p.; demais valores na unidade original. Novas observações não têm valor inicial. Adições incluem novos meses, lacunas preenchidas e séries incluídas. A comparação não altera a base publicada.")
 elif page == "Dicionário e metodologia":
     st.caption("Fichas do catálogo associado à base publicada. Nenhum filtro altera os dados de origem.")
     query = st.text_input("Buscar por nome ou código SGS", key="dictionary_search").strip().casefold()

@@ -274,3 +274,42 @@ def latest_changes(history, meta):
         "events": events,
         "by_series": by_series,
     }
+
+
+def compare_collections(history, meta, earlier_id, later_id):
+    """Diferença líquida entre pontos da cadeia validada de revisões."""
+    if meta is None:
+        raise ValueError("Histórico de comparações indisponível")
+    identifiers = [meta["baseline_snapshot_id"], *[c["snapshot_id"] for c in meta["comparisons"]]]
+    if earlier_id not in identifiers or later_id not in identifiers:
+        raise ValueError("Coleta não pertence ao histórico disponível")
+    start, end = identifiers.index(earlier_id), identifiers.index(later_id)
+    if start >= end:
+        raise ValueError("Escolha uma coleta inicial anterior à coleta final")
+    selected = identifiers[start + 1:end + 1]
+    events = history.loc[history.snapshot_id.isin(selected)].copy()
+    order = {identifier: index for index, identifier in enumerate(selected)}
+    events = events.sort_values("snapshot_id", key=lambda values: values.map(order), kind="stable")
+    rows = []
+    for (code, reference), group in events.groupby(["code", "reference_date"], sort=True):
+        first, last = group.iloc[0], group.iloc[-1]
+        before, after = decimal_value(first.old_value), decimal_value(last.new_value)
+        prior_value = decimal_value(first.new_value)
+        for event in group.iloc[1:].itertuples(index=False):
+            if decimal_value(event.old_value) != prior_value:
+                raise ValueError("Valores intermediários inconsistentes no histórico")
+            prior_value = decimal_value(event.new_value)
+        if before == after:
+            continue
+        kind = "revision" if before is not None else "added_observation"
+        rows.append({
+            "code": code, "name": last["name"], "reference_date": reference,
+            "event_type": kind, "old_value": format(before, "f") if before is not None else "",
+            "new_value": format(after, "f"),
+            "difference": format(after - before, "f") if before is not None else "",
+            "unit": last.unit, "difference_unit": last.difference_unit,
+            "previous_snapshot_id": earlier_id, "snapshot_id": later_id,
+        })
+    columns = ["code", "name", "reference_date", "event_type", "old_value", "new_value",
+               "difference", "unit", "difference_unit", "previous_snapshot_id", "snapshot_id"]
+    return pd.DataFrame(rows, columns=columns)
