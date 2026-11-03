@@ -57,3 +57,10 @@ A tabela do painel usa a última referência com valor numérico de cada série 
 `observatorio/monitoring.py` lê/valida metadados e calcula os estados. `scripts/monitor_update.py` registra início/fim e consulta as execuções. `dashboard/app.py` apresenta os resultados.
 
 Os testes cobrem o limiar de 30 horas, falhas com base recente, interrupções, execução ausente ou presa, recuperação, preservação do último sucesso, ausência/erro de metadados, omissão de detalhes internos e separação entre defasagem da fonte e falha operacional. A interface é testada mantendo os gráficos disponíveis em caso de falha.
+
+## Backups
+
+O backup possui monitor independente, **Monitorar backups no Google Drive**.
+Uma coleta saudável não comprova cópia externa saudável. Consulte
+[Backup dos dados — monitoramento independente](backup.md#monitoramento-independente-do-backup)
+para limites, horários, relatório de última tentativa/sucesso e limitações.

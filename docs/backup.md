@@ -151,3 +151,43 @@ parciais. O mecanismo não reexecuta todo o workflow nem cria agendamentos extra
 
 Referências: [erros do Google Drive](https://developers.google.com/workspace/drive/api/guides/handle-errors)
 e [tentativas do rclone](https://rclone.org/docs/#retries-int).
+
+## Monitoramento independente do backup
+
+O workflow **Monitorar backups no Google Drive** executa após cada backup e a cada
+seis horas: 22h23, 04h23, 10h23 e 16h23 no horário de Brasília. Também permite
+execução manual. Ele consulta os jobs das últimas 20 execuções do backup na
+`main`, incluindo o número da tentativa em reexecuções manuais. O resumo mostra:
+
+- Última tentativa efetiva, início, término, duração e link da execução.
+- Último sucesso completo identificado na janela consultada.
+- Falha, cancelamento, ausência de execução ou backup pulado por condição do job.
+- Ausência de sucesso validado por mais de 30 horas e execução pendente por mais
+  de uma hora. Uma execução em andamento não oculta um sucesso antigo.
+
+O monitor exige o sucesso do job e da etapa **Enviar e verificar cópia externa**,
+que inclui conferência, recuperação, teste das páginas e retenção. Um workflow
+com job pulado não comprova backup e não atualiza o último sucesso. Se ocorrer
+falha após a gravação no Drive, o monitor sinaliza conservadoramente a falha do
+processo completo; isso não significa necessariamente que a cópia remota inexista.
+Não encontrar sucesso na janela de 20 execuções gera alerta, sem inventar uma
+data. Renomear a etapa de verificação exige atualizar `VERIFICATION_STEP` no
+monitor e seus testes.
+
+Abra **Actions → Monitorar backups no Google Drive → execução → Summary** para
+ver o estado. O arquivo `status.json` fica no artefato `backup-monitor-*` por 30
+dias, tanto no sucesso quanto na falha da consulta. Problemas na API ou metadados
+inválidos produzem estado desconhecido e falha do monitor, nunca sucesso silencioso.
+O agendamento permite detectar ausência do workflow de backup mesmo sem evento
+novo, com a defasagem da próxima verificação e eventuais atrasos do GitHub Actions.
+
+O monitor usa apenas o token temporário do GitHub com `actions: read` e
+`contents: read`. Não precisa de novo secret nem acessa credenciais ou arquivos
+do Drive. Não escreve na base de dados e não repete operações de backup/limpeza.
+A evidência é a execução registrada; não substitui uma nova leitura do Drive e
+não detecta uma cópia apagada manualmente depois da validação.
+
+Alertas aparecem como falha e anotação no GitHub Actions. A entrega por e-mail
+ou aplicativo depende das preferências de notificações da conta; nenhum canal
+externo adicional é configurado. O monitor depende do próprio GitHub Actions,
+portanto não é um monitor externo para uma indisponibilidade total do GitHub.
