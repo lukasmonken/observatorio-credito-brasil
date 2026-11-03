@@ -59,3 +59,27 @@ suavização de uma série que já é média móvel trimestral dessazonalizada n
 Não deve ser interpretada como o valor original publicado. Para a inflação,
 acumulado de 12 meses exige todos os meses da janela; para crescimento em 12 meses,
 o cálculo exige os valores nos dois extremos, sem imputação dos meses intermediários.
+
+## Exportação Excel do explorador
+
+Em **Explorador de indicadores → Baixar dados filtrados · Excel**, o arquivo
+respeita o indicador, o período e a transformação selecionados no painel.
+A aba **Dados** contém os valores originais e, quando selecionada, a transformação.
+A aba **Indicador** registra a fonte oficial, o conceito, unidades, periodicidade,
+segmento e limitações do catálogo da base publicada. **Metodologia** inclui a
+fórmula selecionada, o mês-base e esta documentação. **Coleta** identifica o
+snapshot, datas de coleta/exportação, filtro solicitado e referências exportadas.
+
+O Excel recebe os resultados calculados pelo painel, sem recalcular indicadores
+nem inserir fórmulas executáveis. A base 100 acompanha a primeira observação
+válida do recorte; médias e variações preservam os cálculos feitos sobre o
+histórico antes do filtro. Datas de referência são células de data, formatadas
+como mês/ano. Números permanecem numéricos; células vazias significam ausência e
+zero permanece zero. Percentuais mantêm sua escala original: 15 representa 15%,
+não 0,15. Valores seguem a precisão numérica do Excel (aproximadamente 15 dígitos
+significativos), sem arredondamento prévio adicional pelo exportador.
+
+Cabeçalhos congelados, filtros e unidades facilitam o uso fora do painel. Textos
+e URLs são gravados como conteúdo, sem conversão automática em fórmulas ou links
+ativos. O arquivo é gerado em memória, não grava dados no servidor e não realiza
+chamadas externas. A exportação CSV existente continua disponível.
