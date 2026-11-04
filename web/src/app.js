@@ -365,20 +365,10 @@ function chart(
     rows: rows.filter((r) => r.code === s.code),
     color: customColors?.[s.code] || colors[index % colors.length],
   }));
+  const chartDates = selected.flatMap((s) => s.rows.map((r) => r.date)).sort();
   box.append(
     note(
-      `Fonte: BCB/SGS ${codes.join(", ")} · ${
-        rows.length
-          ? month(rows.map((r) => r.date).sort()[0]) +
-            "–" +
-            month(
-              rows
-                .map((r) => r.date)
-                .sort()
-                .at(-1),
-            )
-          : "sem período"
-      } · ${units.join(" / ")}`,
+      `Fonte: BCB/SGS ${codes.join(", ")} · ${chartDates.length ? month(chartDates[0]) + "–" + month(chartDates.at(-1)) : "sem período"} · ${units.join(" / ")}`,
     ),
   );
   parent.append(box);

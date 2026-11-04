@@ -456,3 +456,7 @@ th button:hover {
   text-decoration: underline;
   background: transparent;
 }
+
+main:focus {
+  outline: none;
+}
