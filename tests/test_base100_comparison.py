@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -47,7 +49,7 @@ def test_negative_base_and_out_of_order_dates():
 
 def test_streamlit_comparison_renders_and_exports():
     from streamlit.testing.v1 import AppTest
-    app = AppTest.from_file('dashboard/app.py', default_timeout=20).run()
+    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / 'dashboard/app.py'), default_timeout=20).run()
     app.sidebar.radio[0].set_value('Comparação em base 100').run()
     assert not app.exception
     assert len(app.get('plotly_chart')) == 1
