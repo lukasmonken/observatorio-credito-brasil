@@ -3,7 +3,7 @@ test('Publicação carrega dados e renderiza gráficos no navegador',async({page
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto('',{waitUntil:'domcontentloaded'});
   await expect(page.locator('main h2')).toHaveText('Visão geral');
-  await expect(page.locator('.kpi')).toHaveCount(4);
+  await expect(page.locator('main > .kpis > .kpi')).toHaveCount(4);
   await expect(page.locator('.js-plotly-plot')).toHaveCount(2);
   await expect(page.locator('.scatterlayer .trace').first()).toBeVisible();
   await expect(page.locator('main .error')).toHaveCount(0);
