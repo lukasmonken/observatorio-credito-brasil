@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Indicadores oficiais de crédito e conjuntura do Brasil. Séries do Bacen, histórico de revisões e análise econômica."
+    />
+    <title>Observatório de Crédito Brasil</title>
+    <link rel="stylesheet" href="{{CSS}}" />
+    <script type="module" src="{{JS}}"></script>
+  </head>
+  <body>
+    <a class="skip" href="#content">Ir para os dados</a>
+    <aside>
+      <a class="brand" href="#overview">OBSERVATÓRIO / BRASIL</a>
+      <nav aria-label="Navegação principal" id="nav"></nav>
+      <div id="sidebar-meta"></div>
+      <a
+        class="secondary"
+        href="https://observatorio-credito-brasil.streamlit.app/"
+        target="_blank"
+        rel="noopener"
+        >Versão Streamlit</a
+      >
+    </aside>
+    <div class="workspace">
+      <header>
+        <h1>Observatório de Crédito Brasil</h1>
+        <p>Dados e indicadores do mercado de crédito brasileiro</p>
+        <div id="metadata" class="muted"></div>
+      </header>
+      <div id="health" role="status"></div>
+      <main id="content" tabindex="-1" aria-live="polite">
+        <p>Carregando a base validada…</p>
+      </main>
+      <footer>
+        Fontes oficiais · BCB / SGS · Análise descritiva, sem inferência causal.
+      </footer>
+    </div>
+    <noscript
+      >Ative o JavaScript para utilizar os filtros e gráficos. A versão
+      Streamlit permanece disponível no link acima.</noscript
+    >
+  </body>
+</html>

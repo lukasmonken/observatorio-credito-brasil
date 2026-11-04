@@ -14,3 +14,8 @@ work/
 .mypy_cache/
 .coverage*
 htmlcov/
+node_modules/
+web/dist/
+web/generated/
+web/test-results/
+web/playwright-report/

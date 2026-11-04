@@ -2,7 +2,9 @@
 
 [Abrir painel](https://observatorio-credito-brasil.streamlit.app/)
 
-Dashboard de Lukas Monken com 24 séries oficiais BCB/SGS e sete páginas de análise. Python, Pandas, SQL e Streamlit.
+Dashboard de Lukas Monken com 24 séries oficiais BCB/SGS e oito páginas de análise. Python, Pandas, SQL, Streamlit e uma interface estática para GitHub Pages.
+
+A versão para GitHub Pages e sua publicação automática estão documentadas em [hospedagem e testes](docs/github-pages.md). O Streamlit permanece disponível durante a transição.
 
 ## Tecnologias utilizadas
 
@@ -13,7 +15,8 @@ Dashboard de Lukas Monken com 24 séries oficiais BCB/SGS e sete páginas de an�
 | SQLite | Banco local padrão e banco temporário do job diário |
 | PostgreSQL | Alternativa suportada e testada na CI; não utilizado pelo site público |
 | Streamlit / Plotly | Interface e gráficos do dashboard publicado |
-| GitHub Actions | Atualização diária e testes automáticos |
+| JavaScript / GitHub Pages | Interface estática, filtros no navegador e exportações; ativação em Settings → Pages |
+| GitHub Actions | Atualização diária, testes e publicação automática do site |
 | Power BI | Não implementado neste projeto |
 | Tableau | Exportação CSV preparada; sem workbook criado ou publicado |
 
