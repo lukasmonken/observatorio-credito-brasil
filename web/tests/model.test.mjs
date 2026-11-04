@@ -153,3 +153,40 @@ test("Excel mantém zero, ausência e texto sem fórmulas executáveis", async (
       row.eachCell((cell) => assert.equal(cell.formula, undefined)),
     );
 });
+
+test("Comparação base 100 usa mês comum e equivale ao Python", async () => {
+  const { compareBase100 } = await import("../src/model.js");
+  const expected = JSON.parse(
+    await readFile(
+      new URL("../generated/base100-parity.json", import.meta.url),
+    ),
+  );
+  const actual = compareBase100(
+    periodRows(data.rows, "2018-01-01", "2025-06-01"),
+    [20539, 20631, 20714],
+  );
+  assert.equal(actual.base, expected.base);
+  assert.equal(actual.rows.length, expected.rows.length);
+  actual.rows.forEach((r, i) => {
+    const e = expected.rows[i];
+    assert.equal(r.date, e.date);
+    assert.equal(r.code, e.code);
+    if (e.base100 === null) assert.equal(r.base100, null);
+    else assert.ok(Math.abs(r.base100 - e.base100) < 1e-10);
+  });
+  const rows = [
+    { code: 1, date: "2020-01-01", original: 10 },
+    { code: 1, date: "2020-02-01", original: 20 },
+    { code: 2, date: "2020-02-01", original: 4 },
+    { code: 1, date: "2020-03-01", original: null },
+    { code: 2, date: "2020-03-01", original: 8 },
+  ];
+  assert.deepEqual(
+    compareBase100(rows, [1, 2]).rows.map((r) => r.base100),
+    [100, 100, null, 200],
+  );
+  assert.equal(compareBase100(rows, [1, 9]).base, null);
+  assert.equal(compareBase100(rows, []).base, null);
+  rows[2].original = 0;
+  assert.equal(compareBase100(rows, [1, 2]).base, null);
+});

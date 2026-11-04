@@ -8,7 +8,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from observatorio.revisions import compare_collections
-from observatorio.transform import lag_pairs
+from observatorio.transform import lag_pairs, compare_base100
 
 config = json.loads((ROOT / "web/generated/site.json").read_text())
 data = json.loads((ROOT / "web/generated" / config["data"]).read_text())
@@ -32,3 +32,8 @@ if meta:
         result = compare_collections(pd.DataFrame(data["history"]), meta, earlier, later)
         comparisons.append(dict(earlier=earlier, later=later, expected=result.to_dict("records")))
 (ROOT / "web/generated/parity.json").write_text(json.dumps(dict(correlations=cases, comparisons=comparisons), allow_nan=False))
+
+comparison, base = compare_base100(frame.loc[frame.date.between('2018-01-01', '2025-06-01')], [20539, 20631, 20714])
+comparison['date'] = comparison.date.dt.strftime('%Y-%m-%d')
+fixture = {'base': base.strftime('%Y-%m-%d'), 'rows': json.loads(comparison[['code', 'date', 'base100']].to_json(orient='records', double_precision=15))}
+(ROOT / 'web/generated/base100-parity.json').write_text(json.dumps(fixture))

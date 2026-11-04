@@ -17,7 +17,7 @@ from observatorio.excel import METRIC_FORMULAS as formulas, METRIC_LABELS as lab
 from observatorio.monitoring import collection_health, read_status, source_freshness
 from observatorio.revisions import EVENT_LABELS, compare_collections, latest_changes, read_history
 from observatorio.snapshot import load_snapshot
-from observatorio.transform import lag_pairs
+from observatorio.transform import lag_pairs, compare_base100
 
 st.set_page_config(page_title="Observatório de Crédito | Brasil", layout="wide")
 st.markdown(
@@ -100,6 +100,7 @@ names = {s["code"]: s["name"] for s in specs}
 pages = [
     "Visão geral",
     "Juros e crédito",
+    "Comparação em base 100",
     "Famílias e inadimplência",
     "Explorador de indicadores",
     "Relações e defasagens",
@@ -371,6 +372,42 @@ elif page == "Juros e crédito":
     st.caption(
         "Modalidades PF com recursos livres podem ser comparadas em % a.a.; garantias, prazos e composição diferem. Agregados não devem ser somados às modalidades."
     )
+elif page == "Comparação em base 100":
+    available = [s['code'] for s in specs if s['measure_type'] != 'variation']
+    selection = st.multiselect("Indicadores", available, default=[20539, 20631, 20714],
+                               format_func=lambda c: names[c], max_selections=6, key="comparison_codes")
+    data = date_filter(df, "comparison_dates")
+    if len(selection) < 2:
+        st.info("Selecione de dois a seis indicadores.")
+    else:
+        compared, base = compare_base100(data, selection)
+        if base is None:
+            st.info("Não há mês comum com valores válidos e diferentes de zero. Ajuste o período ou os indicadores.")
+        else:
+            st.caption(f"Mês-base comum: {base:%m/%Y} = 100. Primeiro mês do recorte com valores válidos e diferentes de zero em todas as séries.")
+            fig = go.Figure()
+            for index, code in enumerate(selection):
+                values = compared.loc[compared.code == code]
+                fig.add_trace(go.Scatter(x=values.date, y=values.base100, name=names[code], mode="lines",
+                                        connectgaps=False, line=dict(color=SERIES_COLORS[index], width=2),
+                                        hovertemplate="%{x|%m/%Y}<br>%{y:,.2f} · base 100<extra>%{fullData.name}</extra>"))
+            style_chart(fig, height=440)
+            fig.update_yaxes(title_text="Índice base 100")
+            fig.update_layout(hovermode="x unified")
+            st.plotly_chart(fig, width="stretch", theme=None, key="comparison_base100")
+            st.caption("Índice = valor original ÷ valor no mês-base × 100. 120 significa alta de 20%, não 20 p.p. A normalização não corrige inflação, sazonalidade ou diferenças de conceito. Lacunas permanecem vazias e as séries podem terminar em meses diferentes.")
+            if compared.loc[compared.date == base, 'original'].lt(0).any():
+                st.warning("Há denominador negativo no mês-base: a direção do índice se inverte em relação ao valor original.")
+            exported = compared[['code', 'date', 'original', 'base100']].copy()
+            exported['name'] = exported.code.map(names)
+            exported['original_unit'] = exported.code.map(lambda c: by_code[c]['unit'])
+            exported['base_month'] = base.strftime('%Y-%m-%d')
+            exported['snapshot_id'] = manifest['snapshot_id']
+            st.download_button("Baixar comparação · CSV", exported.to_csv(index=False).encode('utf-8-sig'),
+                               'comparacao_base100.csv', 'text/csv', key="comparison_csv")
+            with st.expander("Ver valores comparados"):
+                st.dataframe(exported, hide_index=True, width="stretch")
+    st.caption("Taxas mensais de inflação não são indexadas nesta comparação; consulte seus acumulados no explorador.")
 elif page == "Famílias e inadimplência":
     data = date_filter(df, "family_dates")
     cols = st.columns(2)

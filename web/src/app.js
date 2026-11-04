@@ -5,6 +5,7 @@ import {
   finite,
   periodRows,
   rebase,
+  compareBase100,
   unit,
   lagPairs,
   pearson,
@@ -16,6 +17,7 @@ import {
 const pages = [
   ["overview", "Visão geral"],
   ["credit", "Juros e crédito"],
+  ["comparison", "Comparação em base 100"],
   ["family", "Famílias e inadimplência"],
   ["explorer", "Explorador de indicadores"],
   ["relations", "Relações e defasagens"],
@@ -544,6 +546,72 @@ function credit() {
   main.append(
     note(
       "Modalidades PF com recursos livres podem ser comparadas em % a.a.; garantias, prazos e composição diferem. Agregados não devem ser somados às modalidades.",
+    ),
+  );
+}
+function comparison() {
+  main.append(
+    note(
+      "Compare trajetórias relativas usando o mesmo mês-base. Até seis indicadores, com cores distintas.",
+    ),
+  );
+  const available = data.catalog.filter((s) => s.measure_type !== "variation");
+  main.append(
+    checks(
+      "comparison-codes",
+      "Indicadores",
+      available.map((s) => [s.code, s.name]),
+      ["20539", "20631", "20714"],
+    ),
+    period("comparison"),
+  );
+  const codes = state["comparison-codes"].map(Number);
+  if (codes.length < 2 || codes.length > 6) {
+    main.append(message("Selecione de dois a seis indicadores."));
+    return;
+  }
+  const result = compareBase100(filtered("comparison", data.rows), codes);
+  if (!result.base) {
+    main.append(
+      message(
+        "Não há mês comum com valores válidos e diferentes de zero. Ajuste o período ou os indicadores.",
+      ),
+    );
+    return;
+  }
+  main.append(
+    note(
+      `Mês-base comum: ${month(result.base)} = 100. O gráfico começa no primeiro mês do recorte em que todas as séries têm valor válido e diferente de zero.`,
+    ),
+  );
+  chart(main, codes, "base100", result.rows, "Evolução relativa · base 100");
+  main.append(
+    note(
+      "Índice = valor original ÷ valor no mês-base × 100. 120 significa alta de 20% em relação à base, não 20 pontos percentuais. A normalização não corrige inflação, sazonalidade ou diferenças de conceito. Lacunas permanecem vazias; o fim do histórico pode variar por série.",
+    ),
+  );
+  if (result.rows.some((r) => r.date === result.base && r.original < 0))
+    main.append(
+      message(
+        "Há denominador negativo no mês-base: a direção do índice se inverte em relação ao valor original. Interprete com cautela.",
+        "alert",
+      ),
+    );
+  const exported = result.rows.map((r) => ({
+    code: r.code,
+    name: byCode.get(r.code).name,
+    date: r.date,
+    original: r.original,
+    original_unit: byCode.get(r.code).unit,
+    base100: r.base100,
+    base_month: result.base,
+    snapshot_id: data.manifest.snapshot_id,
+  }));
+  main.append(
+    download("Baixar comparação · CSV", exported, "comparacao_base100.csv"),
+    details("Ver valores comparados", table(exported)),
+    note(
+      "Taxas mensais de inflação não são indexadas nesta comparação; consulte seus acumulados no explorador.",
     ),
   );
 }
@@ -1338,6 +1406,7 @@ function render() {
   try {
     ({
       overview,
+      comparison,
       credit,
       family,
       explorer,
