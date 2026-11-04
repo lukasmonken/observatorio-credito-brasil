@@ -46,6 +46,7 @@ test("Três séries com cores distintas e seleção interativa", async ({
       page.locator(".js-plotly-plot").evaluate((n) => n.data[0].visible),
     )
     .toBe("legendonly");
+  await page.locator("#credit-Total-toggle").click();
   await page.locator("fieldset input").first().uncheck();
   await expect
     .poll(() => page.locator(".js-plotly-plot").evaluate((n) => n.data.length))
@@ -104,7 +105,7 @@ test("Dicionário busca e estado vazio", async ({ page }) => {
 for (const width of [1920, 1440, 1366, 390])
   test("Layout sem transbordamento " + width, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    for (const route of ["overview", "credit", "explorer", "quality"]) {
+    for (const route of ["overview", "credit", "comparison", "explorer", "quality"]) {
       await page.goto("#" + route);
       await expect(page.locator("main h2")).toBeVisible();
       expect(
@@ -161,6 +162,7 @@ test("Comparação normalizada compartilha base e exporta recorte", async ({
     .getByRole("button", { name: "Baixar comparação · CSV", exact: true })
     .click();
   expect((await download).suggestedFilename()).toBe("comparacao_base100.csv");
+  await page.locator("#comparison-codes-toggle").click();
   await page.locator("#comparison-codes-20539").uncheck();
   await page.locator("#comparison-codes-20631").uncheck();
   await expect(page.locator("main")).toContainText(
@@ -191,6 +193,7 @@ test("Link restaura explorador em nova página e após recarregar", async ({ pag
 test("Link restaura comparação, navegação voltar e fallback de cópia", async ({ page }) => {
   await page.goto("#comparison");
   await page.locator("#comparisonstart").fill("2020-01-01");
+  await page.locator("#comparison-codes-toggle").click();
   await page.locator("#comparison-codes-20714").uncheck();
   const url = page.url();
   await page.getByRole("link", { name: "Explorador de indicadores", exact: true }).click();
@@ -217,4 +220,37 @@ test("Parâmetros inválidos não quebram controles", async ({ page }) => {
   await page.goto("#relations?v=1&lag=999&relation-x=bad");
   await expect(page.locator("#lag")).toHaveValue("6");
   await expect(page.locator("main")).not.toContainText("Não foi possível");
+});
+
+for (const width of [1440, 390]) test("Menu de indicadores compacto " + width, async ({ page }) => {
+  await page.setViewportSize({width, height: 900});
+  await page.goto("#comparison");
+  const menu = page.locator(".picker-menu");
+  await expect(menu).not.toHaveAttribute("open");
+  await expect(page.locator(".picker-tag")).toHaveCount(3);
+  await page.locator("#comparison-codes-toggle").click();
+  await page.locator("#comparison-codes-search").fill("selic");
+  await expect(page.locator(".picker-option")).toHaveCount(1);
+  await page.locator(".picker-option input").check();
+  await expect(page.locator("#comparison-codes-search")).toHaveValue("selic");
+  await expect(page.locator(".picker-tag")).toHaveCount(4);
+  await page.locator("#comparison-codes-search").fill("");
+  await page.locator(".picker-option input:not(:checked):not(:disabled)").first().check();
+  await page.locator(".picker-option input:not(:checked):not(:disabled)").first().check();
+  await expect(page.locator(".picker-tag")).toHaveCount(6);
+  await expect(page.locator(".picker-option input:not(:checked):not(:disabled)")).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({path: `test-results/picker-open-${width}.png`, fullPage: true});
+  await page.keyboard.press("Escape");
+  await expect(menu).not.toHaveAttribute("open");
+  await expect(page.locator("#comparison-codes-toggle")).toBeFocused();
+  await page.locator(".picker-tag button").last().click();
+  await expect(page.locator(".picker-tag")).toHaveCount(5);
+  await page.locator("#comparison-codes-toggle").click();
+  await page.locator("#comparison-codes-search").fill("zzzinexistente");
+  await expect(page.locator(".picker-options")).toContainText("Nenhum indicador encontrado");
+  await page.locator("h2").click();
+  await expect(menu).not.toHaveAttribute("open");
+  await expect(page.locator(".js-plotly-plot")).toBeVisible();
+  await page.screenshot({path: `test-results/picker-closed-${width}.png`, fullPage: true});
 });

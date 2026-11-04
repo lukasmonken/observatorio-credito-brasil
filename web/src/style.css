@@ -460,3 +460,35 @@ th button:hover {
 main:focus {
   outline: none;
 }
+
+/* Compact indicator selection: the chart remains the focus. */
+.indicator-picker { position: relative; margin: 22px 0 16px; max-width: 780px; }
+.picker-menu { margin: 0; padding: 0; border: 1px solid #cbd5cf; border-radius: 8px; background: #fff; }
+.picker-menu > summary { display: flex; align-items: center; gap: 12px; padding: 13px 16px; list-style: none; font-size: 15px; font-weight: 400; }
+.picker-menu > summary::-webkit-details-marker { display: none; }
+.picker-menu > summary > span:first-child { font-weight: 600; }
+.picker-count { margin-left: auto; color: var(--muted); font-size: 13px; }
+.picker-chevron { color: var(--accent); font-size: 20px; line-height: 1; }
+.picker-menu[open] .picker-chevron { transform: rotate(180deg); }
+.picker-menu[open] { border-color: #829c8d; }
+.picker-panel { position: absolute; z-index: 20; top: 52px; left: 0; right: 0; padding: 14px; background: #fff; border: 1px solid #cbd5cf; border-radius: 8px; box-shadow: 0 12px 30px #18382a1a; }
+.picker-panel > input { width: 100%; border-radius: 6px; background: #fafbf9; padding: 10px 12px; }
+.picker-options { max-height: 310px; overflow-y: auto; overscroll-behavior: contain; margin-top: 10px; }
+.picker-options fieldset { margin: 8px 0 12px; }
+.picker-options legend { color: var(--muted); font-size: 12px; letter-spacing: .04em; padding: 6px 10px; margin: 0; }
+.picker-option { display: flex; align-items: flex-start; min-width: 0; gap: 10px; padding: 10px; border-radius: 5px; line-height: 1.4; cursor: pointer; }
+.picker-option:hover { background: #f3f6f3; }
+.picker-option:has(input:checked) { background: #edf3ee; color: #234f40; }
+.picker-option input { flex-shrink: 0; margin: 3px 0 0; }
+.picker-option:has(input:disabled) { opacity: .5; cursor: not-allowed; }
+.picker-footer { border-top: 1px solid var(--border); padding-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.picker-footer button { padding: 7px 16px; border-radius: 5px; background: var(--accent); color: #fff; }
+.picker-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.picker-tag { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; padding: 5px 8px 5px 12px; border: 1px solid #dfe7e1; background: #f2f5f1; border-radius: 6px; color: #3a5143; font-size: 13px; line-height: 1.4; }
+.picker-tag > span { overflow-wrap: anywhere; }
+.picker-tag button { border: 0; background: transparent; padding: 2px 5px; font-size: 18px; line-height: 1; color: #57715f; flex-shrink: 0; }
+@media (max-width: 700px) {
+  .picker-panel { padding: 10px; }
+  .picker-options { max-height: 45vh; }
+  .picker-menu > summary { gap: 8px; padding: 13px 12px; }
+}
