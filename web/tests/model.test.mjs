@@ -190,3 +190,29 @@ test("Comparação base 100 usa mês comum e equivale ao Python", async () => {
   rows[2].original = 0;
   assert.equal(compareBase100(rows, [1, 2]).base, null);
 });
+
+test("Links preservam filtros, listas vazias, Unicode e defasagem zero", async () => {
+  const { readShare, shareHash, pageKeys } = await import("../src/share.js");
+  const examples = {
+    credit: { segment: "PF", "credit-PF": ["20540", "20716"], "credit-view": "combined", creditstart: "2020-01-01" },
+    comparison: { "comparison-codes": [], comparisonstart: "2020-01-01", comparisonend: "2021-02-01" },
+    explorer: { "explorer-code": "20539", "explorer-metric": "base100" },
+    relations: { lag: 0, "relation-x": "432", "relation-y": "21084" },
+    revisions: { "revision-types": ["revision"], "compare-initial": "abc123" },
+    dictionary: { "dictionary-search": "Inflação & crédito + juros? #Brasil", "dictionary-code": "433" },
+  };
+  for (const page of Object.keys(pageKeys)) {
+    const state = examples[page] || {};
+    assert.deepEqual(readShare(shareHash(page, state)), { page, state });
+  }
+  assert.deepEqual(readShare("#explorer"), { page: "explorer", state: {} });
+});
+test("Links inválidos ignoram chaves desconhecidas, tipos incorretos e datas impossíveis", async () => {
+  const { readShare } = await import("../src/share.js");
+  assert.deepEqual(readShare('#comparison?v=1&comparison-codes=%7B%7D&comparisonstart=2020-02-31&__proto__=x').state, {});
+  assert.deepEqual(readShare('#relations?v=1&lag=99').state, {});
+  assert.deepEqual(readShare('#relations?v=1&lag=%22hello%22').state, {});
+  assert.deepEqual(readShare('#explorer?v=2&explorer-code=433').state, {});
+  assert.equal(readShare('#constructor?v=1').page, 'overview');
+  assert.equal(readShare('#not-a-page').page, 'overview');
+});
