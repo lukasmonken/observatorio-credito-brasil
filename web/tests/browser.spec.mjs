@@ -201,6 +201,10 @@ test("Link restaura comparação, navegação voltar e fallback de cópia", asyn
   await page.goto(url);
   await expect(page.locator("#comparison-codes-20714")).not.toBeChecked();
   await page.getByText("Compartilhar análise", { exact: true }).click();
+  await page.evaluate(() => Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async (text) => { window.copiedAnalysis = text; } } }));
+  await page.locator("#copy-analysis").click();
+  await expect(page.locator("#share-status")).toHaveText("Link copiado.");
+  expect(await page.evaluate(() => window.copiedAnalysis)).toBe(page.url());
   await page.evaluate(() => Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: () => Promise.reject(new Error("blocked")) } }));
   await page.locator("#copy-analysis").click();
   await expect(page.locator("#share-status")).toContainText("Selecione e copie");
