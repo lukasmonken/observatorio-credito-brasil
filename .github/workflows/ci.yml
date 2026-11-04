@@ -13,6 +13,7 @@ on:
       - '.github/workflows/ci.yml'
       - '.github/workflows/monitor-data.yml'
       - '.github/workflows/monitor-backup.yml'
+      - '.github/workflows/monitor-pages.yml'
       - '.github/workflows/update-data.yml'
   workflow_dispatch:
 permissions:
@@ -47,7 +48,7 @@ jobs:
       - name: Análise estática
         run: |
           ruff check observatorio dashboard scripts tests
-          mypy observatorio scripts/update_data.py scripts/monitor_update.py scripts/monitor_backup.py
+          mypy observatorio scripts/update_data.py scripts/monitor_update.py scripts/monitor_backup.py scripts/monitor_pages.py
       - name: Testes e cobertura
         run: |
           python -m coverage run -m pytest -q
