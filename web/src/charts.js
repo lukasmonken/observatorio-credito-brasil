@@ -36,6 +36,7 @@ export async function drawLines(node, series, units) {
     hovertemplate:
       "%{x|%m/%Y}<br>%{y:,.3f} " + s.unit + "<extra>%{fullData.name}</extra>",
   }));
+  node.replaceChildren();
   await Plotly.newPlot(
     node,
     traces,
@@ -43,22 +44,24 @@ export async function drawLines(node, series, units) {
       ...layout,
       height: units.length > 1 ? 430 : 350,
       yaxis: { ...layout.yaxis, title: { text: units[0] } },
-      yaxis2:
-        units.length > 1
-          ? {
+      ...(units.length > 1
+        ? {
+            yaxis2: {
               title: { text: units[1] },
               overlaying: "y",
               side: "right",
               showgrid: false,
               automargin: true,
-            }
-          : undefined,
+            },
+          }
+        : {}),
     },
     { responsive: true, displaylogo: false, scrollZoom: false },
   );
 }
 export async function drawScatter(node, pairs, xunit, yunit) {
   if (!node.isConnected) return;
+  node.replaceChildren();
   await Plotly.newPlot(
     node,
     [

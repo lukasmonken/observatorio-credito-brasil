@@ -25,6 +25,8 @@ def build_data(root, output):
     monitoring_error = None
     try:
         monitoring = read_status(root)
+        if monitoring is not None:
+            monitoring = {key: monitoring[key] for key in ("status", "started_at", "ended_at", "last_success_at", "duration_seconds", "failed_series", "stage") if key in monitoring}
     except (ValueError, OSError):
         monitoring = None
         monitoring_error = "Estado operacional indisponível; os dados publicados foram validados."

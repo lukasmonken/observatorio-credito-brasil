@@ -367,13 +367,25 @@ function chart(
   }));
   box.append(
     note(
-      `Fonte: BCB/SGS ${codes.join(", ")} · ${rows.length ? month(rows.map(r => r.date).sort()[0]) + "–" + month(rows.map(r => r.date).sort().at(-1)) : "sem período"} · ${units.join(" / ")}`,
+      `Fonte: BCB/SGS ${codes.join(", ")} · ${
+        rows.length
+          ? month(rows.map((r) => r.date).sort()[0]) +
+            "–" +
+            month(
+              rows
+                .map((r) => r.date)
+                .sort()
+                .at(-1),
+            )
+          : "sem período"
+      } · ${units.join(" / ")}`,
     ),
   );
   parent.append(box);
   charts()
     .then((c) => c.drawLines(plot, selected, units))
-    .catch(() => {
+    .catch((error) => {
+      console.error(error);
       if (plot.isConnected)
         plot.replaceChildren(
           message(

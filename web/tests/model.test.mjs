@@ -130,3 +130,26 @@ test("CSV preserva decimais e protege fórmulas", () => {
   assert.match(result, /'=HYPERLINK/);
   assert.match(result, /"-1.2","0",""/);
 });
+
+test("Excel mantém zero, ausência e texto sem fórmulas executáveis", async () => {
+  const { excelFile } = await import("../src/excel.js"),
+    { default: ExcelJS } = await import("exceljs");
+  const spec = { ...data.catalog[0], name: "=1+1" },
+    rows = [
+      { code: spec.code, date: "2020-01-01", original: 0 },
+      { code: spec.code, date: "2020-02-01", original: null },
+    ];
+  const buffer = await excelFile(data, rows, spec, "original", [
+    "2020-01-01",
+    "2020-02-01",
+  ]);
+  const book = new ExcelJS.Workbook();
+  await book.xlsx.load(buffer);
+  assert.equal(book.getWorksheet("Dados").getCell("D2").value, 0);
+  assert.equal(book.getWorksheet("Dados").getCell("D3").value, null);
+  assert.equal(book.getWorksheet("Dados").getCell("C2").value, "=1+1");
+  for (const sheet of book.worksheets)
+    sheet.eachRow((row) =>
+      row.eachCell((cell) => assert.equal(cell.formula, undefined)),
+    );
+});

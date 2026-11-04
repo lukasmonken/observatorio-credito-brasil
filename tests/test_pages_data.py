@@ -48,3 +48,11 @@ def test_invalid_monitoring_keeps_valid_data_with_warning(source):
     assert result['monitoring'] is None
     assert result['monitoring_error']
     assert result['rows']
+
+
+def test_monitoring_exports_only_operational_fields(source):
+    (source / 'data/processed/monitoring.json').write_text(json.dumps({
+        'status': 'success', 'stage': 'snapshot_validado', 'private_diagnostic': 'not-public',
+    }))
+    result = build_data(source, source / 'output')
+    assert result['monitoring'] == {'status': 'success', 'stage': 'snapshot_validado'}
