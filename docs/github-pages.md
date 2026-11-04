@@ -1,6 +1,6 @@
 # Dashboard no GitHub Pages
 
-A interface estática mantém as oito páginas do Streamlit. Python continua responsável pela coleta, SQL, validação, inflação, médias e variações. O navegador recebe somente dados públicos do snapshot validado. O Streamlit permanece disponível durante a migração.
+A interface estática mantém as páginas do Streamlit. Python continua responsável pela coleta, SQL, validação, inflação, médias e variações. O navegador recebe somente dados públicos do snapshot validado. O Streamlit permanece disponível durante a migração.
 
 ## Arquitetura
 
@@ -18,6 +18,7 @@ O site verifica novas versões a cada cinco minutos e verifica a idade da coleta
 |---|---|
 | Visão geral | KPIs, mudanças da última coleta, crescimento real e inadimplência |
 | Juros e crédito | Segmentos, seleção de séries, cores estáveis, comparação com dois eixos e gráficos separados |
+| Comparação em base 100 | De duas a seis séries, mês-base comum e CSV do recorte |
 | Famílias | Endividamento, comprometimento de renda e inadimplência |
 | Explorador | Transformações permitidas, período, base 100 no recorte, CSV e Excel com quatro abas |
 | Relações | Correlação de Pearson, alinhamento por mês calendário, defasagens de 0 a 24 meses |
@@ -90,3 +91,11 @@ Relatório JSON, trace e captura de tela quando houver falha ficam no artifact `
 Teste local: `python -m pytest -q tests/test_pages_monitor.py`. Consulta real: `python scripts/monitor_pages.py`. Navegador: dentro de `web`, execute `npx playwright test --config playwright.live.config.mjs` após instalar dependências e Chromium.
 
 Este monitor roda no GitHub Actions: uma indisponibilidade do próprio Actions pode atrasar tanto o deploy quanto a checagem. Não é um serviço externo de disponibilidade contínua.
+
+## Comparação em base 100
+
+A página **Comparação em base 100** permite selecionar de dois a seis indicadores e um período. Cada série é dividida pelo seu valor no primeiro mês comum com valores finitos e diferentes de zero, multiplicando o resultado por 100. Todos os indicadores usam a mesma referência, exibida acima do gráfico. O início efetivo pode ser posterior à data solicitada; sem mês comum, não se desenha um gráfico enganoso.
+
+O valor 120 representa aumento de 20% em relação à base. Para taxas, isso é variação relativa, não mudança em pontos percentuais. Não há correção adicional por inflação, sazonalidade ou diferenças de conceito. Denominadores negativos geram aviso; lacunas posteriores permanecem ausentes, e o fim da cobertura pode variar por série. Taxas mensais de inflação ficam fora dessa comparação: seus acumulados continuam disponíveis no explorador.
+
+O CSV inclui valor original, unidade original, índice normalizado, mês-base e identificador da coleta. Essa normalização comparativa também está disponível no Streamlit, sem mudar as transformações permitidas no explorador nem os dados do snapshot. Testes verificam equivalência entre Python e JavaScript.

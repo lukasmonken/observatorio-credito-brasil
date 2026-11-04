@@ -3,6 +3,7 @@ import ExcelJS from "exceljs";
 const pages = [
   "overview",
   "credit",
+  "comparison",
   "family",
   "explorer",
   "relations",
@@ -137,4 +138,32 @@ test("Falha de rede tem mensagem e nova tentativa", async ({ page }) => {
   await expect(
     page.getByRole("button", { name: "Tentar novamente" }),
   ).toBeVisible();
+});
+
+test("Comparação normalizada compartilha base e exporta recorte", async ({
+  page,
+}) => {
+  await page.goto("#comparison");
+  await page.locator("#comparisonstart").fill("2020-01-01");
+  await page.locator("#comparisonend").fill("2022-01-01");
+  await expect(page.locator("main")).toContainText(
+    "Mês-base comum: 01/2020 = 100",
+  );
+  await expect
+    .poll(() =>
+      page
+        .locator(".js-plotly-plot")
+        .evaluateAll((nodes) => nodes[0]?.data?.map((t) => t.y[0]) || []),
+    )
+    .toEqual([100, 100, 100]);
+  const download = page.waitForEvent("download");
+  await page
+    .getByRole("button", { name: "Baixar comparação · CSV", exact: true })
+    .click();
+  expect((await download).suggestedFilename()).toBe("comparacao_base100.csv");
+  await page.locator("#comparison-codes-20539").uncheck();
+  await page.locator("#comparison-codes-20631").uncheck();
+  await expect(page.locator("main")).toContainText(
+    "Selecione de dois a seis indicadores",
+  );
 });

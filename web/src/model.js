@@ -196,3 +196,36 @@ export function csv(rows, columns) {
     ].join("\r\n")
   );
 }
+
+export function compareBase100(rows, codes) {
+  codes = [...new Set(codes)];
+  if (!codes.length) return { rows: [], base: null };
+  const selected = rows.filter((r) => codes.includes(r.code));
+  const months = new Map();
+  for (const row of selected) {
+    if (!months.has(row.date)) months.set(row.date, new Map());
+    months.get(row.date).set(row.code, row.original);
+  }
+  const base = [...months.keys()]
+    .sort()
+    .find((date) =>
+      codes.every(
+        (code) =>
+          finite(months.get(date).get(code)) &&
+          months.get(date).get(code) !== 0,
+      ),
+    );
+  if (!base) return { rows: [], base: null };
+  return {
+    base,
+    rows: selected
+      .filter((r) => r.date >= base)
+      .map((r) => {
+        const value = finite(r.original)
+          ? (r.original / months.get(base).get(r.code)) * 100
+          : null;
+        return { ...r, base100: finite(value) ? value : null };
+      })
+      .sort((a, b) => a.date.localeCompare(b.date) || a.code - b.code),
+  };
+}

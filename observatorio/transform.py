@@ -132,3 +132,21 @@ def correlations(x, y, max_lag=12):
             )
         )
     return pd.DataFrame(rows)
+
+
+def compare_base100(frame, codes):
+    """Normaliza no primeiro mês comum com denominadores válidos, sem imputação."""
+    codes = list(dict.fromkeys(codes))
+    data = frame.loc[frame.code.isin(codes)].copy()
+    data['base100'] = np.nan
+    if not codes or data.empty:
+        return data.iloc[:0], None
+    values = data.pivot(index='date', columns='code', values='original').reindex(columns=codes).sort_index()
+    valid = (np.isfinite(values) & values.ne(0)).all(axis=1)
+    if not valid.any():
+        return data.iloc[:0], None
+    base = values.index[valid][0]
+    denominators = values.loc[base]
+    data = data.loc[data.date >= base].sort_values(['date', 'code']).copy()
+    data['base100'] = (data.original / data.code.map(denominators) * 100).replace([np.inf, -np.inf], np.nan)
+    return data, base
