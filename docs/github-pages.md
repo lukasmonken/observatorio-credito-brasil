@@ -70,3 +70,23 @@ Ativar Pages exige administração do repositório. Se `configure-pages` retorna
 - GitHub Actions pode atrasar agendamentos. A frequência diária não muda a periodicidade econômica das séries.
 - O frontend usa Plotly basic e o bundle de navegador do ExcelJS. `npm audit` apontou avisos moderados nas dependências transitivas de ferramentas Node do ExcelJS (glob/minimatch e uuid); glob/minimatch pertencem ao writer de streams Node, que não faz parte da interface de navegador. O aviso de uuid afeta v3/v5/v6 com buffer; o ExcelJS referencia v4 na formatação condicional, recurso que esta exportação não utiliza. O build não recebe padrões glob enviados por usuários. Não foram aplicados overrides de versões principais incompatíveis. Reavaliar ao atualizar ExcelJS; não interpretar os testes como certificação de segurança.
 - Streamlit e Pages compartilham os dados e fórmulas Python, mas têm camadas de apresentação distintas. Mudanças de regras ou novas páginas devem atualizar os testes de equivalência e ambas as interfaces durante a transição.
+
+## Monitoramento da publicação
+
+O workflow **Monitorar site publicado** executa a cada seis horas (00h23, 06h23, 12h23 e 18h23 UTC; 21h23, 03h23, 09h23 e 15h23 em Brasília), após cada tentativa de publicação em `main`, ao alterar o monitor e manualmente em Actions. Tentativas de publicação de pull requests não disparam o monitor público.
+
+A verificação HTTP consulta o endereço real, o JavaScript/CSS inicial, `site.json` e o arquivo de dados. Exige HTTP 200, limita respostas a 20 MiB, valida checksum SHA-256, estrutura, contagens e códigos das séries. Compara o identificador e metadados da coleta publicada com o manifesto de `main` no início da execução. Não acessa o Bacen nem altera dados.
+
+- `ok`: publicação corresponde à última base válida consultada.
+- `pending`: a base do repositório mudou há no máximo uma hora; a publicação pode estar em andamento. Este estado é aviso, não uma confirmação de atualização.
+- `alert`: indisponibilidade, resposta inválida, corrupção, arquivos ausentes ou divergência após a tolerância. O job termina com falha.
+
+Se a própria base do repositório tiver mais de 30 horas, o relatório avisa sobre a coleta; isso é separado da saúde da hospedagem. O monitor existente de coleta continua responsável por essa falha. Uma publicação nova que coincida com a leitura pode exigir repetir a checagem, pois a referência é o checkout do início do job.
+
+Em seguida, Chromium abre o site público, verifica KPIs e gráficos da visão geral, navega para juros/crédito e confere três séries no gráfico combinado. Essa etapa pode reprovar o job mesmo que o relatório HTTP esteja `ok`. Inclui uma repetição para falha transitória. Ela não substitui a suíte completa executada antes do deploy.
+
+Relatório JSON, trace e captura de tela quando houver falha ficam no artifact `pages-monitor-*` por sete dias; o resumo do Actions mostra o estado HTTP e os IDs das bases. As notificações dependem das preferências de notificações do GitHub. Nenhum secret novo é necessário, e as permissões do workflow são somente leitura.
+
+Teste local: `python -m pytest -q tests/test_pages_monitor.py`. Consulta real: `python scripts/monitor_pages.py`. Navegador: dentro de `web`, execute `npx playwright test --config playwright.live.config.mjs` após instalar dependências e Chromium.
+
+Este monitor roda no GitHub Actions: uma indisponibilidade do próprio Actions pode atrasar tanto o deploy quanto a checagem. Não é um serviço externo de disponibilidade contínua.
