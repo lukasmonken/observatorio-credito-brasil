@@ -167,3 +167,54 @@ test("Comparação normalizada compartilha base e exporta recorte", async ({
     "Selecione de dois a seis indicadores",
   );
 });
+
+test("Link restaura explorador em nova página e após recarregar", async ({ page, context }) => {
+  await page.goto("#explorer");
+  await page.locator("#explorer-code").selectOption("20539");
+  await page.locator("#explorer-metric").selectOption("base100");
+  await page.locator("#explorerstart").fill("2020-01-01");
+  await page.locator("#explorerend").fill("2021-01-01");
+  await page.getByText("Compartilhar análise", { exact: true }).click();
+  const url = await page.locator("#share-url").inputValue();
+  const other = await context.newPage();
+  await other.goto(url);
+  await expect(other.locator("#explorer-code")).toHaveValue("20539");
+  await expect(other.locator("#explorer-metric")).toHaveValue("base100");
+  await expect(other.locator("#explorerstart")).toHaveValue("2020-01-01");
+  await expect(other.locator("#explorerend")).toHaveValue("2021-01-01");
+  await other.reload();
+  await expect(other.locator("#explorer-metric")).toHaveValue("base100");
+  await expect(other.locator(".js-plotly-plot")).toBeVisible();
+  const traces = await other.locator(".js-plotly-plot").evaluate(n => n.data);
+  expect(traces[0].y[0]).toBe(100);
+});
+test("Link restaura comparação, navegação voltar e fallback de cópia", async ({ page }) => {
+  await page.goto("#comparison");
+  await page.locator("#comparisonstart").fill("2020-01-01");
+  await page.locator("#comparison-codes-20714").uncheck();
+  const url = page.url();
+  await page.getByRole("link", { name: "Explorador de indicadores", exact: true }).click();
+  await expect(page.locator("#explorer-code")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#comparisonstart")).toHaveValue("2020-01-01");
+  await expect(page.locator("#comparison-codes-20714")).not.toBeChecked();
+  await page.goto(url);
+  await expect(page.locator("#comparison-codes-20714")).not.toBeChecked();
+  await page.getByText("Compartilhar análise", { exact: true }).click();
+  await page.evaluate(() => Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async (text) => { window.copiedAnalysis = text; } } }));
+  await page.locator("#copy-analysis").click();
+  await expect(page.locator("#share-status")).toHaveText("Link copiado.");
+  expect(await page.evaluate(() => window.copiedAnalysis)).toBe(page.url());
+  await page.evaluate(() => Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: () => Promise.reject(new Error("blocked")) } }));
+  await page.locator("#copy-analysis").click();
+  await expect(page.locator("#share-status")).toContainText("Selecione e copie");
+  await expect(page.locator("#share-url")).toHaveValue(page.url());
+});
+test("Parâmetros inválidos não quebram controles", async ({ page }) => {
+  await page.goto("#comparison?v=1&comparison-codes=%7B%7D&comparisonstart=2020-02-31");
+  await expect(page.locator(".js-plotly-plot")).toBeVisible();
+  await expect(page.locator("#comparison-codes-20539")).toBeChecked();
+  await page.goto("#relations?v=1&lag=999&relation-x=bad");
+  await expect(page.locator("#lag")).toHaveValue("6");
+  await expect(page.locator("main")).not.toContainText("Não foi possível");
+});

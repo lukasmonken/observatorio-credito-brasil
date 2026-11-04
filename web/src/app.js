@@ -1,4 +1,5 @@
 import "./style.css";
+import { readShare, shareHash, pageKeys } from "./share.js";
 import {
   colors,
   eventLabels,
@@ -25,7 +26,7 @@ const pages = [
   ["dictionary", "Dicionário e metodologia"],
   ["quality", "Fontes e qualidade"],
 ];
-const state = {},
+const state = readShare(location.hash).state,
   main = document.querySelector("main");
 let data, byCode, series, dates, signature, chartsPromise;
 const number = (value, digits = 2) =>
@@ -45,10 +46,7 @@ const localTime = (value) =>
         timeStyle: "short",
       })
     : "Não registrado";
-const currentPage = () =>
-  pages.some(([key]) => key === location.hash.slice(1))
-    ? location.hash.slice(1)
-    : "overview";
+const currentPage = () => readShare(location.hash).page;
 function el(tag, attributes = {}, ...children) {
   const node = document.createElement(tag);
   for (const [key, value] of Object.entries(attributes)) {
@@ -1394,7 +1392,7 @@ function render() {
   main.replaceChildren();
   const page = currentPage();
   for (const a of document.querySelectorAll("nav a")) {
-    if (a.hash === "#" + page) a.setAttribute("aria-current", "page");
+    if (readShare(a.hash).page === page) a.setAttribute("aria-current", "page");
     else a.removeAttribute("aria-current");
   }
   main.append(
@@ -1426,6 +1424,27 @@ function render() {
     );
     console.error(error);
   }
+  const hash = shareHash(page, state);
+  if (location.hash !== hash) history.replaceState(null, "", hash);
+  for (const [key] of pages) {
+    const anchor = document.querySelector(`nav a[data-page="${key}"]`);
+    if (anchor) anchor.href = shareHash(key, state);
+  }
+  const sharedURL = location.href;
+  const field = el("input", { id: "share-url", type: "text", readonly: true, value: sharedURL, onclick: (e) => e.target.select() });
+  const status = el("p", { role: "status", id: "share-status" });
+  main.append(details("Compartilhar análise",
+    el("button", { type: "button", id: "copy-analysis", onclick: async () => {
+      try {
+        await navigator.clipboard.writeText(sharedURL);
+        status.textContent = "Link copiado.";
+      } catch {
+        field.focus(); field.select();
+        status.textContent = "Selecione e copie o link abaixo.";
+      }
+    } }, "Copiar link da análise"),
+    el("label", { for: "share-url" }, "Link com os filtros selecionados", field), status,
+    note("O link preserva os filtros e usa a base disponível ao abrir. Revisões futuras podem alterar os valores; exporte os dados para guardar esta coleta.")));
   if (focus) {
     const replacement = document.getElementById(focus);
     replacement?.focus({ preventScroll: true });
@@ -1502,8 +1521,11 @@ async function load() {
   return true;
 }
 for (const [key, label] of pages)
-  document.getElementById("nav").append(el("a", { href: "#" + key }, label));
+  document.getElementById("nav").append(el("a", { href: "#" + key, "data-page": key }, label));
 window.addEventListener("hashchange", () => {
+  const restored = readShare(location.hash);
+  for (const key of pageKeys[restored.page]) delete state[key];
+  Object.assign(state, restored.state);
   render();
   main.focus({ preventScroll: true });
 });

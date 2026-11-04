@@ -53,7 +53,7 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-No Linux/CI, use `npx playwright install --with-deps chromium`. A suíte verifica oito páginas, seleção e legendas, exportações CSV/Excel, busca, responsividade e falhas de integridade/rede. Diagnósticos ficam nos artifacts `pages-qa-*` por sete dias.
+No Linux/CI, use `npx playwright install --with-deps chromium`. A suíte verifica nove páginas, seleção e legendas, exportações CSV/Excel, busca, responsividade e falhas de integridade/rede. Diagnósticos ficam nos artifacts `pages-qa-*` por sete dias.
 
 ## Ativar a hospedagem
 
@@ -99,3 +99,11 @@ A página **Comparação em base 100** permite selecionar de dois a seis indicad
 O valor 120 representa aumento de 20% em relação à base. Para taxas, isso é variação relativa, não mudança em pontos percentuais. Não há correção adicional por inflação, sazonalidade ou diferenças de conceito. Denominadores negativos geram aviso; lacunas posteriores permanecem ausentes, e o fim da cobertura pode variar por série. Taxas mensais de inflação ficam fora dessa comparação: seus acumulados continuam disponíveis no explorador.
 
 O CSV inclui valor original, unidade original, índice normalizado, mês-base e identificador da coleta. Essa normalização comparativa também está disponível no Streamlit, sem mudar as transformações permitidas no explorador nem os dados do snapshot. Testes verificam equivalência entre Python e JavaScript.
+
+## Links com filtros
+
+Os filtros da página ativa são mantidos no fragmento do endereço (`#pagina?v=1&...`). Abra **Compartilhar análise** e use **Copiar link da análise**, ou copie o endereço do navegador. Se a área de transferência estiver indisponível, o campo do link permite cópia manual.
+
+O link preserva indicadores, período, transformação, segmento, defasagem e filtros de revisões conforme a página. Funciona em uma nova aba, após recarregar e com Voltar/Avançar. Links antigos como `#explorer` continuam válidos. Parâmetros desconhecidos ou malformados são ignorados; os controles usam suas opções válidas e os padrões atuais.
+
+O link guarda a seleção, não congela a coleta. A base disponível ao abrir pode incluir revisões posteriores. Use CSV/Excel para guardar valores e identificação da coleta. Estado visual transitório (zoom, séries ocultadas pela legenda, ordenação/paginação de tabelas) não faz parte do link. A funcionalidade de compartilhamento é específica da interface GitHub Pages.
