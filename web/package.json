@@ -1,0 +1,19 @@
+{
+  "name": "observatorio-credito-pages",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test tests/model.test.mjs",
+    "test:browser": "playwright test"
+  },
+  "dependencies": {
+    "exceljs": "4.4.0",
+    "plotly.js-basic-dist-min": "4.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "esbuild": "0.28.2"
+  }
+}
