@@ -1598,6 +1598,23 @@ async function load() {
     );
   return true;
 }
+const themeButton = document.getElementById("theme-toggle");
+function syncThemeButton() {
+  const dark = document.documentElement.dataset.theme === "dark";
+  const label = dark ? "Ativar modo claro" : "Ativar modo escuro";
+  themeButton.setAttribute("aria-label", label);
+  themeButton.setAttribute("title", label);
+  themeButton.setAttribute("aria-pressed", String(dark));
+  themeButton.replaceChildren(el("span", { "aria-hidden": true }, dark ? "☀" : "☾"));
+}
+syncThemeButton();
+themeButton.addEventListener("click", () => {
+  const theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = theme;
+  try { localStorage.setItem("observatorio-theme", theme); } catch { /* The toggle still works without storage. */ }
+  syncThemeButton();
+  render();
+});
 for (const [key, label] of pages)
   document.getElementById("nav").append(el("a", { href: "#" + key, "data-page": key }, label));
 window.addEventListener("hashchange", () => {
