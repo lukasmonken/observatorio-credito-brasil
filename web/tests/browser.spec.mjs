@@ -288,3 +288,18 @@ test("Tema funciona com armazenamento bloqueado", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator(".js-plotly-plot")).toHaveCount(2);
 });
+
+test("Boletim da coleta exibe identificação e exporta Markdown", async ({ page }) => {
+  await page.goto("#overview");
+  await page.getByText("Boletim da coleta", {exact: true}).click();
+  await expect(page.locator("main")).toContainText("Novas referências e variações mensais");
+  const download = page.waitForEvent("download");
+  await page.locator("#download-bulletin").click();
+  const file = await download;
+  const {readFile} = await import("node:fs/promises");
+  const text = await readFile(await file.path(), "utf8");
+  expect(text).toContain("# Boletim da coleta");
+  expect(text).toContain("Coleta anterior:");
+  expect(file.suggestedFilename()).toMatch(/^boletim-.+\.md$/);
+  await expect(page.locator(".js-plotly-plot")).toHaveCount(2);
+});
