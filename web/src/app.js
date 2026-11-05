@@ -713,7 +713,7 @@ function labor() {
   const summary = specs.map(s => exported.find(r => r.code === s.code && r.reference_end === ref) || {indicator:s.short_name || s.name, value:null, unit:s.unit, change12:null, change_unit:s.measure_type === "rate" ? "p.p." : "%"});
   main.append(table(summary, [["indicator","Indicador"],["value","Valor",number],["unit","Unidade"],["change12","Variação em 12 meses",number],["change_unit","Unidade da variação"]]));
   main.append(note("Comparação com o mesmo trimestre móvel do ano anterior: pontos percentuais para a taxa de desocupação e variação percentual para pessoas e rendimento. Ausências permanecem indisponíveis; os cálculos usam o histórico anterior ao filtro."));
-  const controls = el("div", {class:"filters"});
+  const controls = el("div", {class:"filters labor-filters"});
   controls.append(select("labor-code", "Indicador do histórico", specs.map(s => [s.code,s.short_name || s.name]), 24369));
   const code = Number(state["labor-code"]), spec = byCode.get(code), annual = spec.measure_type === "rate" ? "diff12_pp" : "yoy_pct";
   controls.append(select("labor-metric", "Medida do histórico", [["original",`Valor (${spec.unit})`],[annual,`Mesmo trimestre do ano anterior (${annual === "diff12_pp" ? "p.p." : "%"})`]], "original"));

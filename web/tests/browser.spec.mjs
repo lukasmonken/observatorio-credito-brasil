@@ -431,8 +431,8 @@ test("Trabalho e renda: trimestres, referência comum, gráfico, CSV e modo escu
   await page.locator("#theme-toggle").click();
   await page.setViewportSize({width:390,height:844});
   await expect(page.locator(".labor-kpis")).toBeVisible();
-  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
   await page.screenshot({path:"test-results/labor-mobile-dark.png",fullPage:true});
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
   await page.locator("#laborstart").fill("2026-02-01");
   await page.locator("#laborend").fill("2025-01-01");
   await expect(page.getByRole("alert")).toContainText("Selecione um período válido");
