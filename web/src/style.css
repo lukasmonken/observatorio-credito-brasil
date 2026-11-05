@@ -287,6 +287,7 @@ td {
   max-width: 600px;
   overflow-wrap: anywhere;
 }
+th.numeric,
 td.numeric {
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -450,7 +451,7 @@ th button {
   border: 0;
   background: transparent;
   padding: 0;
-  text-align: left;
+  text-align: inherit;
 }
 th button:hover {
   text-decoration: underline;
