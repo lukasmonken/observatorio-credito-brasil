@@ -402,6 +402,8 @@ test("Trabalho e renda: trimestres, referência comum, gráfico, CSV e modo escu
   for (const s of specs) for (let i=0;i<14;i++) {
     payload.rows.push({code:s.code,date:`${2025+Math.floor(i/12)}-${String(i%12+1).padStart(2,"0")}-01`,original:s.code===24382 && i===13?null:s.code===24369?8:100+i,diff12_pp:i>=12?0:null,yoy_pct:i>=12?12:null});
   }
+  payload.manifest.rows = payload.rows.length;
+  payload.manifest.series = payload.catalog.length;
   const body=JSON.stringify(payload), hash=createHash("sha256").update(body).digest("hex"), name=`data-${hash.slice(0,16)}.json`;
   await page.route("**/site.json", route=>route.fulfill({json:{...config,data:name,sha256:hash}}));
   await page.route("**/"+name, route=>route.fulfill({body,contentType:"application/json"}));
