@@ -235,8 +235,8 @@ for (const width of [1440, 390]) test("Menu de indicadores compacto " + width, a
   await expect(page.locator("#comparison-codes-search")).toHaveValue("selic");
   await expect(page.locator(".picker-tag")).toHaveCount(4);
   await page.locator("#comparison-codes-search").fill("");
-  await page.locator(".picker-option input:not(:checked):not(:disabled)").first().check();
-  await page.locator(".picker-option input:not(:checked):not(:disabled)").first().check();
+  await page.locator("#comparison-codes-20540").check();
+  await page.locator("#comparison-codes-20541").check();
   await expect(page.locator(".picker-tag")).toHaveCount(6);
   await expect(page.locator(".picker-option input:not(:checked):not(:disabled)")).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
