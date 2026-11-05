@@ -13,6 +13,7 @@ from plotly.subplots import make_subplots
 from html import escape
 import streamlit as st
 from observatorio.composition import composition_rows
+from observatorio.labor import labor_period, labor_export
 from observatorio.config import ROOT
 from observatorio.bulletin import build_bulletin
 from observatorio.excel import METRIC_FORMULAS as formulas, METRIC_LABELS as labels, build_excel
@@ -104,6 +105,7 @@ pages = [
     "Juros e crédito",
     "Composição do crédito",
     "Inflação detalhada",
+    "Trabalho e renda",
     "Comparação em base 100",
     "Famílias e inadimplência",
     "Explorador de indicadores",
@@ -382,6 +384,44 @@ elif page == "Inflação detalhada":
         st.write('Acumulados compostos antes do filtro: janeiro até a referência, ou doze meses consecutivos. Exigem todos os meses; lacunas permanecem ausentes. Arredondamentos podem gerar diferenças frente ao acumulado oficial.')
         for spec in inflation_specs:
             st.markdown(f"[{spec.get('short_name', spec['name'])}]({spec['source_url']})")
+
+elif page == "Trabalho e renda":
+    st.caption("Brasil · IBGE / PNAD Contínua, distribuído pelo BCB/SGS. Referências em trimestres móveis, sem ajuste sazonal.")
+    labor_specs = [s for s in specs if s['classification'] == 'Trabalho e renda']
+    labor_data = df[df.code.isin([s['code'] for s in labor_specs])]
+    if labor_data.empty:
+        st.info("Trabalho e renda ainda indisponível nesta coleta. Aguarde a atualização dos dados.")
+    else:
+        income = labor_data[(labor_data.code == 24382) & labor_data.original.notna()]
+        income_base = (income.date.max() - pd.DateOffset(months=1)).strftime('%Y-%m') if not income.empty else None
+        labor_data = date_filter(labor_data, 'labor_period')
+        months = sorted(labor_data.date.unique(), reverse=True)
+        reference = st.selectbox("Trimestre móvel do resumo", months, format_func=labor_period)
+        exported = labor_export(labor_data, labor_specs, manifest, income_base)
+        summary = []
+        for col, spec in zip(st.columns(len(labor_specs)), labor_specs):
+            current = exported[(exported.code == spec['code']) & (exported.reference_end == pd.Timestamp(reference).strftime('%Y-%m-%d'))]
+            row = current.iloc[0] if not current.empty else {}
+            value = row.get('value')
+            with col:
+                st.metric(spec.get('short_name', spec['name']), f"{number(value)} {spec['unit']}" if pd.notna(value) else '—')
+                st.caption(labor_period(reference) + ('' if pd.notna(value) else ' · Indisponível nesta referência'))
+            summary.append({'Indicador':spec.get('short_name',spec['name']), 'Valor':value, 'Unidade':spec['unit'], 'Variação em 12 meses':row.get('change12'), 'Unidade da variação':'p.p.' if spec['measure_type']=='rate' else '%'})
+        st.dataframe(pd.DataFrame(summary), hide_index=True)
+        st.caption("Comparação com o mesmo trimestre móvel do ano anterior: pontos percentuais para a taxa e percentuais para pessoas e rendimento. Ausência não é zero. Cálculos usam o histórico anterior ao filtro.")
+        code = st.selectbox("Indicador do histórico", [s['code'] for s in labor_specs], format_func=lambda c: by_code[c].get('short_name', names[c]))
+        annual = 'diff12_pp' if by_code[code]['measure_type'] == 'rate' else 'yoy_pct'
+        measure = st.selectbox("Medida do histórico", ['original', annual], format_func=lambda m: f"Valor ({by_code[code]['unit']})" if m == 'original' else f"Mesmo trimestre do ano anterior ({'p.p.' if m == 'diff12_pp' else '%'})")
+        chart([code], measure, labor_data, title=by_code[code].get('short_name', names[code]) + ' · trimestres móveis')
+        st.caption("O eixo de datas indica o mês final do trimestre móvel. Referências consecutivas compartilham dois meses de pesquisa.")
+        with st.expander("Ver histórico em tabela"):
+            st.dataframe(exported[exported.code == code][['reference_period','value','unit','change12','change_unit']].rename(columns={'reference_period':'Trimestre móvel','value':'Valor','unit':'Unidade','change12':'Variação em 12 meses','change_unit':'Unidade da variação'}), hide_index=True)
+        st.download_button("Baixar trabalho e renda · CSV", exported.to_csv(index=False).encode('utf-8-sig'), 'trabalho-renda.csv', 'text/csv')
+        st.caption(f"Rendimento já corrigido pela fonte. Base de preços: {income_base or 'indisponível'} (mês central do trimestre mais recente da série), independente do filtro. Histórico reconsultado integralmente para incorporar revisões.")
+        with st.expander("Fontes e metodologia — trabalho e renda"):
+            st.write("Estimativas amostrais de pessoas de 14 anos ou mais. Diferenças numéricas não implicam significância estatística. Rendimento habitual do trabalho principal conforme metadados SGS; não é renda domiciliar per capita nem salário mínimo. Não aplicamos nova deflação.")
+            for spec in labor_specs:
+                st.markdown(f"[{spec['short_name']} · SGS {spec['code']}]({spec['source_url']})")
 
 elif page == "Composição do crédito":
     st.caption("Saldos de fim de mês. Participação sobre o total PF ou PJ, incluindo recursos livres e direcionados.")

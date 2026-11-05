@@ -132,6 +132,8 @@ def build_snapshot(engine, specs, run_id, as_of, summary, output_root=ROOT):
                         start=str(x.index.min().date()), end=str(x.index.max().date())
                     ),
                     "months": int(x.notna().sum()),
+                    **({"income_price_base": (valid.index.max() - pd.DateOffset(months=1)).strftime("%Y-%m")}
+                       if s["measure_type"] == "income_real" and len(valid) else {}),
                 }
             )
     result = pd.concat(frames, ignore_index=True).sort_values(["code", "date"])
@@ -281,7 +283,7 @@ def run_pipeline(
                 try:
                     previous = read_observations(engine, code)
                     begin = start
-                    if not full and not previous.empty:
+                    if not full and not spec.get("refresh_full_history") and not previous.empty:
                         begin = max(
                             start,
                             (previous.date.max() - pd.DateOffset(months=requery_months))

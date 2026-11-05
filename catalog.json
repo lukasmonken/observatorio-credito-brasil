@@ -1605,5 +1605,177 @@
     "max_lag_days": 90,
     "short_name": "Duplicatas e recebíveis",
     "credit_composition": true
+  },
+  {
+    "code": 24369,
+    "official_name": "Taxa de desocupação - PNADC",
+    "name": "Taxa de desocupação - PNADC",
+    "short_name": "Taxa de desocupação",
+    "description": "Pessoas desocupadas como percentual da força de trabalho. Não é percentual da população total.",
+    "source": "IBGE — PNAD Contínua, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=24369",
+    "unit": "%",
+    "official_unit": "%",
+    "frequency": "M",
+    "reference_period": "trimestre móvel",
+    "region": "Brasil",
+    "seasonally_adjusted": false,
+    "classification": "Trabalho e renda",
+    "measure_type": "rate",
+    "segment": "Brasil",
+    "modality": "Taxa de desocupação",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Estimativas nacionais da PNAD Contínua para pessoas de 14 anos ou mais; não são registros administrativos do Caged.",
+      "Cada referência representa o trimestre móvel terminado naquele mês; referências consecutivas compartilham dois meses.",
+      "Sem ajuste sazonal. Comparações em 12 meses usam o mesmo trimestre móvel do ano anterior.",
+      "Estimativas amostrais sujeitas a revisões; diferenças numéricas não representam automaticamente diferenças estatisticamente significativas.",
+      "Reconsulta de todo o histórico para incorporar revisões e reponderações da PNAD Contínua."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "metadata_evidence": "docs/trabalho-renda.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 100,
+    "refresh_full_history": true
+  },
+  {
+    "code": 24379,
+    "official_name": "Pessoas ocupadas - PNADC",
+    "name": "Pessoas ocupadas - PNADC",
+    "short_name": "Pessoas ocupadas",
+    "description": "População de 14 anos ou mais ocupada na semana de referência, em milhares de pessoas.",
+    "source": "IBGE — PNAD Contínua, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=24379",
+    "unit": "mil pessoas",
+    "official_unit": "Unidades (mil)",
+    "frequency": "M",
+    "reference_period": "trimestre móvel",
+    "region": "Brasil",
+    "seasonally_adjusted": false,
+    "classification": "Trabalho e renda",
+    "measure_type": "stock",
+    "segment": "Brasil",
+    "modality": "Pessoas ocupadas",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Estimativas nacionais da PNAD Contínua para pessoas de 14 anos ou mais; não são registros administrativos do Caged.",
+      "Cada referência representa o trimestre móvel terminado naquele mês; referências consecutivas compartilham dois meses.",
+      "Sem ajuste sazonal. Comparações em 12 meses usam o mesmo trimestre móvel do ano anterior.",
+      "Estimativas amostrais sujeitas a revisões; diferenças numéricas não representam automaticamente diferenças estatisticamente significativas.",
+      "Reconsulta de todo o histórico para incorporar revisões e reponderações da PNAD Contínua."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "metadata_evidence": "docs/trabalho-renda.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 100,
+    "refresh_full_history": true
+  },
+  {
+    "code": 24380,
+    "official_name": "Pessoas desocupadas - PNADC",
+    "name": "Pessoas desocupadas - PNADC",
+    "short_name": "Pessoas desocupadas",
+    "description": "População de 14 anos ou mais desocupada na semana de referência, em milhares de pessoas.",
+    "source": "IBGE — PNAD Contínua, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=24380",
+    "unit": "mil pessoas",
+    "official_unit": "Unidades (mil)",
+    "frequency": "M",
+    "reference_period": "trimestre móvel",
+    "region": "Brasil",
+    "seasonally_adjusted": false,
+    "classification": "Trabalho e renda",
+    "measure_type": "stock",
+    "segment": "Brasil",
+    "modality": "Pessoas desocupadas",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Estimativas nacionais da PNAD Contínua para pessoas de 14 anos ou mais; não são registros administrativos do Caged.",
+      "Cada referência representa o trimestre móvel terminado naquele mês; referências consecutivas compartilham dois meses.",
+      "Sem ajuste sazonal. Comparações em 12 meses usam o mesmo trimestre móvel do ano anterior.",
+      "Estimativas amostrais sujeitas a revisões; diferenças numéricas não representam automaticamente diferenças estatisticamente significativas.",
+      "Reconsulta de todo o histórico para incorporar revisões e reponderações da PNAD Contínua."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "metadata_evidence": "docs/trabalho-renda.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 100,
+    "refresh_full_history": true
+  },
+  {
+    "code": 24382,
+    "official_name": "Rendimento médio real habitual das pessoas ocupadas - PNADC",
+    "name": "Rendimento médio real habitual das pessoas ocupadas - PNADC",
+    "short_name": "Rendimento real habitual",
+    "description": "Rendimento médio bruto real habitual do trabalho principal das pessoas ocupadas com rendimento, conforme conceito dos metadados SGS 24382. Preços do mês central do trimestre mais recente divulgado; já deflacionado pela fonte.",
+    "source": "IBGE — PNAD Contínua, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=24382",
+    "unit": "R$",
+    "official_unit": "R$",
+    "frequency": "M",
+    "reference_period": "trimestre móvel",
+    "region": "Brasil",
+    "seasonally_adjusted": false,
+    "classification": "Trabalho e renda",
+    "measure_type": "income_real",
+    "segment": "Brasil",
+    "modality": "Rendimento real habitual",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Estimativas nacionais da PNAD Contínua para pessoas de 14 anos ou mais; não são registros administrativos do Caged.",
+      "Cada referência representa o trimestre móvel terminado naquele mês; referências consecutivas compartilham dois meses.",
+      "Sem ajuste sazonal. Comparações em 12 meses usam o mesmo trimestre móvel do ano anterior.",
+      "Estimativas amostrais sujeitas a revisões; diferenças numéricas não representam automaticamente diferenças estatisticamente significativas.",
+      "Reconsulta de todo o histórico para incorporar revisões e reponderações da PNAD Contínua.",
+      "Rendimento já deflacionado: não aplicar novamente IPCA. A base de preços acompanha a publicação e todo o histórico deve ser atualizado em conjunto. Não representa renda domiciliar per capita, salário mínimo ou massa de rendimentos."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "metadata_evidence": "docs/trabalho-renda.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 100,
+    "refresh_full_history": true
   }
 ]

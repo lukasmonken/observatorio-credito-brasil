@@ -88,3 +88,9 @@ chamadas externas. A exportação CSV existente continua disponível.
 ## Inflação detalhada
 
 Cinco índices gerais (IPCA, IPCA-15, INPC, IGP-M e INCC-M) e nove grupos do IPCA. Acumulados por composição das taxas mensais, com calendário completo e sem preencher lacunas. Fontes primárias: IBGE e FGV IBRE; distribuição: BCB/SGS. Consulte [séries, cálculos e limites](inflacao.md).
+
+## Trabalho e renda — PNAD Contínua
+
+As séries nacionais SGS 24369, 24379, 24380 e 24382 têm divulgação mensal e referência em trimestres móveis, identificados pelo mês final. Referências consecutivas compartilham dois meses de pesquisa. A taxa de desocupação usa a força de trabalho como denominador e sua comparação anual é expressa em pontos percentuais. Ocupados e desocupados estão em milhares de pessoas; seu crescimento anual e o do rendimento usam variação percentual frente ao mesmo trimestre móvel do ano anterior. As séries não têm ajuste sazonal nesta entrega.
+
+O rendimento habitual real é publicado já deflacionado, na base de preços do mês central do trimestre mais recente divulgado. Não aplicar novamente a deflação do crédito a essa série. O histórico é reconsultado integralmente para incorporar mudanças da base de preços e revisões. Estimativas amostrais não são registros do Caged; diferenças descritivas não representam testes de significância. Ver [Trabalho e renda](trabalho-renda.md) para conceitos, fontes, cobertura e limitações.
