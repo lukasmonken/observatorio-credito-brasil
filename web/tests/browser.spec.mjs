@@ -254,3 +254,37 @@ for (const width of [1440, 390]) test("Menu de indicadores compacto " + width, a
   await expect(page.locator(".js-plotly-plot")).toBeVisible();
   await page.screenshot({path: `test-results/picker-closed-${width}.png`, fullPage: true});
 });
+
+for (const width of [1440, 390]) test("Tema escuro preserva filtros e preferência " + width, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 });
+  await page.goto("#comparison");
+  await page.locator("#comparisonstart").fill("2020-01-01");
+  const url = page.url();
+  await page.getByRole("button", { name: "Ativar modo escuro" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("#theme-toggle")).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#comparisonstart")).toHaveValue("2020-01-01");
+  expect(page.url()).toBe(url);
+  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#151515");
+  await page.locator("#comparison-codes-toggle").click();
+  await page.screenshot({ path: `test-results/dark-picker-${width}.png`, fullPage: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.getByRole("link", {name: "Relações e defasagens", exact: true}).click();
+  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#151515");
+  await page.getByRole("button", { name: "Ativar modo claro" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#fff");
+  expect(await page.evaluate(() => localStorage.getItem("observatorio-theme"))).toBe("light");
+});
+test("Tema funciona com armazenamento bloqueado", async ({ page }) => {
+  await page.addInitScript(() => {
+    Storage.prototype.getItem = () => { throw new Error("blocked"); };
+    Storage.prototype.setItem = () => { throw new Error("blocked"); };
+  });
+  await page.goto("#overview");
+  await page.getByRole("button", {name: "Ativar modo escuro"}).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator(".js-plotly-plot")).toHaveCount(2);
+});

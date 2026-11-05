@@ -8,11 +8,13 @@
       name="description"
       content="Indicadores oficiais de crédito e conjuntura do Brasil. Séries do Bacen, histórico de revisões e análise econômica."
     />
+    <script>try { document.documentElement.dataset.theme = localStorage.getItem("observatorio-theme") === "dark" ? "dark" : "light"; } catch { document.documentElement.dataset.theme = "light"; }</script>
     <title>Observatório de Crédito Brasil</title>
     <link rel="stylesheet" href="{{CSS}}" />
     <script type="module" src="{{JS}}"></script>
   </head>
   <body>
+    <button id="theme-toggle" type="button" aria-label="Ativar modo escuro" title="Ativar modo escuro" aria-pressed="false"></button>
     <a class="skip" href="#content">Ir para os dados</a>
     <aside>
       <a class="brand" href="#overview">OBSERVATÓRIO / BRASIL</a>

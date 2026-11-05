@@ -492,3 +492,33 @@ main:focus {
   .picker-options { max-height: 45vh; }
   .picker-menu > summary { gap: 8px; padding: 13px 12px; }
 }
+
+#theme-toggle { position: fixed; top: 18px; right: 20px; z-index: 40; display: grid; place-items: center; width: 38px; height: 38px; padding: 0; border-radius: 50%; background: #fff; border: 1px solid var(--border); color: #303030; box-shadow: 0 2px 8px #00000008; }
+#theme-toggle span { font-size: 23px; line-height: 1; }
+header { padding-right: 46px; }
+:root[data-theme="dark"] { color-scheme: dark; color: #e8e8e8; background: #151515; --accent: #b4cec0; --border: #383838; --muted: #b2b2b2; }
+[data-theme="dark"] aside { background: #1b1b1b; }
+[data-theme="dark"] .brand, [data-theme="dark"] nav a, [data-theme="dark"] .kpi .label { color: #dedede; }
+[data-theme="dark"] nav a[aria-current="page"] { background: #29312d; color: #dce9e0; }
+[data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] button, [data-theme="dark"] .button { background: #202020; color: #e6e6e6; border-color: #505050; }
+[data-theme="dark"] button:hover { background: #303030; }
+[data-theme="dark"] th { background: #232323; }
+[data-theme="dark"] td, [data-theme="dark"] th { border-color: #343434; }
+[data-theme="dark"] .message { background: #232623; color: #e0e4e1; }
+[data-theme="dark"] .message.alert { background: #302a20; color: #edddc6; }
+[data-theme="dark"] .message.error { background: #302121; color: #f0caca; }
+[data-theme="dark"] .status-ok { color: #b0d9bc; }
+[data-theme="dark"] .status-bad { color: #e8b58d; }
+[data-theme="dark"] .picker-menu, [data-theme="dark"] .picker-panel { background: #202020; border-color: #505850; }
+[data-theme="dark"] .picker-panel { box-shadow: 0 12px 30px #0006; }
+[data-theme="dark"] .picker-panel > input { background: #181818; }
+[data-theme="dark"] .picker-option:hover { background: #2a2a2a; }
+[data-theme="dark"] .picker-option:has(input:checked) { background: #2b3830; color: #dfede3; }
+[data-theme="dark"] .picker-tag { background: #263029; color: #d4e2d8; border-color: #46544a; }
+[data-theme="dark"] .picker-tag button { background: transparent; color: #c0d4c6; }
+[data-theme="dark"] .picker-footer button { background: #c0d4c6; color: #18271e; }
+[data-theme="dark"] #theme-toggle { background: #252525; color: #eee; }
+[data-theme="dark"] .skip:focus { background: #252525; }
+[data-theme="dark"] .js-plotly-plot .modebar { background: #252525 !important; }
+[data-theme="dark"] .js-plotly-plot .modebar-btn path { fill: #bbb !important; }
+@media (max-width: 700px) { #theme-toggle { top: 12px; right: 12px; } .brand { padding-right: 42px; } }
