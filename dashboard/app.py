@@ -44,7 +44,7 @@ def style_chart(fig, height=340):
     fig.update_layout(
         template="plotly_white",
         height=height,
-        font=dict(family="Times New Roman, Times, serif", size=14, color="#24292e"),
+        font=dict(family="-apple-system, BlinkMacSystemFont, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif", size=14, color="#24292e"),
         margin=dict(l=12, r=20, t=16, b=28),
         paper_bgcolor="#ffffff",
         plot_bgcolor="#ffffff",

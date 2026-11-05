@@ -3,7 +3,7 @@ import { finite } from "./model.js";
 function chartLayout() {
   const dark = document.documentElement.dataset.theme === "dark";
   return {
-  font: { family: "Times New Roman, Times, serif", size: 14, color: dark ? "#e8e8e8" : "#24292e" },
+  font: { family: "-apple-system, BlinkMacSystemFont, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif", size: 14, color: dark ? "#e8e8e8" : "#24292e" },
   paper_bgcolor: dark ? "#151515" : "#fff",
   plot_bgcolor: dark ? "#151515" : "#fff",
   margin: { l: 55, r: 30, t: 15, b: 65 },
