@@ -26,6 +26,7 @@ const pages = [
   ["dictionary", "Dicionário e metodologia"],
   ["quality", "Fontes e qualidade"],
 ];
+const pickerUI = {};
 const state = readShare(location.hash).state,
   main = document.querySelector("main");
 let data, byCode, series, dates, signature, chartsPromise;
@@ -183,12 +184,89 @@ function period(key, rows = data.rows) {
 function filtered(key, rows) {
   return periodRows(rows, state[key + "start"], state[key + "end"]);
 }
+function indicatorPicker(key, title, options, initial) {
+  const available = new Set(options.map(([code]) => String(code)));
+  state[key] ??= initial;
+  state[key] = state[key].map(String).filter((code) => available.has(code));
+  const ui = pickerUI[key] ??= { open: false, search: "" };
+  const limit = key === "comparison-codes" ? 6 : options.length;
+  const selected = state[key];
+  const wrapper = el("section", { class: "indicator-picker", "data-picker": key });
+  const menu = el("details", { class: "picker-menu", ...(ui.open ? { open: true } : {}) });
+  const summary = el("summary", { id: key + "-toggle" },
+    el("span", {}, title),
+    el("span", { class: "picker-count" }, `${selected.length} selecionados`),
+    el("span", { class: "picker-chevron", "aria-hidden": true }, "⌄"));
+  const search = el("input", { type: "search", id: key + "-search", placeholder: "Buscar indicador…", "aria-label": "Buscar indicadores", value: ui.search });
+  const list = el("div", { class: "picker-options" });
+  const normalize = (text) => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const fill = () => {
+    ui.search = search.value;
+    list.replaceChildren();
+    const matching = options.filter(([code, name]) => normalize(`${name} ${code}`).includes(normalize(ui.search)));
+    const groups = new Map();
+    for (const option of matching) {
+      const group = byCode.get(Number(option[0]))?.classification || "Outros indicadores";
+      if (!groups.has(group)) groups.set(group, []);
+      groups.get(group).push(option);
+    }
+    for (const [group, items] of groups) {
+      const field = el("fieldset", {}, el("legend", {}, group));
+      for (const [code, name] of items) {
+        const value = String(code), checked = selected.includes(value);
+        const input = el("input", { type: "checkbox", id: `${key}-${value}`, value,
+          disabled: !checked && selected.length >= limit,
+          onchange: (e) => {
+            state[key] = e.target.checked ? [...selected, value] : selected.filter((v) => v !== value);
+            ui.open = true;
+            render();
+          } });
+        input.checked = checked;
+        field.append(el("label", { class: "picker-option", for: `${key}-${value}` }, input, el("span", {}, name)));
+      }
+      list.append(field);
+    }
+    if (!matching.length) list.append(note("Nenhum indicador encontrado."));
+  };
+  search.addEventListener("input", fill);
+  fill();
+  menu.append(summary, el("div", { class: "picker-panel" }, search, list,
+    el("div", { class: "picker-footer" },
+      el("small", {}, key === "comparison-codes" ? "Selecione de 2 a 6 indicadores" : "Selecione os indicadores do gráfico"),
+      el("button", { type: "button", onclick: () => { menu.open = false; ui.open = false; summary.focus(); } }, "Concluir"))));
+  menu.addEventListener("toggle", () => { if (menu.isConnected) ui.open = menu.open; });
+  const tags = el("div", { class: "picker-tags", "aria-label": "Indicadores selecionados" });
+  for (const value of selected) {
+    const name = options.find(([code]) => String(code) === value)[1];
+    tags.append(el("span", { class: "picker-tag" }, el("span", {}, name),
+      el("button", { type: "button", "aria-label": "Remover " + name, onclick: () => { state[key] = selected.filter((v) => v !== value); render(); } }, "×")));
+  }
+  wrapper.append(menu, tags);
+  return wrapper;
+}
+document.addEventListener("pointerdown", (event) => {
+  for (const picker of document.querySelectorAll(".indicator-picker")) {
+    if (!picker.contains(event.target)) {
+      picker.querySelector("details").open = false;
+      pickerUI[picker.dataset.picker].open = false;
+    }
+  }
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+  for (const picker of document.querySelectorAll(".indicator-picker")) {
+    const menu = picker.querySelector("details");
+    if (menu.open) { menu.open = false; pickerUI[picker.dataset.picker].open = false; menu.querySelector("summary").focus(); }
+  }
+});
 function checks(
   key,
   title,
   options,
   initial = options.map((o) => String(o[0])),
 ) {
+  if (key === "comparison-codes" || /^credit-(Total|PF|PJ)$/.test(key))
+    return indicatorPicker(key, title, options, initial);
   state[key] ??= initial;
   const available = new Set(options.map((o) => String(o[0])));
   state[key] = state[key].filter((v) => available.has(String(v)));
