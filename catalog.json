@@ -1318,5 +1318,292 @@
     "max_lag_days": 90,
     "short_name": "IPCA · Educação",
     "inflation_group": "Grupos do IPCA"
+  },
+  {
+    "code": 20579,
+    "official_name": "Saldo da carteira de crédito com recursos livres - Pessoas físicas - Crédito pessoal consignado total",
+    "name": "Saldo — Consignado (PF)",
+    "description": "Saldo em final de mês de crédito pessoal consignado total, pessoas físicas, recursos livres.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20579-saldo-da-carteira-de-credito-com-recursos-livres---pessoas-fisicas---credito-pessoal-consigna",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PF",
+    "modality": "Consignado",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Consignado",
+    "credit_composition": true
+  },
+  {
+    "code": 20581,
+    "official_name": "Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de veículos",
+    "name": "Saldo — Veículos (PF)",
+    "description": "Saldo em final de mês de aquisição de veículos, pessoas físicas, recursos livres.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20581-saldo-da-carteira-de-credito-com-recursos-livres---pessoas-fisicas---aquisicao-de-veiculos",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PF",
+    "modality": "Veículos",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Veículos",
+    "credit_composition": true
+  },
+  {
+    "code": 20612,
+    "official_name": "Saldo da carteira de crédito com recursos direcionados - Pessoas físicas - Financiamento imobiliário total",
+    "name": "Saldo — Imobiliário (PF)",
+    "description": "Saldo em final de mês de financiamento imobiliário total, pessoas físicas, recursos direcionados.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20612-saldo-da-carteira-de-credito-com-recursos-direcionados---pessoas-fisicas---financiamento-imob",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PF",
+    "modality": "Imobiliário",
+    "resources": "Direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Imobiliário",
+    "credit_composition": true
+  },
+  {
+    "code": 20609,
+    "official_name": "Saldo da carteira de crédito com recursos direcionados - Pessoas físicas - Crédito rural total",
+    "name": "Saldo — Rural (PF)",
+    "description": "Saldo em final de mês de crédito rural total, pessoas físicas, recursos direcionados.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20609-saldo-da-carteira-de-credito-com-recursos-direcionados---pessoas-fisicas---credito-rural-tota",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PF",
+    "modality": "Rural",
+    "resources": "Direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Rural",
+    "credit_composition": true
+  },
+  {
+    "code": 20550,
+    "official_name": "Saldo da carteira de crédito com recursos livres - Pessoas jurídicas - Capital de giro total",
+    "name": "Saldo — Capital de giro (PJ)",
+    "description": "Saldo em final de mês de capital de giro total, pessoas jurídicas, recursos livres.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20550-saldo-da-carteira-de-credito-com-recursos-livres---pessoas-juridicas---capital-de-giro-total",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PJ",
+    "modality": "Capital de giro",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Capital de giro",
+    "credit_composition": true
+  },
+  {
+    "code": 20553,
+    "official_name": "Saldo da carteira de crédito com recursos livres - Pessoas jurídicas - Aquisição de veículos",
+    "name": "Saldo — Veículos (PJ)",
+    "description": "Saldo em final de mês de aquisição de veículos, pessoas jurídicas, recursos livres.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20553-saldo-da-carteira-de-credito-com-recursos-livres---pessoas-juridicas---aquisicao-de-veiculos",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PJ",
+    "modality": "Veículos",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Veículos",
+    "credit_composition": true
+  },
+  {
+    "code": 20544,
+    "official_name": "Saldo da carteira de crédito com recursos livres - Pessoas jurídicas - Desconto de duplicatas e recebíveis",
+    "name": "Saldo — Duplicatas e recebíveis (PJ)",
+    "description": "Saldo em final de mês de desconto de duplicatas e recebíveis, pessoas jurídicas, recursos livres.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20544-saldo-da-carteira-de-credito-com-recursos-livres---pessoas-juridicas---desconto-de-duplicatas",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PJ",
+    "modality": "Duplicatas e recebíveis",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Duplicatas e recebíveis",
+    "credit_composition": true
   }
 ]

@@ -229,3 +229,27 @@ export function compareBase100(rows, codes) {
       .sort((a, b) => a.date.localeCompare(b.date) || a.code - b.code),
   };
 }
+
+export function compositionRows(rows, specs, segment) {
+  if (!["PF", "PJ"].includes(segment)) throw new Error("Segmento inválido");
+  const selected = specs.filter(s => s.credit_composition && s.segment === segment);
+  const denominator = segment === "PF" ? 20541 : 20540;
+  const codes = new Set([denominator, ...selected.map(s => s.code)]);
+  const relevant = rows.filter(r => codes.has(r.code));
+  const index = new Map();
+  for (const row of relevant) {
+    const key = row.code + ":" + row.date;
+    if (index.has(key)) throw new Error("Observações duplicadas");
+    index.set(key, row.original);
+  }
+  return [...new Set(relevant.map(r => r.date))].sort().flatMap(date => {
+    const total = index.get(denominator + ":" + date) ?? null;
+    return selected.map(s => {
+      const amount = index.get(s.code + ":" + date) ?? null;
+      const valid = finite(amount) && finite(total) && amount >= 0 && amount <= total && total > 0;
+      return {date, code:s.code, modality:s.modality, segment, resources:s.resources,
+        original:amount, denominator_code:denominator, total,
+        share:valid ? 100 * amount / total : null, source:s.source, source_url:s.source_url};
+    });
+  });
+}

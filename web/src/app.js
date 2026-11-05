@@ -1,6 +1,7 @@
 import "./style.css";
 import { readShare, shareHash, pageKeys } from "./share.js";
 import {
+  compositionRows,
   colors,
   eventLabels,
   finite,
@@ -18,6 +19,7 @@ import {
 const pages = [
   ["overview", "Visão geral"],
   ["credit", "Juros e crédito"],
+  ["composition", "Composição do crédito"],
   ["inflation", "Inflação detalhada"],
   ["comparison", "Comparação em base 100"],
   ["family", "Famílias e inadimplência"],
@@ -645,6 +647,37 @@ function credit() {
       "Modalidades PF com recursos livres podem ser comparadas em % a.a.; garantias, prazos e composição diferem. Agregados não devem ser somados às modalidades.",
     ),
   );
+}
+function composition() {
+  main.append(note("Saldos de fim de mês por modalidade. As participações usam o total de crédito PF ou PJ, incluindo recursos livres e direcionados."));
+  main.append(select("composition-segment", "Segmento", [["PF", "Pessoas físicas"], ["PJ", "Pessoas jurídicas"]], "PF"));
+  const segment = state["composition-segment"], specs = data.catalog.filter(s => s.credit_composition && s.segment === segment);
+  if (!specs.length) { main.append(message("Modalidades ainda indisponíveis nesta coleta. Aguarde a atualização dos dados.")); return; }
+  const all = compositionRows(data.rows, data.catalog, segment);
+  main.append(period("composition", all));
+  const rows = filtered("composition", all);
+  if (!rows.length) { main.append(message("Não há observações no intervalo selecionado.")); return; }
+  const months = [...new Set(rows.map(r => r.date))].sort().reverse();
+  const complete = months.find(d => rows.filter(r => r.date === d).every(r => finite(r.original) && finite(r.share)));
+  main.append(el("div", {class:"filters"},
+    select("composition-month", "Referência da composição", months.map(d => [d,month(d)]), complete || months[0]),
+    select("composition-metric", "Medida do histórico", [["original","Saldo (R$ milhões)"],["share","Participação no total do segmento (%)"]], "original")));
+  const current = rows.filter(r => r.date === state["composition-month"]);
+  main.append(el("div",{class:"kpis"},metric("Saldo total " + segment, number(current[0]?.total) + " R$ milhões", month(state["composition-month"])),metric("Modalidades acompanhadas",specs.length,"Seleção parcial da carteira")));
+  if (current.some(r => !finite(r.original) || !finite(r.share))) main.append(message("Há valores ou participações indisponíveis nesta referência. Ausências não são tratadas como zero; percentuais exigem total positivo e saldo compatível."));
+  main.append(table(current, [["modality","Modalidade"],["resources","Recursos"],["original","Saldo (R$ milhões)",number],["share","% do total " + segment,number]]));
+  const key = "composition-" + segment;
+  main.append(checks(key,"Modalidades no histórico",specs.map((s,i)=>[s.code,s.modality,colors[i%colors.length]])));
+  const selected = state[key].map(Number), measure = state["composition-metric"], units = [measure === "share" ? "% do total " + segment : "R$ milhões"];
+  if (selected.length) {
+    const box = el("section",{class:"chart-wrap"},el("h3",{},"Evolução das modalidades — " + segment)), plot = el("div",{class:"chart","aria-label":"Evolução das modalidades"});
+    box.append(plot,note("Fonte: BCB/SGS · " + units[0])); main.append(box);
+    charts().then(c=>c.drawLines(plot,specs.filter(s=>selected.includes(s.code)).map(s=>({name:s.modality,metric:measure,unit:units[0],rows:rows.filter(r=>r.code===s.code),color:colors[specs.indexOf(s)%colors.length]})),units)).catch(()=>{if(plot.isConnected) plot.textContent="Não foi possível carregar o gráfico.";});
+  } else main.append(message("Selecione uma modalidade para exibir o histórico."));
+  const exported = rows.map(r=>({...r,unit:"R$ milhões",snapshot_id:data.manifest.snapshot_id}));
+  main.append(download("Baixar modalidades · CSV",exported,"composicao-credito-"+segment+".csv"));
+  main.append(note("As modalidades acompanhadas não esgotam a carteira e seus percentuais não precisam somar 100%. Cada participação usa o total do mesmo segmento e mês; não há interpolação nem combinação de referências diferentes. Valores nominais, sujeitos a revisões."));
+  main.append(details("Fontes das modalidades",...specs.map(s=>el("p",{},el("a",{href:safeURL(s.source_url),target:"_blank",rel:"noopener noreferrer"},s.modality + " · SGS " + s.code)))));
 }
 function inflation() {
   const specs = data.catalog.filter(s => s.classification === "Inflação"),
@@ -1546,6 +1579,7 @@ function render() {
       inflation,
       comparison,
       credit,
+      composition,
       family,
       explorer,
       relations,
