@@ -150,3 +150,45 @@ def test_invalid_repo_never_makes_request(monkeypatch):
     monkeypatch.setattr(monitor, "urlopen", unexpected)
     with pytest.raises(ValueError):
         monitor.api_get("owner/repo/../../other", "token", "actions/runs")
+
+
+def test_skipped_inverted_timestamps_do_not_hide_newer_verified_backup(monkeypatch):
+    skipped_run, skipped_job = run_and_job("skipped", steps=[])
+    skipped_run.update(id=41, run_started_at="2026-11-05T12:03:59Z")
+    skipped_job.update(started_at="2026-11-05T12:04:09Z",
+                       completed_at="2026-11-05T12:03:59Z")
+    good_run, good_job = run_and_job()
+    good_run.update(run_started_at="2026-11-05T12:06:00Z")
+    good_job.update(started_at="2026-11-05T12:06:03Z",
+                    completed_at="2026-11-05T12:07:54Z")
+    def response(repo, token, path):
+        if "workflows/" in path:
+            return {"workflow_runs": [good_run, skipped_run]}
+        return {"jobs": [skipped_job if "/41/" in path else good_job]}
+    monkeypatch.setattr(monitor, "api_get", response)
+    report = monitor.check("owner/repo", "token",
+                           datetime(2026, 11, 5, 12, 8, 5, tzinfo=timezone.utc))
+    assert report["status"] == "ok"
+    assert report["last_success"]["run_id"] == 42
+    assert report["runs_checked"] == 2
+
+
+def test_latest_skipped_with_inverted_times_still_alerts():
+    run, job = run_and_job("skipped", steps=[])
+    job["completed_at"] = (NOW - timedelta(minutes=11)).isoformat()
+    result = monitor.summarize_run(run, [job])
+    assert result["duration_seconds"] is None
+    assert result["ended_at"] is None
+    assert not result["verified"]
+    report = monitor.evaluate([result, record(2)], NOW)
+    assert report["status"] == "alert"
+    assert report["latest_execution_skipped"]
+    assert report["last_success"]["run_id"] == 1
+
+
+@pytest.mark.parametrize("conclusion", ["success", "failure", "cancelled"])
+def test_executed_jobs_with_negative_duration_remain_invalid(conclusion):
+    run, job = run_and_job(conclusion)
+    job["completed_at"] = (NOW - timedelta(minutes=11)).isoformat()
+    with pytest.raises(ValueError, match="Duração negativa"):
+        monitor.summarize_run(run, [job])

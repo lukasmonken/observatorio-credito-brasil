@@ -33,8 +33,12 @@ def summarize_run(run, jobs):
         raise ValueError("Estado inesperado do job")
     if status == "completed" and conclusion not in {"success", "failure", "cancelled", "timed_out", "action_required", "neutral", "skipped", "stale", "startup_failure"}:
         raise ValueError("Conclusão inesperada do job")
-    start = timestamp(job.get("started_at") or run["run_started_at"])
-    end = timestamp(job["completed_at"]) if job.get("completed_at") else None
+    skipped = conclusion == "skipped"
+    # Jobs pulados não executaram: seus horários sintéticos podem vir invertidos.
+    # Use a referência da execução para ordenar, sem inventar duração ou término.
+    start = timestamp(run["run_started_at"] if skipped else
+                      job.get("started_at") or run["run_started_at"])
+    end = timestamp(job["completed_at"]) if not skipped and job.get("completed_at") else None
     if end is not None and end < start:
         raise ValueError("Duração negativa")
     steps = job.get("steps", [])
@@ -47,7 +51,7 @@ def summarize_run(run, jobs):
         "duration_seconds": round((end - start).total_seconds()) if end else None,
         "status": status,
         "conclusion": conclusion,
-        "skipped": conclusion == "skipped",
+        "skipped": skipped,
         # Exige término do job inteiro, inclusive artefatos e retenção.
         "verified": status == "completed" and conclusion == "success" and verified and end is not None,
     }
@@ -129,6 +133,8 @@ def render_report(report, repo):
         else:
             link = f"https://github.com/{repo}/actions/runs/{item['run_id']}/attempts/{item['run_attempt']}"
             lines.append(f"{label}: [{item['started_at']}]({link}); término: {item['ended_at'] or 'pendente'}; duração: {item['duration_seconds']} s.")
+    if report.get("error_type"):
+        lines.append(f"Tipo de erro: {report['error_type']}.")
     lines.extend(report["errors"] or ["Backup dentro dos limites operacionais."])
     lines.append(f"Janela: até {RUN_LIMIT} execuções recentes. Estado consultado no GitHub; o monitor não testa novamente o Drive.")
     return "\n\n".join(lines) + "\n"
@@ -142,9 +148,9 @@ def main():
     repo = os.environ.get("GITHUB_REPOSITORY", "")
     try:
         report = check(repo, os.environ["GITHUB_TOKEN"])
-    except (URLError, TimeoutError, OSError, ValueError, KeyError, TypeError):
+    except (URLError, TimeoutError, OSError, ValueError, KeyError, TypeError) as exc:
         # Erro de consulta é desconhecido, nunca um sinal de backup saudável.
-        report = {"checked_at": now.isoformat(), "status": "unknown", "errors": [
+        report = {"checked_at": now.isoformat(), "status": "unknown", "error_type": type(exc).__name__, "errors": [
             "Não foi possível validar o histórico do backup. Confira a API do GitHub, permissões e formato da resposta."
         ]}
     args.report.parent.mkdir(parents=True, exist_ok=True)
