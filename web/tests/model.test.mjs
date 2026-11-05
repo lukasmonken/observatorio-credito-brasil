@@ -217,3 +217,13 @@ test("Links inválidos ignoram chaves desconhecidas, tipos incorretos e datas im
   assert.equal(readShare('#constructor?v=1').page, 'overview');
   assert.equal(readShare('#not-a-page').page, 'overview');
 });
+
+test("Composição usa total do segmento no mesmo mês e preserva ausência e zero", async () => {
+  const {compositionRows} = await import("../src/model.js");
+  const specs = [{code:1,credit_composition:true,segment:"PF",modality:"A"},{code:2,credit_composition:true,segment:"PF",modality:"B"}];
+  const rows=[{code:20541,date:"2025-01-01",original:100},{code:1,date:"2025-01-01",original:25},{code:20541,date:"2025-02-01",original:200},{code:2,date:"2025-02-01",original:0}];
+  assert.deepEqual(compositionRows(rows,specs,"PF").map(r=>r.share),[25,null,null,0]);
+  for (const total of [0,null,-1,20]) assert.equal(compositionRows([{code:20541,date:"2025-01-01",original:total},rows[1]],specs,"PF")[0].share,null);
+  assert.throws(()=>compositionRows([...rows,rows[0]],specs,"PF"),/duplicadas/);
+  assert.deepEqual(compositionRows(rows,specs,"PJ"),[]);
+});

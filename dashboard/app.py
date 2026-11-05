@@ -12,6 +12,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from html import escape
 import streamlit as st
+from observatorio.composition import composition_rows
 from observatorio.config import ROOT
 from observatorio.bulletin import build_bulletin
 from observatorio.excel import METRIC_FORMULAS as formulas, METRIC_LABELS as labels, build_excel
@@ -101,6 +102,7 @@ names = {s["code"]: s["name"] for s in specs}
 pages = [
     "Visão geral",
     "Juros e crédito",
+    "Composição do crédito",
     "Inflação detalhada",
     "Comparação em base 100",
     "Famílias e inadimplência",
@@ -380,6 +382,43 @@ elif page == "Inflação detalhada":
         st.write('Acumulados compostos antes do filtro: janeiro até a referência, ou doze meses consecutivos. Exigem todos os meses; lacunas permanecem ausentes. Arredondamentos podem gerar diferenças frente ao acumulado oficial.')
         for spec in inflation_specs:
             st.markdown(f"[{spec.get('short_name', spec['name'])}]({spec['source_url']})")
+
+elif page == "Composição do crédito":
+    st.caption("Saldos de fim de mês. Participação sobre o total PF ou PJ, incluindo recursos livres e direcionados.")
+    segment = st.selectbox("Segmento", ["PF", "PJ"], key="composition_segment")
+    comp = composition_rows(df, specs, segment)
+    if comp.empty:
+        st.info("Modalidades ainda indisponíveis nesta coleta. Aguarde a atualização dos dados.")
+    else:
+        comp = date_filter(comp, "composition_dates")
+        if comp.empty:
+            st.info("Não há observações no intervalo selecionado.")
+        else:
+            months = sorted(comp.date.unique(), reverse=True)
+            complete = [m for m in months if comp.loc[comp.date == m, ["original", "share"]].notna().all().all()]
+            reference = st.selectbox("Referência da composição", months, index=months.index(complete[0]) if complete else 0,
+                                     format_func=lambda d: pd.Timestamp(d).strftime("%m/%Y"))
+            current = comp[comp.date == reference]
+            st.dataframe(current[["modality", "resources", "original", "share"]].rename(columns={
+                "modality":"Modalidade", "resources":"Recursos", "original":"Saldo (R$ milhões)", "share":f"% do total {segment}"}), hide_index=True)
+            if current[["original", "share"]].isna().any().any():
+                st.info("Há valores ou participações indisponíveis nesta referência; ausências não são zero.")
+            selected = st.multiselect("Modalidades no histórico", list(comp.modality.unique()), default=list(comp.modality.unique()), key=f"composition_{segment}")
+            measure = st.selectbox("Medida do histórico", ["original", "share"], format_func=lambda m: "Saldo (R$ milhões)" if m == "original" else f"Participação no total {segment} (%)")
+            if selected:
+                fig = px.line(comp[comp.modality.isin(selected)], x="date", y=measure, color="modality",
+                              labels={"date":"Referência", measure:"R$ milhões" if measure == "original" else f"% do total {segment}", "modality":"Modalidade"})
+                fig.update_traces(connectgaps=False)
+                style_chart(fig)
+                st.plotly_chart(fig, width="stretch", theme=None)
+            else:
+                st.info("Selecione uma modalidade para exibir o histórico.")
+            st.download_button("Baixar modalidades · CSV", comp.to_csv(index=False).encode("utf-8-sig"), f"composicao-credito-{segment}.csv", "text/csv")
+            st.caption("Seleção parcial: as modalidades não esgotam a carteira e não precisam somar 100%. Percentuais exigem saldo compatível e total positivo do mesmo segmento e mês. Valores nominais, sujeitos a revisões.")
+            with st.expander("Fontes das modalidades"):
+                for spec in specs:
+                    if spec.get("credit_composition") and spec["segment"] == segment:
+                        st.markdown(f"[{spec['modality']} · SGS {spec['code']}]({spec['source_url']})")
 
 elif page == "Juros e crédito":
     filter_segment, filter_indicators = st.columns([1, 3])

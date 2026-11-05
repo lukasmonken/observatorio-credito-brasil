@@ -5,7 +5,7 @@ Este documento distingue funcionalidades planejadas de funcionalidades já dispo
 | Item | Entrega | Estado |
 | --- | --- | --- |
 | 1 | Inflação detalhada: IPCA, IPCA-15, INPC, IGP-M, INCC-M e nove grupos nacionais do IPCA | Primeira entrega implementada; regiões, subitens e outras variantes do INCC permanecem planejados |
-| 2 | Composição do crédito: PF/PJ, modalidades e outras aberturas do BCB | Planejado |
+| 2 | Composição do crédito: PF/PJ, modalidades e outras aberturas do BCB | Primeira entrega: sete modalidades PF/PJ, saldos e participações; outras aberturas permanecem planejadas |
 | 3 | Comparação em base 100 | Disponível |
 | 4 | Compartilhamento dos filtros por URL | Disponível |
 | 5 | Boletim automático da coleta, com novas referências, variações e revisões separadas | Implementado |

@@ -4,6 +4,7 @@ const pages = [
   "overview",
   "inflation",
   "credit",
+  "composition",
   "comparison",
   "family",
   "explorer",
@@ -351,4 +352,39 @@ test("Inflação: catálogo ampliado, acumulados, grupos, exportação e tema", 
   await page.locator("#inflationstart").fill("2025-03-01");
   await page.locator("#inflationend").fill("2025-01-01");
   await expect(page.locator("main")).toContainText("Selecione um período válido.");
+});
+
+test("Composição: modalidades PF/PJ, participação, CSV e dispositivo móvel", async ({page}) => {
+  const {readFile}=await import("node:fs/promises"), {createHash}=await import("node:crypto");
+  const config=JSON.parse(await readFile(new URL("../generated/site.json",import.meta.url),"utf8"));
+  const payload=JSON.parse(await readFile(new URL("../generated/"+config.data,import.meta.url),"utf8"));
+  payload.catalog=JSON.parse(await readFile(new URL("../../catalog.json",import.meta.url),"utf8"));
+  const modalities=payload.catalog.filter(s=>s.credit_composition);
+  const codes=[20540,20541,...modalities.map(s=>s.code)];
+  payload.rows=payload.rows.filter(r=>!codes.includes(r.code));
+  for (const code of codes) for (const date of ["2025-01-01","2025-02-01"]) payload.rows.push({code,date,original:code===20540||code===20541?1000:100});
+  payload.manifest.rows=payload.rows.length;payload.manifest.series=payload.catalog.length;
+  const body=JSON.stringify(payload),hash=createHash("sha256").update(body).digest("hex"),filename=`data-${hash.slice(0,16)}.json`;
+  await page.route("**/site.json",r=>r.fulfill({json:{...config,data:filename,sha256:hash}}));
+  await page.route("**/"+filename,r=>r.fulfill({body,contentType:"application/json"}));
+  const errors=[];page.on("pageerror",e=>errors.push(e.message));
+  await page.goto("#composition");
+  await expect(page.locator("main")).toContainText("Consignado");
+  await expect(page.locator("main table")).toContainText("10,00");
+  await page.locator("#composition-metric").selectOption("share");
+  await expect(page.locator(".js-plotly-plot")).toHaveCount(1);
+  await expect.poll(()=>page.locator(".js-plotly-plot").evaluate(n=>n.data[0].y[0])).toBe(10);
+  await page.locator("#composition-segment").selectOption("PJ");
+  await expect(page.locator("main table")).toContainText("Capital de giro");
+  const pending=page.waitForEvent("download");
+  await page.getByRole("button",{name:"Baixar modalidades · CSV",exact:true}).click();
+  const downloaded=await pending, text=await readFile(await downloaded.path(),"utf8");
+  expect(text).toContain("20540");expect(text).toContain("snapshot_id");expect(text).toContain("Banco Central");
+  await page.screenshot({path:"test-results/composition-desktop.png",fullPage:true});
+  await page.setViewportSize({width:390,height:844});
+  await page.getByRole("button",{name:"Ativar modo escuro"}).click();
+  await expect(page.locator(".js-plotly-plot")).toHaveCount(1);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
+  await page.screenshot({path:"test-results/composition-mobile-dark.png",fullPage:true});
+  expect(errors).toEqual([]);
 });
