@@ -83,3 +83,8 @@ Cabeçalhos congelados, filtros e unidades facilitam o uso fora do painel. Texto
 e URLs são gravados como conteúdo, sem conversão automática em fórmulas ou links
 ativos. O arquivo é gerado em memória, não grava dados no servidor e não realiza
 chamadas externas. A exportação CSV existente continua disponível.
+
+
+## Inflação detalhada
+
+Cinco índices gerais (IPCA, IPCA-15, INPC, IGP-M e INCC-M) e nove grupos do IPCA. Acumulados por composição das taxas mensais, com calendário completo e sem preencher lacunas. Fontes primárias: IBGE e FGV IBRE; distribuição: BCB/SGS. Consulte [séries, cálculos e limites](inflacao.md).

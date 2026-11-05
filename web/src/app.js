@@ -18,6 +18,7 @@ import {
 const pages = [
   ["overview", "Visão geral"],
   ["credit", "Juros e crédito"],
+  ["inflation", "Inflação detalhada"],
   ["comparison", "Comparação em base 100"],
   ["family", "Famílias e inadimplência"],
   ["explorer", "Explorador de indicadores"],
@@ -189,7 +190,7 @@ function indicatorPicker(key, title, options, initial) {
   state[key] ??= initial;
   state[key] = state[key].map(String).filter((code) => available.has(code));
   const ui = pickerUI[key] ??= { open: false, search: "" };
-  const limit = key === "comparison-codes" ? 6 : options.length;
+  const limit = ["comparison-codes", "inflation-groups"].includes(key) ? 6 : options.length;
   const selected = state[key];
   const wrapper = el("section", { class: "indicator-picker", "data-picker": key });
   const menu = el("details", { class: "picker-menu", ...(ui.open ? { open: true } : {}) });
@@ -265,7 +266,7 @@ function checks(
   options,
   initial = options.map((o) => String(o[0])),
 ) {
-  if (key === "comparison-codes" || /^credit-(Total|PF|PJ)$/.test(key))
+  if (key.startsWith("inflation-") || key === "comparison-codes" || /^credit-(Total|PF|PJ)$/.test(key))
     return indicatorPicker(key, title, options, initial);
   state[key] ??= initial;
   const available = new Set(options.map((o) => String(o[0])));
@@ -437,7 +438,7 @@ function chart(
     );
   box.append(plot);
   const selected = specs.map((s, index) => ({
-    name: s.name,
+    name: s.short_name || s.name,
     unit: unit(s, metricName, data.manifest),
     metric: metricName,
     rows: rows.filter((r) => r.code === s.code),
@@ -645,6 +646,48 @@ function credit() {
     ),
   );
 }
+function inflation() {
+  const specs = data.catalog.filter(s => s.classification === "Inflação"),
+    general = specs.filter(s => s.inflation_group !== "Grupos do IPCA"),
+    groups = specs.filter(s => s.inflation_group === "Grupos do IPCA"),
+    allRows = data.rows.filter(r => specs.some(s => s.code === r.code));
+  if (!allRows.length) { main.append(message("Inflação indisponível nesta coleta.")); return; }
+  main.append(note("Compare índices e acompanhe os nove grupos do IPCA. Cada indicador mantém sua própria data de referência."));
+  main.append(period("inflation", allRows));
+  const rows = filtered("inflation", allRows);
+  const metrics = ["original", "inflation_ytd", "inflation12"].filter(m => general.some(s => s.allowed_transforms.includes(m)));
+  main.append(el("div", {class: "filters"}, select("inflation-metric", "Medida", metrics.map(m => [m, m === "original" ? "Variação mensal (%)" : data.labels[m]]), "original")));
+  if (!rows.length) { main.append(message("Não há observações no intervalo selecionado.")); return; }
+  const measure = state["inflation-metric"], cards = el("div", {class: "kpis inflation-kpis"});
+  for (const spec of general) {
+    const latest = rows.filter(r => r.code === spec.code && finite(r.original)).at(-1);
+    cards.append(metric(spec.short_name || spec.name, latest ? `${number(latest[measure])} %` : "—", latest ? `${month(latest.date)} · ${measure === "original" ? "No mês" : measure === "inflation_ytd" ? "No ano" : "Em 12 meses"}` : "Sem referência no recorte"));
+  }
+  main.append(cards, note("Os cartões usam a última referência disponível de cada índice dentro do período. Ausência de acumulado aparece como —; não é zero."));
+  main.append(checks("inflation-codes", "Índices para comparar", general.map(s => [s.code, s.short_name || s.name]), general.map(s => String(s.code))));
+  const selected = state["inflation-codes"].map(Number);
+  if (selected.length) chart(main, selected, measure, rows, "Evolução dos índices de inflação");
+  else main.append(message("Selecione ao menos um índice."));
+  const exported = rows.filter(r => selected.includes(r.code)).map(r => ({date:r.date, code:r.code, name:byCode.get(r.code).name, monthly_pct:r.original, year_to_date_pct:r.inflation_ytd ?? null, trailing_12_months_pct:r.inflation12 ?? null, source:byCode.get(r.code).source, source_url:byCode.get(r.code).source_url, snapshot_id:data.manifest.snapshot_id}));
+  if (exported.length) main.append(download("Baixar índices · CSV", exported, "inflacao_indices.csv"), details("Ver dados dos índices", table(exported, [["date","Referência",month],["name","Índice"],["monthly_pct","No mês (%)",number],["year_to_date_pct","No ano (%)",number],["trailing_12_months_pct","Em 12 meses (%)",number]])));
+  main.append(el("h3", {}, "Grupos do IPCA"), note("Variações dos grupos, não contribuições em pontos percentuais. Não some as taxas para reconstruir o IPCA."));
+  if (groups.length) {
+    const groupRows = rows.filter(r => groups.some(s => s.code === r.code));
+    const months = [...new Set(groupRows.filter(r => finite(r.original)).map(r => r.date))].sort().reverse();
+    if (months.length) {
+      main.append(select("inflation-group-month", "Referência dos grupos", months.map(m => [m,month(m)]), months[0]));
+      const monthRows = groups.map(s => {
+        const row = groupRows.find(r => r.code === s.code && r.date === state["inflation-group-month"]);
+        return {date:state["inflation-group-month"], code:s.code, group:s.modality, monthly_pct:row?.original ?? null, year_to_date_pct:row?.inflation_ytd ?? null, trailing_12_months_pct:row?.inflation12 ?? null, source:s.source, source_url:s.source_url, snapshot_id:data.manifest.snapshot_id};
+      });
+      main.append(table(monthRows, [["group","Grupo"],["monthly_pct","No mês (%)",number],["year_to_date_pct","No ano (%)",number],["trailing_12_months_pct","Em 12 meses (%)",number]]), download("Baixar grupos · CSV",monthRows,"inflacao_grupos.csv"));
+      main.append(checks("inflation-groups", "Grupos no gráfico", groups.map(s => [s.code,s.modality]), ["1635","1636","1639"]));
+      if (state["inflation-groups"].length) chart(main,state["inflation-groups"].map(Number),measure,groupRows,"Evolução dos grupos selecionados");
+    } else main.append(message("Sem dados dos grupos neste período."));
+  } else main.append(note("Os grupos serão exibidos após a primeira coleta validada do catálogo ampliado."));
+  main.append(details("Fontes e como interpretar", note("IBGE: IPCA, IPCA-15, INPC e grupos do IPCA. FGV IBRE: IGP-M e INCC-M. Distribuição: BCB/SGS."), note("IPCA-15 tem janela de coleta e cobertura próprias. INCC-M mede custos de construção e não equivale ao INCC-DI ou INCC-10. Os índices medem cestas diferentes."), note("Acumulados calculados por composição das taxas mensais, antes do filtro de período. No ano: janeiro até a referência; em 12 meses: doze meses consecutivos completos. Lacunas não são preenchidas. Arredondamentos podem gerar pequenas diferenças frente aos acumulados oficiais."), el("ul", {}, specs.map(s => el("li", {}, link(s.short_name || s.name,s.source_url))))));
+}
+
 function comparison() {
   main.append(
     note(
@@ -1321,9 +1364,7 @@ function dictionary() {
       ),
       link("Consultar fonte oficial e metadados", spec.source_url),
       note(
-        spec.code === 433
-          ? "Fonte primária: IBGE; distribuição: BCB/SGS."
-          : "Fonte: Banco Central do Brasil / SGS.",
+        "Fonte: " + (spec.source || "Banco Central do Brasil / SGS"),
       ),
       el("h3", {}, "Como interpretar"),
       el(
@@ -1502,6 +1543,7 @@ function render() {
   try {
     ({
       overview,
+      inflation,
       comparison,
       credit,
       family,

@@ -14,6 +14,8 @@ def validate_monthly(x, spec, as_of):
         add('range','error','Valor negativo incompatível com estoque, fluxo ou índice selecionado')
     if spec['classification']=='Inadimplência' and ((valid<0)|(valid>100)).any():
         add('range','error','Inadimplência fora de [0,100]')
+    if spec['classification']=='Inflação' and (valid <= -100).any():
+        add('range','error','Inflação mensal menor ou igual a -100%')
     change=x.diff().abs()
     # Descriptive flag only, retaining all observations including shocks.
     threshold=change.median()*10

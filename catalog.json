@@ -824,7 +824,7 @@
     "official_name": "Índice nacional de preços ao consumidor-amplo (IPCA)",
     "name": "Índice nacional de preços ao consumidor-amplo (IPCA)",
     "description": "Variação mensal do índice de preços ao consumidor amplo. Fonte primária: IBGE. Redistribuição: SGS/BCB. Metadados conferidos nos documentos cmiDadosBasicos e cmiMetadados, preservados nesta pasta.",
-    "source": "BCB/SGS (IBGE para IPCA)",
+    "source": "IBGE; distribuição BCB/SGS",
     "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=433",
     "unit": "% a.m.",
     "official_unit": "Variação percentual mensal",
@@ -837,6 +837,7 @@
     "aggregation": "identity_month",
     "allowed_transforms": [
       "original",
+      "inflation_ytd",
       "inflation12"
     ],
     "limitations": [
@@ -848,6 +849,474 @@
       "end": null
     },
     "metadata_evidence": "data/metadata/433.json",
-    "max_lag_days": 90
+    "max_lag_days": 90,
+    "short_name": "IPCA",
+    "inflation_group": "Índices gerais"
+  },
+  {
+    "code": 188,
+    "official_name": "Índice nacional de preços ao consumidor (INPC)",
+    "name": "INPC",
+    "description": "Variação mensal de INPC. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=188&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "INPC",
+    "inflation_group": "Índices gerais"
+  },
+  {
+    "code": 189,
+    "official_name": "Índice geral de preços - Mercado (IGP-M)",
+    "name": "IGP-M",
+    "description": "Variação mensal de IGP-M. Fonte primária: FGV IBRE; distribuição: BCB/SGS.",
+    "source": "FGV IBRE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=189&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IGP-M",
+    "inflation_group": "Índices gerais"
+  },
+  {
+    "code": 7478,
+    "official_name": "Índice nacional de preços ao consumidor-amplo 15 (IPCA-15)",
+    "name": "IPCA-15",
+    "description": "Variação mensal de IPCA-15. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=7478&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "IPCA-15 possui janela e cobertura próprias; não representa os primeiros quinze dias do IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA-15",
+    "inflation_group": "Índices gerais"
+  },
+  {
+    "code": 7456,
+    "official_name": "Índice nacional de custo da construção - Mercado (INCC-M)",
+    "name": "INCC-M",
+    "description": "Variação mensal de INCC-M. Fonte primária: FGV IBRE; distribuição: BCB/SGS.",
+    "source": "FGV IBRE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=7456&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "INCC-M: coleta entre 21 do mês anterior e 20 do mês de referência. Não equivale a INCC-DI ou INCC-10."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "INCC-M",
+    "inflation_group": "Índices gerais"
+  },
+  {
+    "code": 1635,
+    "official_name": "IPCA - Alimentação e bebidas",
+    "name": "IPCA · Alimentação e bebidas",
+    "description": "Variação mensal de IPCA · Alimentação e bebidas. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1635&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Alimentação e bebidas",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Alimentação e bebidas",
+    "inflation_group": "Grupos do IPCA"
+  },
+  {
+    "code": 1636,
+    "official_name": "IPCA - Habitação",
+    "name": "IPCA · Habitação",
+    "description": "Variação mensal de IPCA · Habitação. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1636&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Habitação",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Habitação",
+    "inflation_group": "Grupos do IPCA"
+  },
+  {
+    "code": 1637,
+    "official_name": "IPCA - Artigos de residência",
+    "name": "IPCA · Artigos de residência",
+    "description": "Variação mensal de IPCA · Artigos de residência. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1637&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Artigos de residência",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Artigos de residência",
+    "inflation_group": "Grupos do IPCA"
+  },
+  {
+    "code": 1638,
+    "official_name": "IPCA - Vestuário",
+    "name": "IPCA · Vestuário",
+    "description": "Variação mensal de IPCA · Vestuário. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1638&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Vestuário",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Vestuário",
+    "inflation_group": "Grupos do IPCA"
+  },
+  {
+    "code": 1639,
+    "official_name": "IPCA - Transportes",
+    "name": "IPCA · Transportes",
+    "description": "Variação mensal de IPCA · Transportes. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1639&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Transportes",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Transportes",
+    "inflation_group": "Grupos do IPCA"
+  },
+  {
+    "code": 1640,
+    "official_name": "IPCA - Comunicação",
+    "name": "IPCA · Comunicação",
+    "description": "Variação mensal de IPCA · Comunicação. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1640&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Comunicação",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Comunicação",
+    "inflation_group": "Grupos do IPCA"
+  },
+  {
+    "code": 1641,
+    "official_name": "IPCA - Saúde e cuidados pessoais",
+    "name": "IPCA · Saúde e cuidados pessoais",
+    "description": "Variação mensal de IPCA · Saúde e cuidados pessoais. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1641&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Saúde e cuidados pessoais",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Saúde e cuidados pessoais",
+    "inflation_group": "Grupos do IPCA"
+  },
+  {
+    "code": 1642,
+    "official_name": "IPCA - Despesas pessoais",
+    "name": "IPCA · Despesas pessoais",
+    "description": "Variação mensal de IPCA · Despesas pessoais. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1642&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Despesas pessoais",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Despesas pessoais",
+    "inflation_group": "Grupos do IPCA"
+  },
+  {
+    "code": 1643,
+    "official_name": "IPCA - Educação",
+    "name": "IPCA · Educação",
+    "description": "Variação mensal de IPCA · Educação. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1643&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Educação",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Educação",
+    "inflation_group": "Grupos do IPCA"
   }
 ]

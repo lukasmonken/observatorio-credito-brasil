@@ -81,9 +81,7 @@ export async function excelFile(data, rows, spec, metric, period) {
     ["Conceito", spec.description || "Não informado"],
     [
       "Fonte primária",
-      spec.code === 433
-        ? "IBGE; distribuição BCB/SGS"
-        : "Banco Central do Brasil / SGS",
+      spec.source || "Banco Central do Brasil / SGS",
     ],
     ["Fonte oficial e metadados", spec.source_url],
     ["Unidade original", spec.unit],

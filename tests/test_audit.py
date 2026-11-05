@@ -253,10 +253,11 @@ def test_daily_main_publishes_validated_run(snapshot_root, monkeypatch):
         manifest_path.write_text(json.dumps(manifest))
         update_manifest(dest)
         return dict(
-            run_id=run_id, status="success", failures=0, successes=24, snapshot=manifest
+            run_id=run_id, status="success", failures=0, successes=len(json.loads((old_directory / "catalog.json").read_text())), snapshot=manifest
         )
 
     monkeypatch.setattr(daily, "ROOT", root)
+    monkeypatch.setattr(daily, "catalog", lambda: json.loads((old_directory / "catalog.json").read_text()))
     monkeypatch.setattr(daily, "run_pipeline", collect)
     daily.main()
     assert (root / "data/processed/latest.json").read_text() != previous_pointer
@@ -280,11 +281,12 @@ def test_daily_main_rejects_concurrent_publication(snapshot_root, monkeypatch):
             run_id="new-run",
             status="success",
             failures=0,
-            successes=24,
+            successes=len(json.loads((old_directory / "catalog.json").read_text())),
             snapshot={"ok": True},
         )
 
     monkeypatch.setattr(daily, "ROOT", root)
+    monkeypatch.setattr(daily, "catalog", lambda: json.loads((old_directory / "catalog.json").read_text()))
     monkeypatch.setattr(daily, "run_pipeline", collect)
     with pytest.raises(RuntimeError, match="mudou durante"):
         daily.main()

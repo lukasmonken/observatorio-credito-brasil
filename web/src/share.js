@@ -2,6 +2,7 @@
 const periods = (prefix) => [prefix + "start", prefix + "end"];
 export const pageKeys = {
   overview: [],
+  inflation: ["inflation-codes", "inflation-groups", "inflation-metric", "inflation-group-month", ...periods("inflation")],
   credit: ["segment", "credit-view", "credit-Total", "credit-PF", "credit-PJ", ...periods("credit")],
   comparison: ["comparison-codes", ...periods("comparison")],
   family: periods("family"),
@@ -11,7 +12,7 @@ export const pageKeys = {
   dictionary: ["dictionary-search", "dictionary-code"],
   quality: [],
 };
-const arrays = new Set(["credit-Total", "credit-PF", "credit-PJ", "comparison-codes", "revision-codes", "revision-types"]);
+const arrays = new Set(["inflation-codes", "inflation-groups", "credit-Total", "credit-PF", "credit-PJ", "comparison-codes", "revision-codes", "revision-types"]);
 function valid(key, value) {
   if (arrays.has(key)) {
     if (!Array.isArray(value) || value.length > 100) return undefined;

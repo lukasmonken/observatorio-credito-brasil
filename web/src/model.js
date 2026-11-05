@@ -34,7 +34,7 @@ export function rebase(rows) {
   }));
 }
 export function unit(spec, metric, manifest) {
-  if (["mom_pct", "yoy_pct", "real_yoy_pct", "inflation12"].includes(metric))
+  if (["mom_pct", "yoy_pct", "real_yoy_pct", "inflation12", "inflation_ytd"].includes(metric))
     return "%";
   if (["diff_pp", "diff12_pp"].includes(metric)) return "p.p.";
   if (metric === "base100") return "índice base 100";

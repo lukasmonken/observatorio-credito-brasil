@@ -16,7 +16,8 @@ METRIC_LABELS = {
     "base100": "Índice base 100",
     "real": "Valor real (R$ milhões)",
     "real_yoy_pct": "Crescimento real em 12 meses (%)",
-    "inflation12": "IPCA acumulado em 12 meses (%)",
+    "inflation_ytd": "Inflação acumulada no ano (%)",
+    "inflation12": "Inflação acumulada em 12 meses (%)",
 }
 
 METRIC_FORMULAS = {
@@ -29,7 +30,8 @@ METRIC_FORMULAS = {
             "base100": "100 × xₜ / primeiro valor válido. No explorador, a base é recalculada no intervalo selecionado; base zero gera ausência.",
             "real": "Nominalₜ × P_base / Pₜ, com índice de preços encadeado pelo IPCA.",
             "real_yoy_pct": "(realₜ / realₜ₋₁₂ − 1) × 100; crescimento descontada a inflação pelo IPCA.",
-            "inflation12": "[Produto dos 12 fatores (1 + IPCAₘ / 100) − 1] × 100; exige 12 meses presentes.",
+            "inflation_ytd": "[Produto dos fatores (1 + taxaₘ / 100), de janeiro ao mês de referência − 1] × 100; exige todos os meses desde janeiro.",
+            "inflation12": "[Produto dos 12 fatores (1 + taxaₘ / 100) − 1] × 100; exige 12 meses presentes.",
         }
 
 
@@ -63,7 +65,7 @@ def build_excel(data, spec, manifest, metric, transformed_unit, period, methodol
         ("Código SGS", spec["code"]), ("Nome", spec["name"]),
         ("Nome oficial", spec.get("official_name", "Não informado")),
         ("Conceito", spec.get("description", "Não informado")),
-        ("Fonte primária", "IBGE; distribuição BCB/SGS" if spec["code"] == 433 else "Banco Central do Brasil / SGS"),
+        ("Fonte primária", spec.get("source", "Banco Central do Brasil / SGS")),
         ("Fonte oficial e metadados", spec["source_url"]),
         ("Unidade original", spec["unit"]),
         ("Periodicidade de origem", {"D": "Diária", "M": "Mensal"}.get(spec["frequency"], spec["frequency"])),
