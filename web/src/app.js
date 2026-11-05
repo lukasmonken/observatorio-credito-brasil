@@ -304,6 +304,11 @@ function checks(
 function table(rows, columns) {
   columns ??= Object.keys(rows[0] || {}).map((key) => [key, key]);
   if (!rows.length) return message("Nenhum registro corresponde aos filtros.");
+  const numericColumns = new Set(
+    columns
+      .filter(([key, , format]) => format === number || rows.some((row) => finite(row[key])))
+      .map(([key]) => key),
+  );
   let ordered = [...rows],
     offset = 0;
   const holder = el("div"),
@@ -324,7 +329,7 @@ function table(rows, columns) {
         tr.append(
           el(
             "td",
-            { class: finite(value) ? "numeric" : "" },
+            { class: numericColumns.has(key) ? "numeric" : "" },
             format
               ? format(value)
               : value == null
@@ -346,7 +351,7 @@ function table(rows, columns) {
     head.append(
       el(
         "th",
-        {},
+        { scope: "col", class: numericColumns.has(key) ? "numeric" : "" },
         el(
           "button",
           {
