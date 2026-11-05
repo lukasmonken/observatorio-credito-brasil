@@ -474,6 +474,25 @@ const eventColumns = [
   ["unit", "Unidade"],
   ["difference_unit", "Unidade da diferença"],
 ];
+function collectionBulletin() {
+  const b = data.bulletin;
+  if (!b) return;
+  const box = details("Boletim da coleta");
+  box.append(note(`Coleta validada: ${localTime(b.created_at)} · Brasília`));
+  for (const text of b.paragraphs) box.append(el("p", {}, text));
+  for (const [title, items] of [["Novas referências e variações mensais", b.highlights], ["Revisões históricas", b.revisions]]) {
+    box.append(el("h3", {}, title));
+    if (!items.length) box.append(note(b.counts === null ? "Comparação ainda indisponível." : "Nenhum registro desta categoria na última comparação."));
+    else box.append(el("ul", {}, items.slice(0, 8).map(item => el("li", {}, item.text, " ", link("Fonte", item.source_url)))));
+    if (items.length > 8) box.append(note(`Exibidos 8 de ${items.length} registros, em ordem SGS e referência. O JSON contém todos.`));
+  }
+  box.append(details("Como ler o boletim", b.notes.map(text => note(text))),
+    el("div", {class: "actions"},
+      el("button", {type: "button", id: "download-bulletin", onclick: () => save(b.markdown, `boletim-${b.snapshot_id}.md`, "text/markdown;charset=utf-8")}, "Baixar boletim · Markdown"),
+      el("button", {type: "button", onclick: () => save(JSON.stringify(b, null, 2), `boletim-${b.snapshot_id}.json`, "application/json")}, "Baixar boletim completo · JSON")),
+    note(`Coleta: ${b.snapshot_id} · Anterior: ${b.previous_snapshot_id || "não disponível"}`));
+  main.append(box);
+}
 function overview() {
   const kpis = el("div", { class: "kpis" });
   for (const [code, label] of [
@@ -496,6 +515,7 @@ function overview() {
       );
   }
   main.append(kpis);
+  collectionBulletin();
   const changed = lastChanges(data.history, data.history_meta),
     box = details("O que mudou na última atualização");
   if (!changed)

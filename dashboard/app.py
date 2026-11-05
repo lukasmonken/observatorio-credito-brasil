@@ -13,6 +13,7 @@ from plotly.subplots import make_subplots
 from html import escape
 import streamlit as st
 from observatorio.config import ROOT
+from observatorio.bulletin import build_bulletin
 from observatorio.excel import METRIC_FORMULAS as formulas, METRIC_LABELS as labels, build_excel
 from observatorio.monitoring import collection_health, read_status, source_freshness
 from observatorio.revisions import EVENT_LABELS, compare_collections, latest_changes, read_history
@@ -248,6 +249,11 @@ def date_filter(data, key):
 
 
 if page == "Visão geral":
+    with st.expander("Boletim da coleta"):
+        bulletin = build_bulletin(df, specs, manifest, history, history_meta)
+        st.markdown(bulletin["markdown"])
+        st.download_button("Baixar boletim · Markdown", bulletin["markdown"], f"boletim-{manifest['snapshot_id']}.md", "text/markdown", key="bulletin_md")
+        st.download_button("Baixar boletim completo · JSON", json.dumps(bulletin, ensure_ascii=False, indent=2), f"boletim-{manifest['snapshot_id']}.json", "application/json", key="bulletin_json")
     cols = st.columns(4)
     for col, code, label in zip(
         cols,

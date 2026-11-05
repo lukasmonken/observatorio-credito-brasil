@@ -107,3 +107,11 @@ Os filtros da página ativa são mantidos no fragmento do endereço (`#pagina?v=
 O link preserva indicadores, período, transformação, segmento, defasagem e filtros de revisões conforme a página. Funciona em uma nova aba, após recarregar e com Voltar/Avançar. Links antigos como `#explorer` continuam válidos. Parâmetros desconhecidos ou malformados são ignorados; os controles usam suas opções válidas e os padrões atuais.
 
 O link guarda a seleção, não congela a coleta. A base disponível ao abrir pode incluir revisões posteriores. Use CSV/Excel para guardar valores e identificação da coleta. Estado visual transitório (zoom, séries ocultadas pela legenda, ordenação/paginação de tabelas) não faz parte do link. A funcionalidade de compartilhamento é específica da interface GitHub Pages.
+
+## Boletim automático de coleta
+
+Após uma coleta publicada com sucesso, `scripts/build_bulletin.py` gera Markdown e JSON em `work/bulletin`, adiciona o texto ao resumo da execução no Actions e inclui os arquivos no artifact da coleta (retenção de sete dias). Falhas na coleta não geram um boletim novo. O site e o Streamlit mostram o boletim da última base validada em **Visão geral → Boletim da coleta**, com identificação, fontes e downloads. Avisos operacionais posteriores continuam separados.
+
+O texto é gerado por regras determinísticas a partir do histórico validado. Distingue novas referências, revisões, preenchimentos históricos e inclusão de séries. Uma coleta sem mudanças não repete novidades anteriores; sem comparação disponível, essa limitação é explícita. A variação mensal usa meses consecutivos da base atual e apenas transformações permitidas: diferença em pontos percentuais para taxas ou variação percentual com denominador positivo. Não preenche lacunas nem atribui causas econômicas.
+
+A apresentação curta mostra até oito registros por categoria em ordem SGS/referência; não é um ranking entre unidades diferentes. O JSON contém todos os registros da última comparação nessas categorias. Os arquivos podem ser reproduzidos com `python scripts/build_bulletin.py --output work/bulletin` a partir de um backup restaurado com o histórico. O boletim é um produto derivado, não altera o snapshot nem suas verificações de integridade.

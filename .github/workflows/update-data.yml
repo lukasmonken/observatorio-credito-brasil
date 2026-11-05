@@ -9,6 +9,7 @@ on:
       - '.github/workflows/update-data.yml'
       - 'scripts/update_data.py'
       - 'scripts/monitor_update.py'
+      - 'scripts/build_bulletin.py'
       - 'observatorio/**'
       - 'sql/**'
       - 'tests/**'
@@ -77,12 +78,16 @@ jobs:
             git commit -m 'Atualizar dados e estado operacional do Bacen'
             git push origin HEAD:main
           fi
+      - name: Gerar boletim da coleta publicada
+        if: success() && steps.collect.outcome == 'success'
+        run: python scripts/build_bulletin.py
       - name: Preservar evidências e diagnóstico
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coleta-bacen-${{ github.run_id }}
           path: |
+            work/bulletin
             data/processed/monitoring.json
             work/collection-*/data/raw
             work/collection-*/reports/runs

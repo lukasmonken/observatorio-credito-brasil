@@ -9,6 +9,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from observatorio.bulletin import build_bulletin
 from observatorio.excel import METRIC_FORMULAS, METRIC_LABELS
 from observatorio.monitoring import read_status
 from observatorio.revisions import read_history
@@ -19,6 +20,7 @@ def build_data(root, output):
     frame, catalog, quality, manifest = load_snapshot(root)
     pointer = json.loads((root / "data/processed/latest.json").read_text())
     history, meta = read_history(root / pointer["path"], manifest)
+    bulletin = build_bulletin(frame, catalog, manifest, history, meta)
     numeric_columns = sorted(set().union(*(s["allowed_transforms"] for s in catalog)))
     frame = frame[["code", "date", *[m for m in numeric_columns if m in frame]]].copy()
     frame["date"] = frame.date.dt.strftime("%Y-%m-%d")
@@ -32,6 +34,7 @@ def build_data(root, output):
         monitoring_error = "Estado operacional indisponível; os dados publicados foram validados."
     payload = {
         "schema_version": 1,
+        "bulletin": bulletin,
         "manifest": {key: manifest[key] for key in ("snapshot_id", "created_at", "as_of", "rows", "series", "summary", "price_base_month")},
         "catalog": catalog,
         "rows": json.loads(frame.to_json(orient="records", double_precision=15)),
