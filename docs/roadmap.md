@@ -4,12 +4,71 @@ Este documento distingue funcionalidades planejadas de funcionalidades já dispo
 
 | Item | Entrega | Estado |
 | --- | --- | --- |
-| 1 | Inflação detalhada: IPCA, INPC e IGP-M; grupos e recortes conforme disponibilidade e licença das fontes | Planejado |
+| 1 | Inflação detalhada: IPCA, IPCA-15, INPC, IGP-M e variantes do INCC; grupos e recortes conforme disponibilidade e licença das fontes | Planejado |
 | 2 | Composição do crédito: PF/PJ, modalidades e outras aberturas do BCB | Planejado |
 | 3 | Comparação em base 100 | Disponível |
 | 4 | Compartilhamento dos filtros por URL | Disponível |
 | 5 | Boletim automático da coleta, com novas referências, variações e revisões separadas | Implementado |
 | 6 | Instituições financeiras: capital, Basileia e comparação entre instituições | Planejado; adicionado em 05/11/2026 |
+| 7 | Evolução para Observatório Econômico do Brasil, com navegação por módulos e panorama geral de KPIs | Planejado; adicionado em 05/11/2026 |
+| 8 | Crescimento e atividade: PIB, IBC-Br, indústria, comércio e serviços | Planejado |
+| 9 | Setor externo: balança comercial, câmbio, reservas e contas externas | Planejado |
+| 10 | Mercado imobiliário e construção: FipeZap, Secovi-SP, INCC, SINAPI e crédito imobiliário | Planejado; acesso às fontes condicionado conforme catálogo |
+| 11 | Expansões: trabalho e renda, contas públicas e recortes regionais | Possibilidades futuras |
+| 12 | Exportações prontas para análise: CSV compatível com planilhas e melhoria do Excel existente | Planejado; relato de problema visual no CSV em 05/11/2026 |
+| 13 | Personalização e exportação de gráficos com título, números, unidades e fonte | Planejado |
+
+Os itens futuros são um backlog de possibilidades. O usuário esclareceu em 05/11/2026 que não deseja implementar todas essas expansões agora. O item 5 foi concluído separadamente, conforme combinado.
+
+## 12. Exportações prontas para análise
+
+Relato do usuário: o CSV foi baixado e os dados aparentavam estar corretos, mas a apresentação ficou desconfigurada ao abrir. A causa ainda não foi reproduzida nem diagnosticada; investigar separador, codificação, convenções numéricas e programa de abertura antes de alterar o exportador.
+
+- Oferecer um formato CSV adequado ao Excel em português, com separador e decimal coerentes, acentos preservados e cabeçalhos claros; considerar um perfil interoperável separado para ferramentas analíticas.
+- Manter uma linha por observação, datas consistentes, colunas estáveis, valores numéricos sem símbolos misturados, unidade e fonte identificadas. Preservar zeros e códigos de identificação e distinguir dados ausentes.
+- Aprimorar a exportação Excel já existente para abertura imediata: tipos de célula, formatos de data/número, filtros, cabeçalho fixo, largura de colunas e uma aba de metadados.
+- Explicar na escolha de formato que CSV não armazena cores, larguras ou formatação de células; essas propriedades pertencem ao arquivo Excel.
+- Validar acentos, aspas, separadores, datas, decimais e proteção contra fórmulas; testar importação e reimportação sem perda ou mudança de valores.
+
+## 13. Gráficos personalizáveis para download
+
+Relato do usuário: o gráfico exportado saiu sem título e sem os números esperados. Reproduzir a exportação e distinguir números dos eixos de rótulos nos pontos antes da implementação.
+
+- Criar uma prévia de exportação com título/subtítulo editáveis, período, unidade, legenda, fonte e data-base.
+- Permitir escolher tipo de gráfico entre opções compatíveis com a análise, cores das séries, tema/fundo, dimensões, resolução e tamanho da fonte.
+- Oferecer rótulos de valores nos pontos, somente no último ponto ou desativados; manter escalas e números dos eixos legíveis, com limites para evitar sobreposição.
+- Exportar a composição completa em imagem; avaliar PNG e SVG conforme suporte do renderizador e validar equivalência entre prévia e arquivo.
+- Avaliar primeiro os recursos da biblioteca de gráficos já utilizada, sem pressupor uma integração externa ou serviço pago.
+- Respeitar as unidades e os dados: personalização visual não pode alterar valores, ocultar transformações ou produzir comparação enganosa.
+
+Critérios de aceite: título, eixos, legenda, unidades e fonte presentes no arquivo final; cores e rótulos refletem a prévia; funcionamento nos temas claro/escuro e em dispositivos móveis. Nenhuma dessas mudanças de exportação foi implementada nesta atualização do roadmap.
+
+## Direção do produto: Observatório Econômico do Brasil
+
+Solicitação registrada em 05/11/2026. Ampliar o escopo do Observatório para a economia brasileira, preservando o crédito como módulo próprio. A mudança de nome, navegação e páginas ainda não foi implementada.
+
+Menu proposto:
+
+1. **Panorama Brasil**: visão geral com PIB, IPCA em 12 meses, Selic, desemprego, câmbio e saldo comercial. Cada cartão informa sua própria data-base, unidade e fonte.
+2. **Crédito**: manter as análises atuais e ampliar modalidades e composição.
+3. **Instituições financeiras**: módulo IFData descrito abaixo, com capital e Basileia.
+4. **Inflação**: IPCA, IPCA-15, INPC, IGP-M e INCC, com seletor da variante e metodologia.
+5. **Crescimento e atividade**: PIB trimestral e seus componentes; IBC-Br, produção industrial, comércio e serviços mensais.
+6. **Setor externo e câmbio**: exportações, importações e saldo comercial, parceiros e produtos; PTAX, reservas e balanço de pagamentos em subseções próprias.
+7. **Imobiliário e construção**: preços de venda/locação, vendas e lançamentos de imóveis novos, custos de construção e financiamento imobiliário.
+8. **Trabalho e renda / Contas públicas / Regiões**: expansões posteriores, sem páginas vazias antes de haver dados validados.
+
+Manter o menu selecionável, responsividade, tipografia de sistema e temas claro/escuro. Usar abas ou subseções dentro de cada módulo para evitar uma navegação com dezenas de itens.
+
+### Sequência proposta, ainda sem cronograma
+
+- Preparar catálogo de múltiplas fontes, com identificadores próprios: nem toda série será identificada por código SGS.
+- Implementar Panorama Brasil, expansão da inflação e atividade usando APIs públicas documentadas.
+- Acrescentar Comex Stat e PTAX; executar o módulo IFData como entrega própria.
+- Integrar FipeZap por planilha oficial e SINAPI; INCC/FGV e Secovi avançam conforme disponibilidade e condições de reutilização.
+- Ampliar trabalho/renda, fiscal e regiões após estabilizar os módulos anteriores.
+
+O [catálogo de fontes e viabilidade](fontes-expansao.md) registra exemplos, formas de acesso e restrições. A ordem é uma proposta para implementação futura, não uma promessa de cobertura integral de cada fonte.
 
 ## 6. Instituições financeiras e capital
 
