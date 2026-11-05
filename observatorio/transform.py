@@ -84,9 +84,20 @@ def indicators(x, spec, prices=None):
             x / valid.iloc[0] * 100 if len(valid) and valid.iloc[0] != 0 else np.nan
         )
     if "inflation12" in allowed:
+        if (x.dropna() <= -100).any():
+            raise ValueError("Inflação impossível para encadeamento")
+        calendar = x.reindex(pd.date_range(x.index.min(), x.index.max(), freq="MS"))
         out["inflation12"] = (
-            (1 + x / 100).rolling(12, min_periods=12).apply(np.prod, raw=True) - 1
+            (1 + calendar / 100).rolling(12, min_periods=12).apply(np.prod, raw=True) - 1
         ) * 100
+    if "inflation_ytd" in allowed:
+        calendar = x.reindex(pd.date_range(x.index.min(), x.index.max(), freq="MS"))
+        if (calendar.dropna() <= -100).any():
+            raise ValueError("Inflação impossível para encadeamento")
+        factors = 1 + calendar / 100
+        accumulated = factors.groupby(calendar.index.year).transform(lambda year: year.cumprod(skipna=False))
+        count = calendar.notna().groupby(calendar.index.year).cumsum()
+        out["inflation_ytd"] = ((accumulated - 1) * 100).where(count == calendar.index.month)
     if "real" in allowed:
         if prices is not None and len(prices.dropna()):
             out["real"] = x / prices.reindex(x.index) * prices.dropna().iloc[-1]

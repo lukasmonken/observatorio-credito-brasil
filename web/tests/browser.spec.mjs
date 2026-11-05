@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import ExcelJS from "exceljs";
 const pages = [
   "overview",
+  "inflation",
   "credit",
   "comparison",
   "family",
@@ -302,4 +303,52 @@ test("Boletim da coleta exibe identificação e exporta Markdown", async ({ page
   expect(text).toContain("Coleta anterior:");
   expect(file.suggestedFilename()).toMatch(/^boletim-.+\.md$/);
   await expect(page.locator(".js-plotly-plot")).toHaveCount(2);
+});
+
+test("Inflação: catálogo ampliado, acumulados, grupos, exportação e tema", async ({ page }) => {
+  // Deterministic test-only data; never published as observations.
+  const {readFile} = await import("node:fs/promises");
+  const {createHash} = await import("node:crypto");
+  const config = JSON.parse(await readFile(new URL("../generated/site.json", import.meta.url), "utf8"));
+  const payload = JSON.parse(await readFile(new URL("../generated/" + config.data, import.meta.url), "utf8"));
+  payload.catalog = JSON.parse(await readFile(new URL("../../catalog.json", import.meta.url), "utf8"));
+  const inflation = payload.catalog.filter(s => s.classification === "Inflação");
+  payload.rows = payload.rows.filter(r => !inflation.some(s => s.code === r.code));
+  for (const spec of inflation) for (let i=0; i<24; i++) {
+    payload.rows.push({code:spec.code, date:`${2024+Math.floor(i/12)}-${String(i%12+1).padStart(2,"0")}-01`, original:1, inflation_ytd:(1.01**(i%12+1)-1)*100, inflation12:i<11?null:(1.01**12-1)*100});
+  }
+  payload.manifest.rows=payload.rows.length;
+  payload.manifest.series=payload.catalog.length;
+  const body=JSON.stringify(payload), hash=createHash("sha256").update(body).digest("hex");
+  const fixtureName = `data-${hash.slice(0,16)}.json`;
+  await page.route("**/site.json", route => route.fulfill({json:{...config,data:fixtureName,sha256:hash}}));
+  await page.route("**/"+fixtureName, route => route.fulfill({body,contentType:"application/json"}));
+  await page.goto("#inflation");
+  await expect(page.locator(".js-plotly-plot")).toHaveCount(2);
+  await expect(page.locator(".inflation-kpis .kpi")).toHaveCount(5);
+  await page.locator("#inflation-metric").selectOption("inflation_ytd");
+  await expect(page.locator(".inflation-kpis")).toContainText("12,68");
+  await page.locator("#inflation-group-month").selectOption("2025-01-01");
+  await expect(page.locator("main")).toContainText("Alimentação e bebidas");
+  const download=page.waitForEvent("download");
+  await page.getByRole("button",{name:"Baixar grupos · CSV",exact:true}).click();
+  const file=await download;
+  const csv=await readFile(await file.path(),"utf8");
+  expect(csv).toContain("2025-01-01");
+  expect(csv).toContain("trailing_12_months_pct");
+  expect(csv).toContain("IBGE");
+  await page.screenshot({path:"test-results/inflation-desktop.png",fullPage:true});
+  await page.setViewportSize({width:390,height:844});
+  await page.getByRole("button",{name:"Ativar modo escuro"}).click();
+  await expect(page.locator(".js-plotly-plot")).toHaveCount(2);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
+  await page.screenshot({path:"test-results/inflation-mobile-dark.png",fullPage:true});
+  await page.locator("#inflation-codes-toggle").click();
+  await page.locator("#inflation-codes-search").fill("INCC");
+  await expect(page.locator("#inflation-codes-7456")).toBeVisible();
+  await page.locator("#inflation-codes-7456").uncheck();
+  await expect.poll(()=>page.locator(".js-plotly-plot").first().evaluate(n=>n.data.length)).toBe(4);
+  await page.locator("#inflationstart").fill("2025-03-01");
+  await page.locator("#inflationend").fill("2025-01-01");
+  await expect(page.locator("main")).toContainText("Selecione um período válido.");
 });

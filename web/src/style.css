@@ -522,3 +522,5 @@ header { padding-right: 46px; }
 [data-theme="dark"] .js-plotly-plot .modebar { background: transparent !important; }
 [data-theme="dark"] .js-plotly-plot .modebar-btn path { fill: #bbb !important; }
 @media (max-width: 700px) { #theme-toggle { top: 12px; right: 12px; } .brand { padding-right: 42px; } }
+
+.inflation-kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }

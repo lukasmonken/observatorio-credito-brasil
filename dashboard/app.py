@@ -101,6 +101,7 @@ names = {s["code"]: s["name"] for s in specs}
 pages = [
     "Visão geral",
     "Juros e crédito",
+    "Inflação detalhada",
     "Comparação em base 100",
     "Famílias e inadimplência",
     "Explorador de indicadores",
@@ -170,7 +171,7 @@ st.caption(
 
 
 def unit_for(code, metric):
-    if metric in ("mom_pct", "yoy_pct", "real_yoy_pct", "inflation12"):
+    if metric in ("mom_pct", "yoy_pct", "real_yoy_pct", "inflation12", "inflation_ytd"):
         return "%"
     if metric in ("diff_pp", "diff12_pp"):
         return "p.p."
@@ -319,6 +320,67 @@ if page == "Visão geral":
     st.caption(
         "Leitura conjunta: crescimento real do crédito, custo e atrasos. As séries mostram associações históricas; não estabelecem causalidade."
     )
+elif page == "Inflação detalhada":
+    inflation_specs = [s for s in specs if s['classification'] == 'Inflação']
+    general = [s for s in inflation_specs if s.get('inflation_group') != 'Grupos do IPCA']
+    groups = [s for s in inflation_specs if s.get('inflation_group') == 'Grupos do IPCA']
+    st.caption('Compare índices e acompanhe os nove grupos do IPCA. Cada indicador mantém sua própria referência.')
+    inflation_data = date_filter(df[df.code.isin([s['code'] for s in inflation_specs])], 'inflation_period')
+    measures = [m for m in ['original', 'inflation_ytd', 'inflation12'] if any(m in s['allowed_transforms'] for s in general)]
+    measure = st.selectbox('Medida', measures, format_func=lambda m: 'Variação mensal (%)' if m == 'original' else labels[m])
+    for col, spec in zip(st.columns(len(general)), general):
+        available = inflation_data[(inflation_data.code == spec['code']) & inflation_data.original.notna()]
+        last = available.iloc[-1] if len(available) else None
+        value = last.get(measure) if last is not None else None
+        col.metric(spec.get('short_name', spec['name']), f'{number(value)} %' if pd.notna(value) else '—')
+        col.caption(last.date.strftime('%m/%Y') if last is not None else 'Sem referência no recorte')
+    st.caption('Última referência de cada índice no período. Acumulados ausentes aparecem como —, não como zero.')
+    selected = st.multiselect('Índices para comparar', [s['code'] for s in general], default=[s['code'] for s in general], format_func=lambda c: by_code[c].get('short_name', names[c]))
+
+    def inflation_plot(codes, title):
+        rows = inflation_data[inflation_data.code.isin(codes)]
+        if rows.empty:
+            st.info('Selecione ao menos um indicador com dados no período.')
+            return
+        fig = px.line(rows, x='date', y=measure, color='name', labels={'date': 'Referência', measure: '%', 'name': 'Indicador'}, color_discrete_sequence=SERIES_COLORS)
+        fig.update_traces(connectgaps=False)
+        st.markdown('#### ' + title)
+        st.plotly_chart(style_chart(fig), width='stretch', key=title)
+
+    inflation_plot(selected, 'Evolução dos índices de inflação')
+    exported = inflation_data[inflation_data.code.isin(selected)].copy()
+    if not exported.empty:
+        exported['source'] = exported.code.map(lambda c: by_code[c]['source'])
+        exported['source_url'] = exported.code.map(lambda c: by_code[c]['source_url'])
+        columns = ['date', 'code', 'name', 'original', *[m for m in ['inflation_ytd', 'inflation12'] if m in exported], 'unit', 'source', 'source_url', 'snapshot_id']
+        st.download_button('Baixar índices · CSV', exported[columns].to_csv(index=False).encode('utf-8-sig'), 'inflacao_indices.csv', 'text/csv')
+        with st.expander('Ver dados dos índices'):
+            st.dataframe(exported[columns], hide_index=True)
+    st.markdown('### Grupos do IPCA')
+    st.caption('Variações dos grupos, não contribuições em pontos percentuais. Não some as taxas para reconstruir o IPCA.')
+    group_data = inflation_data[inflation_data.code.isin([s['code'] for s in groups])]
+    months = sorted(group_data.loc[group_data.original.notna(), 'date'].unique(), reverse=True)
+    if len(months):
+        reference = st.selectbox('Referência dos grupos', months, format_func=lambda d: pd.Timestamp(d).strftime('%m/%Y'))
+        records = []
+        for spec in groups:
+            found = group_data[(group_data.code == spec['code']) & (group_data.date == reference)]
+            row = found.iloc[0] if len(found) else {}
+            records.append({'Referência': pd.Timestamp(reference).strftime('%Y-%m-%d'), 'Grupo': spec['modality'], 'No mês (%)': row.get('original'), 'No ano (%)': row.get('inflation_ytd'), 'Em 12 meses (%)': row.get('inflation12'), 'Fonte': spec['source'], 'URL': spec['source_url'], 'Coleta': manifest['snapshot_id']})
+        group_table = pd.DataFrame(records)
+        st.dataframe(group_table.iloc[:, :5], hide_index=True)
+        st.download_button('Baixar grupos · CSV', group_table.to_csv(index=False).encode('utf-8-sig'), 'inflacao_grupos.csv', 'text/csv')
+        selected_groups = st.multiselect('Grupos no gráfico', [s['code'] for s in groups], max_selections=6, default=[c for c in [1635, 1636, 1639] if c in by_code], format_func=lambda c: by_code[c]['modality'])
+        inflation_plot(selected_groups, 'Evolução dos grupos selecionados')
+    else:
+        st.info('Sem dados dos grupos neste período ou catálogo ainda não atualizado.')
+    with st.expander('Fontes e como interpretar'):
+        st.write('IBGE: IPCA, IPCA-15, INPC e grupos. FGV IBRE: IGP-M e INCC-M. Distribuição: BCB/SGS.')
+        st.write('IPCA-15 possui janela e cobertura próprias. INCC-M mede custos de construção e não equivale a INCC-DI ou INCC-10.')
+        st.write('Acumulados compostos antes do filtro: janeiro até a referência, ou doze meses consecutivos. Exigem todos os meses; lacunas permanecem ausentes. Arredondamentos podem gerar diferenças frente ao acumulado oficial.')
+        for spec in inflation_specs:
+            st.markdown(f"[{spec.get('short_name', spec['name'])}]({spec['source_url']})")
+
 elif page == "Juros e crédito":
     filter_segment, filter_indicators = st.columns([1, 3])
     with filter_segment:
@@ -814,7 +876,7 @@ elif page == "Dicionário e metodologia":
             {"Campo": "Metadados conferidos em", "Informação": spec.get("metadata_verified_at", "Não informado")},
         ]), hide_index=True, width="stretch")
         st.markdown(f"[Consultar fonte oficial e metadados]({spec['source_url']})")
-        st.caption("Fonte primária: IBGE; distribuição: BCB/SGS." if code == 433 else "Fonte: Banco Central do Brasil / SGS.")
+        st.caption("Fonte: " + by_code[code].get("source", "Banco Central do Brasil / SGS"))
         st.markdown("#### Como interpretar")
         interpretations = {
             "stock": "Mede o saldo da carteira em uma data. Aumento do saldo não equivale ao volume de novos empréstimos do mês.",

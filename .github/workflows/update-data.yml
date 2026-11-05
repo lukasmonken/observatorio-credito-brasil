@@ -11,6 +11,7 @@ on:
       - 'scripts/monitor_update.py'
       - 'scripts/build_bulletin.py'
       - 'observatorio/**'
+      - 'catalog.json'
       - 'sql/**'
       - 'tests/**'
       - 'requirements*.txt'
@@ -40,7 +41,7 @@ jobs:
       - name: Testar proteção contra publicação incompleta
         id: tests
         run: python -m pytest -q tests
-      - name: Coletar e validar as 24 séries
+      - name: Coletar e validar todas as séries do catálogo
         id: collect
         run: python scripts/update_data.py
       - name: Registrar resultado operacional
