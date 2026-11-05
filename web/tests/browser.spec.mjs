@@ -320,8 +320,9 @@ test("Inflação: catálogo ampliado, acumulados, grupos, exportação e tema", 
   payload.manifest.rows=payload.rows.length;
   payload.manifest.series=payload.catalog.length;
   const body=JSON.stringify(payload), hash=createHash("sha256").update(body).digest("hex");
-  await page.route("**/site.json", route => route.fulfill({json:{...config,data:"inflation-fixture.json",sha256:hash}}));
-  await page.route("**/inflation-fixture.json", route => route.fulfill({body,contentType:"application/json"}));
+  const fixtureName = `data-${hash.slice(0,16)}.json`;
+  await page.route("**/site.json", route => route.fulfill({json:{...config,data:fixtureName,sha256:hash}}));
+  await page.route("**/"+fixtureName, route => route.fulfill({body,contentType:"application/json"}));
   await page.goto("#inflation");
   await expect(page.locator(".js-plotly-plot")).toHaveCount(2);
   await expect(page.locator(".inflation-kpis .kpi")).toHaveCount(5);

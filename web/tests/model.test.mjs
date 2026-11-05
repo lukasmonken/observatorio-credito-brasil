@@ -194,6 +194,7 @@ test("Comparação base 100 usa mês comum e equivale ao Python", async () => {
 test("Links preservam filtros, listas vazias, Unicode e defasagem zero", async () => {
   const { readShare, shareHash, pageKeys } = await import("../src/share.js");
   const examples = {
+    inflation: { "inflation-codes": ["433","7456"], "inflation-groups": ["1635"], "inflation-metric": "inflation_ytd", "inflation-group-month": "2025-02-01", inflationstart: "2025-01-01", inflationend: "2025-12-01" },
     credit: { segment: "PF", "credit-PF": ["20540", "20716"], "credit-view": "combined", creditstart: "2020-01-01" },
     comparison: { "comparison-codes": [], comparisonstart: "2020-01-01", comparisonend: "2021-02-01" },
     explorer: { "explorer-code": "20539", "explorer-metric": "base100" },
