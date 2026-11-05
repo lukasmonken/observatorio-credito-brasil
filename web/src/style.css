@@ -519,6 +519,6 @@ header { padding-right: 46px; }
 [data-theme="dark"] .picker-footer button { background: #c0d4c6; color: #18271e; }
 [data-theme="dark"] #theme-toggle { background: #252525; color: #eee; }
 [data-theme="dark"] .skip:focus { background: #252525; }
-[data-theme="dark"] .js-plotly-plot .modebar { background: #252525 !important; }
+[data-theme="dark"] .js-plotly-plot .modebar { background: transparent !important; }
 [data-theme="dark"] .js-plotly-plot .modebar-btn path { fill: #bbb !important; }
 @media (max-width: 700px) { #theme-toggle { top: 12px; right: 12px; } .brand { padding-right: 42px; } }
