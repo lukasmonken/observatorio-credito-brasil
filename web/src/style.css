@@ -530,3 +530,18 @@ header { padding-right: 46px; }
 /* Long labor measure labels wrap into full-width controls on small screens. */
 .labor-filters label { flex: 1 1 260px; min-width: 0; }
 .labor-filters select { width: 100%; min-width: 0; max-width: 100%; }
+
+/* Six external indicators: keep amounts intact at every screen size. */
+.external-kpis {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.external-kpis .value {
+  overflow-wrap: normal;
+  font-size: 26px;
+}
+@media (max-width: 1000px) {
+  .external-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .external-kpis { grid-template-columns: 1fr; }
+}
