@@ -4,6 +4,7 @@ const pages = [
   "overview",
   "inflation",
   "labor",
+  "external",
   "credit",
   "composition",
   "comparison",
@@ -435,5 +436,49 @@ test("Trabalho e renda: trimestres, referência comum, gráfico, CSV e modo escu
   await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
   await page.locator("#laborstart").fill("2026-02-01");
   await page.locator("#laborend").fill("2025-01-01");
+  await expect(page.getByRole("alert")).toContainText("Selecione um período válido");
+});
+
+test("Setor externo: déficit, acumulados, referência, CSV e celular", async ({ page }) => {
+  const {readFile} = await import("node:fs/promises");
+  const {createHash} = await import("node:crypto");
+  const config = JSON.parse(await readFile(new URL("../generated/site.json", import.meta.url), "utf8"));
+  const payload = JSON.parse(await readFile(new URL("../generated/" + config.data, import.meta.url), "utf8"));
+  payload.catalog = JSON.parse(await readFile(new URL("../../catalog.json", import.meta.url), "utf8"));
+  payload.labels.sum12 = "Acumulado em 12 meses";
+  payload.labels.sum_ytd = "Acumulado no ano";
+  const specs = payload.catalog.filter(s => s.classification === "Setor externo e câmbio");
+  payload.rows = payload.rows.filter(r => !specs.some(s => s.code === r.code));
+  for (const s of specs) for (let i=0;i<14;i++) {
+    payload.rows.push({code:s.code,date:`${2025+Math.floor(i/12)}-${String(i%12+1).padStart(2,"0")}-01`,original:s.code===22701 && i===13?null:s.measure_type==="balance"?-10:5,sum12:i>=11?-120:null,sum_ytd:-10*(i%12+1),yoy_pct:0,mom_pct:0});
+  }
+  payload.manifest.rows=payload.rows.length; payload.manifest.series=payload.catalog.length;
+  const body=JSON.stringify(payload), hash=createHash("sha256").update(body).digest("hex"), name=`data-${hash.slice(0,16)}.json`;
+  await page.route("**/site.json", route=>route.fulfill({json:{...config,data:name,sha256:hash}}));
+  await page.route("**/"+name, route=>route.fulfill({body,contentType:"application/json"}));
+  await page.goto("#external");
+  await expect(page.locator(".external-kpis .kpi")).toHaveCount(6);
+  await expect(page.locator(".external-kpis .kpi").last()).toContainText("Indisponível nesta referência");
+  await page.locator("#external-reference").selectOption("2026-01-01");
+  await expect(page.locator(".external-kpis .kpi").last()).toContainText("-10,00 US$ milhões");
+  await page.locator("#external-code").selectOption("22701");
+  await page.locator("#external-metric").selectOption("sum12");
+  await expect.poll(()=>page.locator(".js-plotly-plot").evaluate(n=>n.layout.yaxis.title.text)).toBe("US$ milhões");
+  await page.locator("#external-code").selectOption("3698");
+  await expect(page.locator("#external-metric")).toHaveValue("original");
+  await expect(page.locator("#external-metric option[value=sum12]")).toHaveCount(0);
+  const downloading=page.waitForEvent("download");
+  await page.getByRole("button",{name:"Baixar setor externo e câmbio · CSV"}).click();
+  const csvText=await readFile(await (await downloading).path(),"utf8");
+  expect(csvText).toContain("trailing_12_months");
+  expect(csvText).toContain(payload.manifest.snapshot_id);
+  expect(csvText).toContain("-10");
+  await page.screenshot({path:"test-results/external-desktop.png",fullPage:true});
+  await page.locator("#theme-toggle").click();
+  await page.setViewportSize({width:390,height:844});
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  await page.screenshot({path:"test-results/external-mobile-dark.png",fullPage:true});
+  await page.locator("#externalstart").fill("2026-02-01");
+  await page.locator("#externalend").fill("2025-01-01");
   await expect(page.getByRole("alert")).toContainText("Selecione um período válido");
 });

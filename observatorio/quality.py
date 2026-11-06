@@ -19,6 +19,8 @@ def validate_monthly(x, spec, as_of):
     if spec['classification'] == 'Trabalho e renda':
         invalid = (valid < 0) | ((valid > 100) if spec['measure_type'] == 'rate' else False)
         if invalid.any(): add('range','error','Indicador de trabalho fora do domínio: valores não negativos e taxas até 100%')
+    if spec['measure_type'] == 'exchange_rate' and (valid <= 0).any():
+        add('range','error','Cotação cambial deve ser positiva')
     change=x.diff().abs()
     # Descriptive flag only, retaining all observations including shocks.
     threshold=change.median()*10

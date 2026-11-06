@@ -68,6 +68,14 @@ def price_index(inflation):
 def indicators(x, spec, prices=None):
     out = pd.DataFrame({"original": x})
     allowed = spec["allowed_transforms"]
+    if "sum12" in allowed or "sum_ytd" in allowed:
+        calendar = x.reindex(pd.date_range(x.index.min(), x.index.max(), freq="MS"))
+        if "sum12" in allowed:
+            out["sum12"] = calendar.rolling(12, min_periods=12).sum()
+        if "sum_ytd" in allowed:
+            total = calendar.groupby(calendar.index.year).transform(lambda year: year.cumsum(skipna=False))
+            count = calendar.notna().groupby(calendar.index.year).cumsum()
+            out["sum_ytd"] = total.where(count == calendar.index.month)
     if "ma3" in allowed:
         out["ma3"] = x.rolling(3, min_periods=3).mean()
     if "mom_pct" in allowed:

@@ -12,7 +12,7 @@ Este documento distingue funcionalidades planejadas de funcionalidades já dispo
 | 6 | Instituições financeiras: capital, Basileia e comparação entre instituições | Planejado; adicionado em 05/11/2026 |
 | 7 | Evolução para Observatório Econômico do Brasil, com navegação por módulos e panorama geral de KPIs | Planejado; adicionado em 05/11/2026 |
 | 8 | Crescimento e atividade: PIB, IBC-Br, indústria, comércio e serviços | Planejado |
-| 9 | Setor externo: balança comercial, câmbio, reservas e contas externas | Planejado |
+| 9 | Setor externo: balança comercial, câmbio, reservas e contas externas | Implementado: seis séries mensais BCB, filtros, acumulados e exportação. Detalhamento Comex Stat por parceiros/produtos permanece planejado. |
 | 10 | Mercado imobiliário e construção: FipeZap, Secovi-SP, INCC, SINAPI e crédito imobiliário | Planejado; acesso às fontes condicionado conforme catálogo |
 | 11 | Trabalho e renda: PNAD Contínua nacional | Primeira entrega implementada: desocupação, ocupados, desocupados e rendimento real habitual; contas públicas e recortes regionais permanecem futuros |
 | 12 | Exportações prontas para análise: CSV compatível com planilhas e melhoria do Excel existente | Planejado; relato de problema visual no CSV em 05/11/2026 |

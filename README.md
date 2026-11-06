@@ -72,3 +72,7 @@ A página **Histórico de revisões** distingue mudanças de valores já publica
 ### Backup dos dados
 
 Consulte [a rotina de backup](docs/backup.md) para exportar a base validada, o catálogo e o histórico de revisões para um arquivo fora do projeto.
+
+### Setor externo e câmbio
+
+No menu **Setor externo e câmbio** (`#external`): dólar médio mensal, reservas, exportações, importações, saldo comercial e transações correntes. Filtros, acumulados dos fluxos, CSV e Excel pelo Explorador. [Fontes e metodologia](docs/setor-externo.md).

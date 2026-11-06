@@ -106,6 +106,7 @@ pages = [
     "Composição do crédito",
     "Inflação detalhada",
     "Trabalho e renda",
+    "Setor externo e câmbio",
     "Comparação em base 100",
     "Famílias e inadimplência",
     "Explorador de indicadores",
@@ -384,6 +385,43 @@ elif page == "Inflação detalhada":
         st.write('Acumulados compostos antes do filtro: janeiro até a referência, ou doze meses consecutivos. Exigem todos os meses; lacunas permanecem ausentes. Arredondamentos podem gerar diferenças frente ao acumulado oficial.')
         for spec in inflation_specs:
             st.markdown(f"[{spec.get('short_name', spec['name'])}]({spec['source_url']})")
+
+elif page == "Setor externo e câmbio":
+    st.caption("Brasil · Dados mensais do Banco Central. Comércio de bens e transações correntes seguem o balanço de pagamentos (BPM6), com ajustes em relação ao Comex Stat/MDIC.")
+    external_specs = [s for s in specs if s['classification'] == 'Setor externo e câmbio']
+    external_data = df[df.code.isin([s['code'] for s in external_specs])]
+    if external_data.empty:
+        st.info("Setor externo e câmbio ainda indisponível nesta coleta. Aguarde a atualização dos dados.")
+    else:
+        external_data = date_filter(external_data, 'external_period')
+        months = sorted(external_data.date.unique(), reverse=True)
+        reference = st.selectbox("Referência do resumo", months, format_func=lambda d: pd.Timestamp(d).strftime('%m/%Y'))
+        for offset in range(0, len(external_specs), 3):
+            for col, spec in zip(st.columns(3), external_specs[offset:offset+3]):
+                values = external_data[(external_data.code == spec['code']) & (external_data.date == reference)]
+                value = values.original.iloc[0] if len(values) else None
+                with col:
+                    st.metric(spec['short_name'], f"{number(value, 4 if spec['code'] == 3698 else 2)} {spec['unit']}" if pd.notna(value) else '—')
+                    st.caption(pd.Timestamp(reference).strftime('%m/%Y') + (' · Indisponível nesta referência' if pd.isna(value) else ' · Média do mês' if spec['code'] == 3698 else ' · Fim do mês' if spec['measure_type'] == 'stock' else ' · Fluxo do mês'))
+        st.caption("Todos os cartões usam a referência escolhida. — indica ausência, não zero. Fluxos são mensais; reservas são estoque e dólar é cotação média.")
+        code = st.selectbox("Indicador do histórico", [s['code'] for s in external_specs], format_func=lambda c: by_code[c]['short_name'])
+        spec = by_code[code]
+        measure = st.selectbox("Medida do histórico", [m for m in spec['allowed_transforms'] if m != 'base100'], format_func=lambda m: labels[m])
+        chart([code], measure, external_data, title=spec['short_name'] + ' · ' + labels[measure])
+        st.caption(spec['description'])
+        st.caption("Acumulados somam apenas fluxos e exigem todos os meses desde janeiro ou 12 meses consecutivos. Cálculos anteriores ao filtro; saldos negativos indicam déficit. Alta do dólar em R$/US$ indica desvalorização do real.")
+        with st.expander("Ver histórico em tabela"):
+            st.dataframe(external_data[external_data.code == code][['date', measure]].rename(columns={'date':'Referência',measure:labels[measure] + ' (' + unit_for(code, measure) + ')'}), hide_index=True)
+        export = external_data.reindex(columns=['date','code','original','sum_ytd','sum12','mom_pct','yoy_pct']).copy()
+        for field in ['name','unit','source','source_url']:
+            export[field] = export.code.map(lambda c: by_code[c][field])
+        export['snapshot_id'] = manifest['snapshot_id']
+        st.download_button("Baixar setor externo e câmbio · CSV", export.to_csv(index=False).encode('utf-8-sig'), 'setor-externo-cambio.csv', 'text/csv')
+        st.caption("Excel e outras comparações estão no Explorador de indicadores. Valores em dólares correntes, sem deflação pelo IPCA. Reservas também variam com preços e taxas de câmbio dos ativos. Cotação mensal não é cotação em tempo real.")
+        with st.expander("Fontes e metodologia — setor externo"):
+            for spec in external_specs:
+                st.markdown(f"[{spec['short_name']} · SGS {spec['code']}]({spec['source_url']})")
+                st.write(spec['description'])
 
 elif page == "Trabalho e renda":
     st.caption("Brasil · IBGE / PNAD Contínua, distribuído pelo BCB/SGS. Referências em trimestres móveis, sem ajuste sazonal.")

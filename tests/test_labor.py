@@ -92,7 +92,8 @@ def test_dashboard_with_labor_data(monkeypatch):
             extra.append(dict(code=s['code'], date=dt, original=8 if s['code']==24369 else 100+i, diff12_pp=0 if i>=12 else np.nan, yoy_pct=12 if i>=12 else np.nan))
     labor = pd.DataFrame(extra)
     labor.loc[(labor.code==24382) & (labor.date==pd.Timestamp('2026-02-01')), 'original'] = np.nan
-    monkeypatch.setattr(observatorio.snapshot, 'load_snapshot', lambda *a,**kw:(pd.concat([frame,labor],ignore_index=True),entries+specs(),quality,manifest))
+    codes = [s['code'] for s in specs()]
+    monkeypatch.setattr(observatorio.snapshot, 'load_snapshot', lambda *a,**kw:(pd.concat([frame[~frame.code.isin(codes)],labor],ignore_index=True),[s for s in entries if s['code'] not in codes]+specs(),quality,manifest))
     st.cache_data.clear()
     app=AppTest.from_file(str(ROOT/'dashboard/app.py'),default_timeout=30).run()
     app.sidebar.radio[0].set_value('Trabalho e renda').run()
