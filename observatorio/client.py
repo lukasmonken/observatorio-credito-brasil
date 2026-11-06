@@ -143,6 +143,14 @@ class SGSClient:
                         if retry_after.isdigit()
                         else 2**attempt
                     )
+                    # A full-history monthly response can fail while a bounded
+                    # request remains available. Keep the same requested coverage.
+                    if code in self.monthly_codes:
+                        params = {
+                            "formato": "json",
+                            "dataInicial": a.strftime("%d/%m/%Y"),
+                            "dataFinal": b.strftime("%d/%m/%Y"),
+                        }
                     self.sleep(delay)
         return all_rows
 

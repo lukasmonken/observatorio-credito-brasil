@@ -42,3 +42,36 @@ def test_monthly_request_filters_full_history_and_keeps_evidence(tmp_path):
     client = SGSClient(tmp_path, 'test', session=Session(), monthly_codes=[433])
     assert client.fetch(433, date(2026, 1, 1), date(2026, 1, 31)) == [{'data': '01/01/2026', 'valor': '2'}]
     assert len(list((tmp_path / 'test').glob('*.body'))) == 1
+
+
+def test_monthly_retry_uses_explicit_dates_and_preserves_evidence(tmp_path):
+    from datetime import date
+    from observatorio.client import SGSClient
+    calls = []
+
+    class Response:
+        status_code = 200
+        ok = True
+        url = 'https://api.bcb.gov.br/dados/serie/bcdata.sgs.189/dados'
+        headers = {}
+
+        def __init__(self, content):
+            self.content = content
+
+        def json(self):
+            return json.loads(self.content)
+
+    class Session:
+        def get(self, url, params, timeout):
+            calls.append(dict(params))
+            if len(calls)==1:
+                return Response(b'Invalid upstream response')
+            return Response(json.dumps([{'data':'01/01/2026','valor':'0'}]).encode())
+
+    client = SGSClient(tmp_path, 'bounded', session=Session(), sleeper=lambda _: None, monthly_codes=[189])
+    rows = client.fetch(189,date(2010,1,1),date(2026,11,6))
+    assert rows == [{'data':'01/01/2026','valor':'0'}]
+    assert calls == [{'formato':'json'},{'formato':'json','dataInicial':'01/01/2010','dataFinal':'06/11/2026'}]
+    envelopes = [json.loads(p.read_text()) for p in sorted((tmp_path/'bounded').glob('*.json'))]
+    assert len(envelopes)==2 and envelopes[1]['params']==calls[1]
+    assert all(e['start']=='2010-01-01' and e['end']=='2026-11-06' for e in envelopes)
