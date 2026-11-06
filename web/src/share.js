@@ -2,6 +2,7 @@
 const periods = (prefix) => [prefix + "start", prefix + "end"];
 export const pageKeys = {
   overview: [],
+  labor: ["labor-reference", "labor-code", "labor-metric", ...periods("labor")],
   composition: ["composition-segment", "composition-month", "composition-metric", "composition-PF", "composition-PJ", ...periods("composition")],
   inflation: ["inflation-codes", "inflation-groups", "inflation-metric", "inflation-group-month", ...periods("inflation")],
   credit: ["segment", "credit-view", "credit-Total", "credit-PF", "credit-PJ", ...periods("credit")],

@@ -3,6 +3,7 @@ import ExcelJS from "exceljs";
 const pages = [
   "overview",
   "inflation",
+  "labor",
   "credit",
   "composition",
   "comparison",
@@ -387,4 +388,52 @@ test("Composição: modalidades PF/PJ, participação, CSV e dispositivo móvel"
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
   await page.screenshot({path:"test-results/composition-mobile-dark.png",fullPage:true});
   expect(errors).toEqual([]);
+});
+
+test("Trabalho e renda: trimestres, referência comum, gráfico, CSV e modo escuro", async ({ page }) => {
+  const {readFile} = await import("node:fs/promises");
+  const {createHash} = await import("node:crypto");
+  const config = JSON.parse(await readFile(new URL("../generated/site.json", import.meta.url), "utf8"));
+  const payload = JSON.parse(await readFile(new URL("../generated/" + config.data, import.meta.url), "utf8"));
+  payload.catalog = JSON.parse(await readFile(new URL("../../catalog.json", import.meta.url), "utf8"));
+  const specs = payload.catalog.filter(s => s.classification === "Trabalho e renda");
+  payload.rows = payload.rows.filter(r => !specs.some(s => s.code === r.code));
+  // Synthetic fixture is confined to this browser test.
+  for (const s of specs) for (let i=0;i<14;i++) {
+    payload.rows.push({code:s.code,date:`${2025+Math.floor(i/12)}-${String(i%12+1).padStart(2,"0")}-01`,original:s.code===24382 && i===13?null:s.code===24369?8:100+i,diff12_pp:i>=12?0:null,yoy_pct:i>=12?12:null});
+  }
+  payload.manifest.rows = payload.rows.length;
+  payload.manifest.series = payload.catalog.length;
+  const body=JSON.stringify(payload), hash=createHash("sha256").update(body).digest("hex"), name=`data-${hash.slice(0,16)}.json`;
+  await page.route("**/site.json", route=>route.fulfill({json:{...config,data:name,sha256:hash}}));
+  await page.route("**/"+name, route=>route.fulfill({body,contentType:"application/json"}));
+  await page.goto("#labor");
+  await expect(page.locator(".labor-kpis .kpi")).toHaveCount(4);
+  await expect(page.locator(".labor-kpis .kpi").last()).toContainText("Indisponível nesta referência");
+  await page.locator("#labor-reference").selectOption("2026-01-01");
+  await expect(page.locator(".labor-kpis")).toContainText("11/2025–01/2026");
+  await expect(page.locator(".labor-kpis .kpi").last()).toContainText("112,00 R$");
+  await page.locator("#labor-code").selectOption("24382");
+  await page.locator("#labor-metric").selectOption("yoy_pct");
+  await expect(page.locator(".js-plotly-plot")).toBeVisible();
+  await page.locator("#labor-code").selectOption("24369");
+  await expect(page.locator("#labor-metric")).toHaveValue("original");
+  await page.locator("#labor-metric").selectOption("diff12_pp");
+  await expect.poll(()=>page.locator(".js-plotly-plot").evaluate(n=>n.layout.yaxis.title.text)).toBe("p.p.");
+  const downloading = page.waitForEvent("download");
+  await page.getByRole("button",{name:"Baixar trabalho e renda · CSV"}).click();
+  const file = await downloading, csvText=await readFile(await file.path(),"utf8");
+  expect(csvText).toContain("reference_period");
+  expect(csvText).toContain("11/2025–01/2026");
+  expect(csvText).toContain("income_price_base");
+  expect(csvText).toContain(payload.manifest.snapshot_id);
+  await page.screenshot({path:"test-results/labor-desktop.png",fullPage:true});
+  await page.locator("#theme-toggle").click();
+  await page.setViewportSize({width:390,height:844});
+  await expect(page.locator(".labor-kpis")).toBeVisible();
+  await page.screenshot({path:"test-results/labor-mobile-dark.png",fullPage:true});
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  await page.locator("#laborstart").fill("2026-02-01");
+  await page.locator("#laborend").fill("2025-01-01");
+  await expect(page.getByRole("alert")).toContainText("Selecione um período válido");
 });

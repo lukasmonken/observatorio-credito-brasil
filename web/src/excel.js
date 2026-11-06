@@ -86,7 +86,7 @@ export async function excelFile(data, rows, spec, metric, period) {
     ["Fonte oficial e metadados", spec.source_url],
     ["Unidade original", spec.unit],
     ["Periodicidade de origem", spec.frequency === "D" ? "Diária" : "Mensal"],
-    ["Periodicidade exportada", "Mensal"],
+    ["Periodicidade exportada", spec.reference_period === "trimestre móvel" ? "Mensal — trimestres móveis" : "Mensal"],
     [
       "Tratamento temporal",
       spec.frequency === "D"
@@ -114,7 +114,7 @@ export async function excelFile(data, rows, spec, metric, period) {
     ],
     [
       "Mês-base dos valores reais",
-      data.manifest.price_base_month || "Indisponível",
+      (spec.measure_type === "income_real" ? spec.income_price_base : data.manifest.price_base_month) || "Indisponível",
     ],
     [
       "Valores ausentes",

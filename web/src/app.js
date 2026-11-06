@@ -1,7 +1,10 @@
 import "./style.css";
+import { laborPeriod, laborExport } from "./labor.js";
 import { readShare, shareHash, pageKeys } from "./share.js";
 import {
   compositionRows,
+  monthNumber,
+  monthDate,
   colors,
   eventLabels,
   finite,
@@ -21,6 +24,7 @@ const pages = [
   ["credit", "Juros e crédito"],
   ["composition", "Composição do crédito"],
   ["inflation", "Inflação detalhada"],
+  ["labor", "Trabalho e renda"],
   ["comparison", "Comparação em base 100"],
   ["family", "Famílias e inadimplência"],
   ["explorer", "Explorador de indicadores"],
@@ -684,6 +688,44 @@ function composition() {
   main.append(note("As modalidades acompanhadas não esgotam a carteira e seus percentuais não precisam somar 100%. Cada participação usa o total do mesmo segmento e mês; não há interpolação nem combinação de referências diferentes. Valores nominais, sujeitos a revisões."));
   main.append(details("Fontes das modalidades",...specs.map(s=>el("p",{},el("a",{href:safeURL(s.source_url),target:"_blank",rel:"noopener noreferrer"},s.modality + " · SGS " + s.code)))));
 }
+function labor() {
+  const specs = data.catalog.filter(s => s.classification === "Trabalho e renda");
+  const codes = specs.map(s => s.code), all = data.rows.filter(r => codes.includes(r.code));
+  main.append(note("Brasil · IBGE / PNAD Contínua, distribuído pelo BCB/SGS. Cada referência é um trimestre móvel: os três meses terminados no mês indicado. Sem ajuste sazonal."));
+  if (!all.length) {
+    main.append(message("Trabalho e renda ainda indisponível nesta coleta. Aguarde a atualização dos dados."));
+    return;
+  }
+  main.append(period("labor", all));
+  const rows = filtered("labor", all);
+  if (!rows.length) { main.append(message("Não há observações no intervalo selecionado.")); return; }
+  const months = [...new Set(rows.map(r => r.date))].sort().reverse();
+  main.append(select("labor-reference", "Trimestre móvel do resumo", months.map(d => [d, laborPeriod(d)]), months[0]));
+  const ref = state["labor-reference"], cards = el("div", {class:"kpis labor-kpis"});
+  for (const spec of specs) {
+    const r = rows.find(r => r.code === spec.code && r.date === ref);
+    cards.append(metric(spec.short_name || spec.name, finite(r?.original) ? `${number(r.original)} ${spec.unit}` : "—", `${laborPeriod(ref)}${finite(r?.original) ? "" : " · Indisponível nesta referência"}`));
+  }
+  main.append(cards);
+  const lastIncome = all.filter(r => r.code === 24382 && finite(r.original)).map(r => r.date).sort().at(-1);
+  const incomeBase = lastIncome ? monthDate(monthNumber(lastIncome) - 1).slice(0,7) : null;
+  const exported = laborExport(rows, specs, data.manifest, incomeBase);
+  const summary = specs.map(s => exported.find(r => r.code === s.code && r.reference_end === ref) || {indicator:s.short_name || s.name, value:null, unit:s.unit, change12:null, change_unit:s.measure_type === "rate" ? "p.p." : "%"});
+  main.append(table(summary, [["indicator","Indicador"],["value","Valor",number],["unit","Unidade"],["change12","Variação em 12 meses",number],["change_unit","Unidade da variação"]]));
+  main.append(note("Comparação com o mesmo trimestre móvel do ano anterior: pontos percentuais para a taxa de desocupação e variação percentual para pessoas e rendimento. Ausências permanecem indisponíveis; os cálculos usam o histórico anterior ao filtro."));
+  const controls = el("div", {class:"filters labor-filters"});
+  controls.append(select("labor-code", "Indicador do histórico", specs.map(s => [s.code,s.short_name || s.name]), 24369));
+  const code = Number(state["labor-code"]), spec = byCode.get(code), annual = spec.measure_type === "rate" ? "diff12_pp" : "yoy_pct";
+  controls.append(select("labor-metric", "Medida do histórico", [["original",`Valor (${spec.unit})`],[annual,`Mesmo trimestre do ano anterior (${annual === "diff12_pp" ? "p.p." : "%"})`]], "original"));
+  main.append(controls);
+  chart(main, [code], state["labor-metric"], rows, `${spec.short_name || spec.name} · trimestres móveis`);
+  main.append(note("O eixo de datas indica o mês final de cada trimestre móvel. Referências consecutivas compartilham dois meses de pesquisa."));
+  main.append(details("Ver histórico em tabela", table(exported.filter(r => r.code === code), [["reference_period","Trimestre móvel"],["indicator","Indicador"],["value","Valor",number],["unit","Unidade"],["change12","Variação em 12 meses",number],["change_unit","Unidade da variação"]])));
+  main.append(download("Baixar trabalho e renda · CSV", exported, "trabalho-renda.csv"));
+  main.append(note(`Rendimento já corrigido pela fonte; base de preços: ${incomeBase ? incomeBase.slice(5,7)+"/"+incomeBase.slice(0,4) : "indisponível"} (mês central do trimestre mais recente da série). A base não muda com o filtro. O histórico é reconsultado integralmente para incorporar revisões.`));
+  main.append(details("Fontes e metodologia — trabalho e renda", note("Estimativas amostrais para pessoas de 14 anos ou mais. Diferenças numéricas não implicam significância estatística. Rendimento habitual do trabalho principal conforme metadados SGS; não é renda domiciliar per capita nem salário mínimo. Não aplicamos nova deflação ao rendimento real."), specs.map(s => el("p", {}, link(`${s.short_name || s.name} · SGS ${s.code}`, s.source_url)))));
+}
+
 function inflation() {
   const specs = data.catalog.filter(s => s.classification === "Inflação"),
     general = specs.filter(s => s.inflation_group !== "Grupos do IPCA"),
@@ -1582,6 +1624,7 @@ function render() {
     ({
       overview,
       inflation,
+      labor,
       comparison,
       credit,
       composition,
@@ -1751,3 +1794,4 @@ setInterval(async () => {
       );
   }
 }, 300000);
+

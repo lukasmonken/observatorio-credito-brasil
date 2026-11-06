@@ -227,3 +227,19 @@ test("Composição usa total do segmento no mesmo mês e preserva ausência e ze
   assert.throws(()=>compositionRows([...rows,rows[0]],specs,"PF"),/duplicadas/);
   assert.deepEqual(compositionRows(rows,specs,"PJ"),[]);
 });
+
+test("Trabalho e renda preserva trimestre móvel, ausências e unidades", async () => {
+  const { laborPeriod, laborExport } = await import("../src/labor.js");
+  assert.equal(laborPeriod("2026-01-01"), "11/2025–01/2026");
+  const specs = [{code:24369, name:"Desocupação", unit:"%", measure_type:"rate"}, {code:24382,name:"Rendimento",unit:"R$",measure_type:"income_real"}];
+  const rows = laborExport([{code:24369,date:"2026-01-01",original:0,diff12_pp:-2},{code:24382,date:"2026-01-01",original:null,yoy_pct:null}], specs, {snapshot_id:"test"}, "2026-08");
+  assert.equal(rows[0].value,0);
+  assert.equal(rows[0].change_unit,"p.p.");
+  assert.equal(rows[0].change12,-2);
+  assert.equal(rows[1].value,null);
+  assert.equal(rows[1].income_price_base,"2026-08");
+  assert.equal(rows[1].change_unit,"%");
+  const { shareHash, readShare } = await import("../src/share.js");
+  const state = {"labor-code":"24382","labor-metric":"yoy_pct","labor-reference":"2026-01-01",laborstart:"2025-01-01",laborend:"2026-01-01"};
+  assert.deepEqual(readShare(shareHash("labor",state)),{page:"labor",state});
+});

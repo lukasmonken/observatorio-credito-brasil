@@ -525,3 +525,8 @@ header { padding-right: 46px; }
 @media (max-width: 700px) { #theme-toggle { top: 12px; right: 12px; } .brand { padding-right: 42px; } }
 
 .inflation-kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+
+
+/* Long labor measure labels wrap into full-width controls on small screens. */
+.labor-filters label { flex: 1 1 260px; min-width: 0; }
+.labor-filters select { width: 100%; min-width: 0; max-width: 100%; }
