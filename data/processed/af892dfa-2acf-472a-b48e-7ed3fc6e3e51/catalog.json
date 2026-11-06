@@ -1,0 +1,1830 @@
+[
+  {
+    "code": 20539,
+    "official_name": "Saldo da carteira de crédito - Total",
+    "name": "Saldo - Total",
+    "description": "\n\n Conceito: Saldo em final de período das operações de crédito contratadas no Sistema Financeiro Nacional. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20539",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20539-saldo-da-carteira-de-credito---total",
+    "unit": "R$ milhões",
+    "official_unit": "Unidades monetárias correntes",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.",
+      "Ficha CKAN usa unidade genérica; SGS confirma R$ milhões. Série revisada em fevereiro de 2017."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20539.json",
+    "max_lag_days": 90,
+    "months": 201
+  },
+  {
+    "code": 20540,
+    "official_name": "Saldo da carteira de crédito - Pessoas jurídicas - Total",
+    "name": "Saldo - Pessoas jurídicas - Total",
+    "description": "\n\n Conceito: Saldo em final de período das operações de crédito contratadas no Sistema Financeiro Nacional. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20540",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20540-saldo-da-carteira-de-credito---pessoas-juridicas---total",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PJ",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20540.json",
+    "max_lag_days": 90,
+    "months": 201
+  },
+  {
+    "code": 20541,
+    "official_name": "Saldo da carteira de crédito - Pessoas físicas - Total",
+    "name": "Saldo - Pessoas físicas - Total",
+    "description": "\n\n Conceito: Saldo em final de período das operações de crédito contratadas no Sistema Financeiro Nacional. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20541",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20541-saldo-da-carteira-de-credito---pessoas-fisicas---total",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PF",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20541.json",
+    "max_lag_days": 90,
+    "months": 201
+  },
+  {
+    "code": 20631,
+    "official_name": "Concessões de crédito - Total",
+    "name": "Concessões de crédito - Total",
+    "description": "\n\n Conceito: Valor das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20631",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20631-concessoes-de-credito---total",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Concessões",
+    "measure_type": "flow",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20631.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 20632,
+    "official_name": "Concessões de crédito - Pessoas jurídicas - Total",
+    "name": "Concessões de crédito - Pessoas jurídicas - Total",
+    "description": "\n\n Conceito: Valor das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20632",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20632-concessoes-de-credito---pessoas-juridicas---total",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Concessões",
+    "measure_type": "flow",
+    "segment": "PJ",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20632.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 20633,
+    "official_name": "Concessões de crédito - Pessoas físicas - Total",
+    "name": "Concessões de crédito - Pessoas físicas - Total",
+    "description": "\n\n Conceito: Valor das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20633",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20633-concessoes-de-credito---pessoas-fisicas---total",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Concessões",
+    "measure_type": "flow",
+    "segment": "PF",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20633.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 20714,
+    "official_name": "Taxa média de juros das operações de crédito - Total",
+    "name": "Juros - Total",
+    "description": "\n\n Conceito: Taxa média de juros das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional. Taxa ponderada pelo valor das concessões. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20714",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20714-taxa-media-de-juros-das-operacoes-de-credito---total",
+    "unit": "% a.a.",
+    "official_unit": "Percentual ao ano",
+    "frequency": "M",
+    "classification": "Juros",
+    "measure_type": "rate",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20714.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 20715,
+    "official_name": "Taxa média de juros das operações de crédito - Pessoas jurídicas - Total",
+    "name": "Juros - Pessoas jurídicas - Total",
+    "description": "\n\n Conceito: Taxa média de juros das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional. Taxa ponderada pelo valor das concessões. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20715",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20715-taxa-media-de-juros-das-operacoes-de-credito---pessoas-juridicas---total",
+    "unit": "% a.a.",
+    "official_unit": "Percentual ao ano",
+    "frequency": "M",
+    "classification": "Juros",
+    "measure_type": "rate",
+    "segment": "PJ",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20715.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 20716,
+    "official_name": "Taxa média de juros das operações de crédito - Pessoas físicas - Total",
+    "name": "Juros - Pessoas físicas - Total",
+    "description": "\n\n Conceito: Taxa média de juros das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional. Taxa ponderada pelo valor das concessões. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20716",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20716-taxa-media-de-juros-das-operacoes-de-credito---pessoas-fisicas---total",
+    "unit": "% a.a.",
+    "official_unit": "Percentual ao ano",
+    "frequency": "M",
+    "classification": "Juros",
+    "measure_type": "rate",
+    "segment": "PF",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20716.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 20740,
+    "official_name": "Taxa média de juros das operações de crédito com recursos livres - Pessoas físicas - Total",
+    "name": "Juros com recursos livres - Pessoas físicas - Total",
+    "description": "\n\n Conceito: Taxa média de juros das novas operações de crédito livre contratadas no período de referência. Taxa ponderada pelo valor das concessões. Não inclui operações referenciadas em taxas regulamentadas, operações vinculadas a recursos do Banco Nacional de Desenvolvimento Econômico e Social (BNDES) ou quaisquer outras lastreadas em recursos compulsórios ou governamentais.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20740",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20740-taxa-media-de-juros-das-operacoes-de-credito-com-recursos-livres---pessoas-fisicas---total",
+    "unit": "% a.a.",
+    "official_unit": "Percentual ao ano",
+    "frequency": "M",
+    "classification": "Juros",
+    "measure_type": "rate",
+    "segment": "PF",
+    "modality": "Agregado",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20740.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 20741,
+    "official_name": "Taxa média de juros das operações de crédito com recursos livres - Pessoas físicas - Cheque especial",
+    "name": "Juros com recursos livres - Pessoas físicas - Cheque especial",
+    "description": "\n\n Conceito: Taxa média de juros das novas operações de crédito livre contratadas no período de referência. Taxa ponderada pelo valor das concessões. Não inclui operações referenciadas em taxas regulamentadas, operações vinculadas a recursos do Banco Nacional de Desenvolvimento Econômico e Social (BNDES) ou quaisquer outras lastreadas em recursos compulsórios ou governamentais.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20741",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20741-taxa-media-de-juros-das-operacoes-de-credito-com-recursos-livres---pessoas-fisicas---cheque-e",
+    "unit": "% a.a.",
+    "official_unit": "Percentual ao ano",
+    "frequency": "M",
+    "classification": "Juros",
+    "measure_type": "rate",
+    "segment": "PF",
+    "modality": "Cheque especial",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20741.json",
+    "max_lag_days": 90,
+    "months": 201
+  },
+  {
+    "code": 20742,
+    "official_name": "Taxa média de juros das operações de crédito com recursos livres - Pessoas físicas - Crédito pessoal não consignado",
+    "name": "Juros com recursos livres - Pessoas físicas - Crédito pessoal não consignado",
+    "description": "\n\n Conceito: Taxa média de juros das novas operações de crédito livre contratadas no período de referência. Taxa ponderada pelo valor das concessões. Não inclui operações referenciadas em taxas regulamentadas, operações vinculadas a recursos do Banco Nacional de Desenvolvimento Econômico e Social (BNDES) ou quaisquer outras lastreadas em recursos compulsórios ou governamentais.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20742",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20742-taxa-media-de-juros-das-operacoes-de-credito-com-recursos-livres---pessoas-fisicas---credito-",
+    "unit": "% a.a.",
+    "official_unit": "Percentual ao ano",
+    "frequency": "M",
+    "classification": "Juros",
+    "measure_type": "rate",
+    "segment": "PF",
+    "modality": "Crédito pessoal não consignado",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20742.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 20743,
+    "official_name": "Taxa média de juros das operações de crédito com recursos livres - Pessoas físicas - Crédito pessoal não consignado vinculado à composição de dívidas",
+    "name": "Juros com recursos livres - Pessoas físicas - Crédito pessoal não consignado vinculado à composição de dívidas",
+    "description": "\n\n Conceito: Taxa média de juros das novas operações de crédito livre contratadas no período de referência. Taxa ponderada pelo valor das concessões. Não inclui operações referenciadas em taxas regulamentadas, operações vinculadas a recursos do Banco Nacional de Desenvolvimento Econômico e Social (BNDES) ou quaisquer outras lastreadas em recursos compulsórios ou governamentais.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20743",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20743-taxa-media-de-juros-das-operacoes-de-credito-com-recursos-livres---pessoas-fisicas---credito-",
+    "unit": "% a.a.",
+    "official_unit": "Percentual ao ano",
+    "frequency": "M",
+    "classification": "Juros",
+    "measure_type": "rate",
+    "segment": "PF",
+    "modality": "Crédito pessoal não consignado vinculado à composição de dívidas",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia.",
+      "Subconjunto do crédito pessoal não consignado; não somar à série 20742."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20743.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 20783,
+    "official_name": "Spread médio das operações de crédito - Total",
+    "name": "Spread médio das operações de crédito - Total",
+    "description": "\n\n Conceito: Diferença entre a taxa média de juros das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional e o custo de captação referencial médio. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20783",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20783-spread-medio-das-operacoes-de-credito---total",
+    "unit": "p.p.",
+    "official_unit": "Pontos percentuais",
+    "frequency": "M",
+    "classification": "Spread",
+    "measure_type": "rate",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20783.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 20784,
+    "official_name": "Spread médio das operações de crédito - Pessoas jurídicas - Total",
+    "name": "Spread médio das operações de crédito - Pessoas jurídicas - Total",
+    "description": "\n\n Conceito: Diferença entre a taxa média de juros das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional e o custo de captação referencial médio. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20784",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20784-spread-medio-das-operacoes-de-credito---pessoas-juridicas---total",
+    "unit": "p.p.",
+    "official_unit": "Pontos percentuais",
+    "frequency": "M",
+    "classification": "Spread",
+    "measure_type": "rate",
+    "segment": "PJ",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20784.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 20785,
+    "official_name": "Spread médio das operações de crédito - Pessoas físicas - Total",
+    "name": "Spread médio das operações de crédito - Pessoas físicas - Total",
+    "description": "\n\n Conceito: Diferença entre a taxa média de juros das novas operações de crédito contratadas no período de referência no Sistema Financeiro Nacional e o custo de captação referencial médio. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=20785",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20785-spread-medio-das-operacoes-de-credito---pessoas-fisicas---total",
+    "unit": "p.p.",
+    "official_unit": "Pontos percentuais",
+    "frequency": "M",
+    "classification": "Spread",
+    "measure_type": "rate",
+    "segment": "PF",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/20785.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 21082,
+    "official_name": "Inadimplência da carteira de crédito - Total",
+    "name": "Inadimplência da carteira de crédito - Total",
+    "description": "\n\n Conceito: Percentual da carteira de crédito do Sistema Financeiro Nacional com pelo menos uma parcela com atraso superior a 90 dias. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=21082",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/21082-inadimplencia-da-carteira-de-credito---total",
+    "unit": "%",
+    "official_unit": "Percentual",
+    "frequency": "M",
+    "classification": "Inadimplência",
+    "measure_type": "rate",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/21082.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 21083,
+    "official_name": "Inadimplência da carteira de crédito - Pessoas jurídicas - Total",
+    "name": "Inadimplência da carteira de crédito - Pessoas jurídicas - Total",
+    "description": "\n\n Conceito: Percentual da carteira de crédito do Sistema Financeiro Nacional com pelo menos uma parcela com atraso superior a 90 dias. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=21083",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/21083-inadimplencia-da-carteira-de-credito---pessoas-juridicas---total",
+    "unit": "%",
+    "official_unit": "Percentual",
+    "frequency": "M",
+    "classification": "Inadimplência",
+    "measure_type": "rate",
+    "segment": "PJ",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/21083.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 21084,
+    "official_name": "Inadimplência da carteira de crédito - Pessoas físicas - Total",
+    "name": "Inadimplência da carteira de crédito - Pessoas físicas - Total",
+    "description": "\n\n Conceito: Percentual da carteira de crédito do Sistema Financeiro Nacional com pelo menos uma parcela com atraso superior a 90 dias. Inclui operações contratadas no segmento de crédito livre e no segmento de crédito direcionado.\n\n Fonte: Banco Central do Brasil – Departamento de Estatísticas\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=21084",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/21084-inadimplencia-da-carteira-de-credito---pessoas-fisicas---total",
+    "unit": "%",
+    "official_unit": "Percentual",
+    "frequency": "M",
+    "classification": "Inadimplência",
+    "measure_type": "rate",
+    "segment": "PF",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Agregados refletem composição de modalidades e ponderação oficial; PF/PJ não são carteiras de risco idêntico.",
+      "Mudanças contábeis a partir de 2025 exigem cautela nas comparações de inadimplência; ver metodologia."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2011-03-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/21084.json",
+    "max_lag_days": 90,
+    "months": 187
+  },
+  {
+    "code": 24364,
+    "official_name": "Índice de Atividade Econômica do Banco Central (IBC-Br) - com ajuste sazonal",
+    "name": "Índice de Atividade Econômica do Banco Central (IBC-Br) - com ajuste sazonal",
+    "description": "\n\n Conceito:    Indicador mensal contemporâneo da atividade econômica nacional.      \n\n Fonte: Banco Central do Brasil – Departamento Econômico\r\n\r\n__Para mais informações sobre a série, clique no link abaixo:__\r\n\r\nhttps://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=24364",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/24364-indice-de-atividade-economica-do-banco-central-ibc-br---com-ajuste-sazonal",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "M",
+    "classification": "Atividade",
+    "measure_type": "index",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "IBC-Br com ajuste sazonal; não equivale ao PIB. Base original mantida."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-08-01"
+    },
+    "metadata_evidence": "data/metadata/24364.json",
+    "max_lag_days": 90,
+    "months": 200
+  },
+  {
+    "code": 29034,
+    "official_name": "Comprometimento de renda das famílias com o serviço da dívida com o Sistema Financeiro Nacional - Com ajuste sazonal (RNDBF)",
+    "name": "Comprometimento de renda (RNDBF, dessaz.)",
+    "description": "Conceito:  Comprometimento de renda - Relação entre o valor correspondente aos pagamentos esperados para o serviço da dívida com o Sistema Financeiro Nacional e a renda mensal das famílias, em média móvel trimestral, ajustado sazonalmente.   Endividamento - Relação entre o valor atual das dívidas das famílias com o Sistema Financeiro Nacional e a renda das famílias acumulada nos últimos doze meses. \r\n\r\n* Tipo da série: __Série temporal mensal__\r\n\r\n* Unidade de medida: __Percentual__\r\n\r\n* Tempestividade: __ Até oito semanas após o mês de referência. O calendário de divulgação dos dados mensais encontra-se no endereço eletrônico  https://www.bcb.gov.br/estatisticas/notas_calendario  __\r\n\r\n* Fonte: __Banco Central do Brasil - Departamento de Estatísticas__\r\n\r\nTemas: \r\n\r\n    - Indicadores de crédito\r\n        - Endividamento das famílias\r\n\r\n\r\n\r\n\r\n",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/29034-comprometimento-de-renda-das-familias-com-o-servico-da-divida-com-o-sistema-financeiro-nacion",
+    "unit": "%",
+    "official_unit": "Percentual",
+    "frequency": "M",
+    "classification": "Famílias",
+    "measure_type": "rate",
+    "segment": "PF",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
+      "Indicador oficial já é média móvel trimestral com ajuste sazonal; não representa proporção de famílias inadimplentes."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-08-01"
+    },
+    "metadata_evidence": "data/metadata/29034.json",
+    "max_lag_days": 100,
+    "months": 200
+  },
+  {
+    "code": 29037,
+    "official_name": "Endividamento das famílias com o Sistema Financeiro Nacional em relação à renda acumulada dos últimos doze meses (RNDBF)",
+    "name": "Endividamento das famílias (RNDBF)",
+    "description": "Conceito:  Comprometimento de renda - Relação entre o valor correspondente aos pagamentos esperados para o serviço da dívida com o Sistema Financeiro Nacional e a renda mensal das famílias, em média móvel trimestral, ajustado sazonalmente.   Endividamento - Relação entre o valor atual das dívidas das famílias com o Sistema Financeiro Nacional e a renda das famílias acumulada nos últimos doze meses. \r\n\r\n* Tipo da série: __Série temporal mensal__\r\n\r\n* Unidade de medida: __Percentual__\r\n\r\n* Tempestividade: __ Até oito semanas após o mês de referência. O calendário de divulgação dos dados mensais encontra-se no endereço eletrônico  https://www.bcb.gov.br/estatisticas/notas_calendario  __\r\n\r\n* Fonte: __Banco Central do Brasil - Departamento de Estatísticas__\r\n\r\nTemas: \r\n\r\n    - Indicadores de crédito\r\n        - Endividamento das famílias\r\n\r\n\r\n\r\n\r\n",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/29037-endividamento-das-familias-com-o-sistema-financeiro-nacional-em-relacao-a-renda-acumulada-dos",
+    "unit": "%",
+    "official_unit": "Percentual",
+    "frequency": "M",
+    "classification": "Famílias",
+    "measure_type": "rate",
+    "segment": "PF",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-08-01"
+    },
+    "metadata_evidence": "data/metadata/29037.json",
+    "max_lag_days": 100,
+    "months": 200
+  },
+  {
+    "code": 432,
+    "official_name": "Taxa de juros - Meta Selic definida pelo Copom",
+    "name": "Taxa de juros - Meta Selic definida pelo Copom",
+    "description": "---\r\n```A partir de 26 de março de 2025, para consultas que retornam informações nos formatos JSON e CSV de séries históricas diárias, o volume de dados retornados será limitado, tornando-se obrigatório o uso de filtros para a recuperação das informações. \r\nConsultas por período de datas serão limitadas a 10 anos, retornando erro caso não satisfaça essa condição. \r\nPara mais detalhes, consulte as informações dos recursos que retornam os formatos JSON e CSV.\r\n``` \r\n--- \r\n\r\nConceito: Taxa de juros que representa a meta, definida pelo Copom, para a taxa Selic. Divulgação em % a.a.\r\n\r\n* Tipo da série: __Série temporal diária__\r\n\r\n* Unidade de medida: __Percentual ao ano__\r\n\r\n* Tempestividade: __Não se aplica__\r\n\r\n* Fonte: __Comitê de Política Monetária__\r\n\r\n* Base de dados de origem: __SGS - Sistema Gerenciador de Séries Temporais__\r\n\r\nTemas: \r\n\r\n    - Estatísticas monetárias\r\n        - Política monetária\r\n            - Taxa SELIC\r\n\r\n\r\n\r\n\r\n",
+    "source": "BCB/SGS (IBGE para IPCA)",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/432-taxa-de-juros---meta-selic-definida-pelo-copom",
+    "unit": "% a.a.",
+    "official_unit": "Percentual ao ano",
+    "frequency": "D",
+    "classification": "Juros",
+    "measure_type": "rate",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "last_complete_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-10-01"
+    },
+    "metadata_evidence": "data/metadata/432.json",
+    "max_lag_days": 40,
+    "months": 202
+  },
+  {
+    "code": 433,
+    "official_name": "Índice nacional de preços ao consumidor-amplo (IPCA)",
+    "name": "Índice nacional de preços ao consumidor-amplo (IPCA)",
+    "description": "Variação mensal do índice de preços ao consumidor amplo. Fonte primária: IBGE. Redistribuição: SGS/BCB. Metadados conferidos nos documentos cmiDadosBasicos e cmiMetadados, preservados nesta pasta.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=433",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas."
+    ],
+    "metadata_verified_at": "2026-10-26",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "data/metadata/433.json",
+    "max_lag_days": 90,
+    "short_name": "IPCA",
+    "inflation_group": "Índices gerais",
+    "months": 201
+  },
+  {
+    "code": 188,
+    "official_name": "Índice nacional de preços ao consumidor (INPC)",
+    "name": "INPC",
+    "description": "Variação mensal de INPC. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=188&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "INPC",
+    "inflation_group": "Índices gerais",
+    "months": 201
+  },
+  {
+    "code": 189,
+    "official_name": "Índice geral de preços - Mercado (IGP-M)",
+    "name": "IGP-M",
+    "description": "Variação mensal de IGP-M. Fonte primária: FGV IBRE; distribuição: BCB/SGS.",
+    "source": "FGV IBRE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=189&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-10-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IGP-M",
+    "inflation_group": "Índices gerais",
+    "months": 202
+  },
+  {
+    "code": 7478,
+    "official_name": "Índice nacional de preços ao consumidor-amplo 15 (IPCA-15)",
+    "name": "IPCA-15",
+    "description": "Variação mensal de IPCA-15. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=7478&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "IPCA-15 possui janela e cobertura próprias; não representa os primeiros quinze dias do IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-10-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA-15",
+    "inflation_group": "Índices gerais",
+    "months": 202
+  },
+  {
+    "code": 7456,
+    "official_name": "Índice nacional de custo da construção - Mercado (INCC-M)",
+    "name": "INCC-M",
+    "description": "Variação mensal de INCC-M. Fonte primária: FGV IBRE; distribuição: BCB/SGS.",
+    "source": "FGV IBRE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=7456&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "INCC-M: coleta entre 21 do mês anterior e 20 do mês de referência. Não equivale a INCC-DI ou INCC-10."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-10-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "INCC-M",
+    "inflation_group": "Índices gerais",
+    "months": 202
+  },
+  {
+    "code": 1635,
+    "official_name": "IPCA - Alimentação e bebidas",
+    "name": "IPCA · Alimentação e bebidas",
+    "description": "Variação mensal de IPCA · Alimentação e bebidas. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1635&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Alimentação e bebidas",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Alimentação e bebidas",
+    "inflation_group": "Grupos do IPCA",
+    "months": 201
+  },
+  {
+    "code": 1636,
+    "official_name": "IPCA - Habitação",
+    "name": "IPCA · Habitação",
+    "description": "Variação mensal de IPCA · Habitação. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1636&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Habitação",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Habitação",
+    "inflation_group": "Grupos do IPCA",
+    "months": 201
+  },
+  {
+    "code": 1637,
+    "official_name": "IPCA - Artigos de residência",
+    "name": "IPCA · Artigos de residência",
+    "description": "Variação mensal de IPCA · Artigos de residência. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1637&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Artigos de residência",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Artigos de residência",
+    "inflation_group": "Grupos do IPCA",
+    "months": 201
+  },
+  {
+    "code": 1638,
+    "official_name": "IPCA - Vestuário",
+    "name": "IPCA · Vestuário",
+    "description": "Variação mensal de IPCA · Vestuário. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1638&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Vestuário",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Vestuário",
+    "inflation_group": "Grupos do IPCA",
+    "months": 201
+  },
+  {
+    "code": 1639,
+    "official_name": "IPCA - Transportes",
+    "name": "IPCA · Transportes",
+    "description": "Variação mensal de IPCA · Transportes. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1639&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Transportes",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Transportes",
+    "inflation_group": "Grupos do IPCA",
+    "months": 201
+  },
+  {
+    "code": 1640,
+    "official_name": "IPCA - Comunicação",
+    "name": "IPCA · Comunicação",
+    "description": "Variação mensal de IPCA · Comunicação. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1640&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Comunicação",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Comunicação",
+    "inflation_group": "Grupos do IPCA",
+    "months": 201
+  },
+  {
+    "code": 1641,
+    "official_name": "IPCA - Saúde e cuidados pessoais",
+    "name": "IPCA · Saúde e cuidados pessoais",
+    "description": "Variação mensal de IPCA · Saúde e cuidados pessoais. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1641&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Saúde e cuidados pessoais",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Saúde e cuidados pessoais",
+    "inflation_group": "Grupos do IPCA",
+    "months": 201
+  },
+  {
+    "code": 1642,
+    "official_name": "IPCA - Despesas pessoais",
+    "name": "IPCA · Despesas pessoais",
+    "description": "Variação mensal de IPCA · Despesas pessoais. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1642&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Despesas pessoais",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Despesas pessoais",
+    "inflation_group": "Grupos do IPCA",
+    "months": 201
+  },
+  {
+    "code": 1643,
+    "official_name": "IPCA - Educação",
+    "name": "IPCA · Educação",
+    "description": "Variação mensal de IPCA · Educação. Fonte primária: IBGE; distribuição: BCB/SGS.",
+    "source": "IBGE; distribuição BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=1643&method=consultarGraficoPorId",
+    "unit": "% a.m.",
+    "official_unit": "Variação percentual mensal",
+    "frequency": "M",
+    "classification": "Inflação",
+    "measure_type": "variation",
+    "segment": "Total",
+    "modality": "Educação",
+    "resources": "Não aplicável",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "inflation_ytd",
+      "inflation12"
+    ],
+    "limitations": [
+      "Acumulados calculados pela composição das taxas mensais publicadas; arredondamentos podem gerar diferenças frente ao acumulado oficial.",
+      "Índices possuem cestas, coberturas e períodos de coleta distintos.",
+      "Taxa de variação do grupo, não contribuição em pontos percentuais. Os grupos não devem ser somados ou promediados para reconstruir o IPCA."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/inflacao.md",
+    "max_lag_days": 90,
+    "short_name": "IPCA · Educação",
+    "inflation_group": "Grupos do IPCA",
+    "months": 201
+  },
+  {
+    "code": 20579,
+    "official_name": "Saldo da carteira de crédito com recursos livres - Pessoas físicas - Crédito pessoal consignado total",
+    "name": "Saldo — Consignado (PF)",
+    "description": "Saldo em final de mês de crédito pessoal consignado total, pessoas físicas, recursos livres.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20579-saldo-da-carteira-de-credito-com-recursos-livres---pessoas-fisicas---credito-pessoal-consigna",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PF",
+    "modality": "Consignado",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Consignado",
+    "credit_composition": true,
+    "months": 201
+  },
+  {
+    "code": 20581,
+    "official_name": "Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de veículos",
+    "name": "Saldo — Veículos (PF)",
+    "description": "Saldo em final de mês de aquisição de veículos, pessoas físicas, recursos livres.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20581-saldo-da-carteira-de-credito-com-recursos-livres---pessoas-fisicas---aquisicao-de-veiculos",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PF",
+    "modality": "Veículos",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Veículos",
+    "credit_composition": true,
+    "months": 201
+  },
+  {
+    "code": 20612,
+    "official_name": "Saldo da carteira de crédito com recursos direcionados - Pessoas físicas - Financiamento imobiliário total",
+    "name": "Saldo — Imobiliário (PF)",
+    "description": "Saldo em final de mês de financiamento imobiliário total, pessoas físicas, recursos direcionados.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20612-saldo-da-carteira-de-credito-com-recursos-direcionados---pessoas-fisicas---financiamento-imob",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PF",
+    "modality": "Imobiliário",
+    "resources": "Direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Imobiliário",
+    "credit_composition": true,
+    "months": 201
+  },
+  {
+    "code": 20609,
+    "official_name": "Saldo da carteira de crédito com recursos direcionados - Pessoas físicas - Crédito rural total",
+    "name": "Saldo — Rural (PF)",
+    "description": "Saldo em final de mês de crédito rural total, pessoas físicas, recursos direcionados.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20609-saldo-da-carteira-de-credito-com-recursos-direcionados---pessoas-fisicas---credito-rural-tota",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PF",
+    "modality": "Rural",
+    "resources": "Direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Rural",
+    "credit_composition": true,
+    "months": 201
+  },
+  {
+    "code": 20550,
+    "official_name": "Saldo da carteira de crédito com recursos livres - Pessoas jurídicas - Capital de giro total",
+    "name": "Saldo — Capital de giro (PJ)",
+    "description": "Saldo em final de mês de capital de giro total, pessoas jurídicas, recursos livres.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20550-saldo-da-carteira-de-credito-com-recursos-livres---pessoas-juridicas---capital-de-giro-total",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PJ",
+    "modality": "Capital de giro",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Capital de giro",
+    "credit_composition": true,
+    "months": 201
+  },
+  {
+    "code": 20553,
+    "official_name": "Saldo da carteira de crédito com recursos livres - Pessoas jurídicas - Aquisição de veículos",
+    "name": "Saldo — Veículos (PJ)",
+    "description": "Saldo em final de mês de aquisição de veículos, pessoas jurídicas, recursos livres.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20553-saldo-da-carteira-de-credito-com-recursos-livres---pessoas-juridicas---aquisicao-de-veiculos",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PJ",
+    "modality": "Veículos",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Veículos",
+    "credit_composition": true,
+    "months": 201
+  },
+  {
+    "code": 20544,
+    "official_name": "Saldo da carteira de crédito com recursos livres - Pessoas jurídicas - Desconto de duplicatas e recebíveis",
+    "name": "Saldo — Duplicatas e recebíveis (PJ)",
+    "description": "Saldo em final de mês de desconto de duplicatas e recebíveis, pessoas jurídicas, recursos livres.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20544-saldo-da-carteira-de-credito-com-recursos-livres---pessoas-juridicas---desconto-de-duplicatas",
+    "unit": "R$ milhões",
+    "official_unit": "Milhões de reais",
+    "frequency": "M",
+    "classification": "Estoque",
+    "measure_type": "stock",
+    "segment": "PJ",
+    "modality": "Duplicatas e recebíveis",
+    "resources": "Livres",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "mom_pct",
+      "yoy_pct",
+      "base100",
+      "real",
+      "real_yoy_pct"
+    ],
+    "limitations": [
+      "Saldo de fim de mês; não equivale às concessões do mês.",
+      "Seleção de modalidades não esgota a carteira do segmento.",
+      "Participações usam o saldo total PF ou PJ do mesmo mês, incluindo recursos livres e direcionados.",
+      "Não somar agregados às suas submodalidades. Revisões históricas podem alterar valores."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "coverage_observed": {
+      "start": "2010-01-01",
+      "end": "2026-09-01"
+    },
+    "metadata_evidence": "docs/composicao-credito.md",
+    "max_lag_days": 90,
+    "short_name": "Duplicatas e recebíveis",
+    "credit_composition": true,
+    "months": 201
+  },
+  {
+    "code": 24369,
+    "official_name": "Taxa de desocupação - PNADC",
+    "name": "Taxa de desocupação - PNADC",
+    "short_name": "Taxa de desocupação",
+    "description": "Pessoas desocupadas como percentual da força de trabalho. Não é percentual da população total.",
+    "source": "IBGE — PNAD Contínua, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=24369",
+    "unit": "%",
+    "official_unit": "%",
+    "frequency": "M",
+    "reference_period": "trimestre móvel",
+    "region": "Brasil",
+    "seasonally_adjusted": false,
+    "classification": "Trabalho e renda",
+    "measure_type": "rate",
+    "segment": "Brasil",
+    "modality": "Taxa de desocupação",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Estimativas nacionais da PNAD Contínua para pessoas de 14 anos ou mais; não são registros administrativos do Caged.",
+      "Cada referência representa o trimestre móvel terminado naquele mês; referências consecutivas compartilham dois meses.",
+      "Sem ajuste sazonal. Comparações em 12 meses usam o mesmo trimestre móvel do ano anterior.",
+      "Estimativas amostrais sujeitas a revisões; diferenças numéricas não representam automaticamente diferenças estatisticamente significativas.",
+      "Reconsulta de todo o histórico para incorporar revisões e reponderações da PNAD Contínua."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "metadata_evidence": "docs/trabalho-renda.md",
+    "coverage_observed": {
+      "start": "2012-03-01",
+      "end": "2026-09-01"
+    },
+    "max_lag_days": 100,
+    "refresh_full_history": true,
+    "months": 175
+  },
+  {
+    "code": 24379,
+    "official_name": "Pessoas ocupadas - PNADC",
+    "name": "Pessoas ocupadas - PNADC",
+    "short_name": "Pessoas ocupadas",
+    "description": "População de 14 anos ou mais ocupada na semana de referência, em milhares de pessoas.",
+    "source": "IBGE — PNAD Contínua, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=24379",
+    "unit": "mil pessoas",
+    "official_unit": "Unidades (mil)",
+    "frequency": "M",
+    "reference_period": "trimestre móvel",
+    "region": "Brasil",
+    "seasonally_adjusted": false,
+    "classification": "Trabalho e renda",
+    "measure_type": "stock",
+    "segment": "Brasil",
+    "modality": "Pessoas ocupadas",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Estimativas nacionais da PNAD Contínua para pessoas de 14 anos ou mais; não são registros administrativos do Caged.",
+      "Cada referência representa o trimestre móvel terminado naquele mês; referências consecutivas compartilham dois meses.",
+      "Sem ajuste sazonal. Comparações em 12 meses usam o mesmo trimestre móvel do ano anterior.",
+      "Estimativas amostrais sujeitas a revisões; diferenças numéricas não representam automaticamente diferenças estatisticamente significativas.",
+      "Reconsulta de todo o histórico para incorporar revisões e reponderações da PNAD Contínua."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "metadata_evidence": "docs/trabalho-renda.md",
+    "coverage_observed": {
+      "start": "2012-03-01",
+      "end": "2026-09-01"
+    },
+    "max_lag_days": 100,
+    "refresh_full_history": true,
+    "months": 175
+  },
+  {
+    "code": 24380,
+    "official_name": "Pessoas desocupadas - PNADC",
+    "name": "Pessoas desocupadas - PNADC",
+    "short_name": "Pessoas desocupadas",
+    "description": "População de 14 anos ou mais desocupada na semana de referência, em milhares de pessoas.",
+    "source": "IBGE — PNAD Contínua, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=24380",
+    "unit": "mil pessoas",
+    "official_unit": "Unidades (mil)",
+    "frequency": "M",
+    "reference_period": "trimestre móvel",
+    "region": "Brasil",
+    "seasonally_adjusted": false,
+    "classification": "Trabalho e renda",
+    "measure_type": "stock",
+    "segment": "Brasil",
+    "modality": "Pessoas desocupadas",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Estimativas nacionais da PNAD Contínua para pessoas de 14 anos ou mais; não são registros administrativos do Caged.",
+      "Cada referência representa o trimestre móvel terminado naquele mês; referências consecutivas compartilham dois meses.",
+      "Sem ajuste sazonal. Comparações em 12 meses usam o mesmo trimestre móvel do ano anterior.",
+      "Estimativas amostrais sujeitas a revisões; diferenças numéricas não representam automaticamente diferenças estatisticamente significativas.",
+      "Reconsulta de todo o histórico para incorporar revisões e reponderações da PNAD Contínua."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "metadata_evidence": "docs/trabalho-renda.md",
+    "coverage_observed": {
+      "start": "2012-03-01",
+      "end": "2026-09-01"
+    },
+    "max_lag_days": 100,
+    "refresh_full_history": true,
+    "months": 175
+  },
+  {
+    "code": 24382,
+    "official_name": "Rendimento médio real habitual das pessoas ocupadas - PNADC",
+    "name": "Rendimento médio real habitual das pessoas ocupadas - PNADC",
+    "short_name": "Rendimento real habitual",
+    "description": "Rendimento médio bruto real habitual do trabalho principal das pessoas ocupadas com rendimento, conforme conceito dos metadados SGS 24382. Preços do mês central do trimestre mais recente divulgado; já deflacionado pela fonte.",
+    "source": "IBGE — PNAD Contínua, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=24382",
+    "unit": "R$",
+    "official_unit": "R$",
+    "frequency": "M",
+    "reference_period": "trimestre móvel",
+    "region": "Brasil",
+    "seasonally_adjusted": false,
+    "classification": "Trabalho e renda",
+    "measure_type": "income_real",
+    "segment": "Brasil",
+    "modality": "Rendimento real habitual",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Estimativas nacionais da PNAD Contínua para pessoas de 14 anos ou mais; não são registros administrativos do Caged.",
+      "Cada referência representa o trimestre móvel terminado naquele mês; referências consecutivas compartilham dois meses.",
+      "Sem ajuste sazonal. Comparações em 12 meses usam o mesmo trimestre móvel do ano anterior.",
+      "Estimativas amostrais sujeitas a revisões; diferenças numéricas não representam automaticamente diferenças estatisticamente significativas.",
+      "Reconsulta de todo o histórico para incorporar revisões e reponderações da PNAD Contínua.",
+      "Rendimento já deflacionado: não aplicar novamente IPCA. A base de preços acompanha a publicação e todo o histórico deve ser atualizado em conjunto. Não representa renda domiciliar per capita, salário mínimo ou massa de rendimentos."
+    ],
+    "metadata_verified_at": "2026-11-05",
+    "metadata_evidence": "docs/trabalho-renda.md",
+    "coverage_observed": {
+      "start": "2012-03-01",
+      "end": "2026-09-01"
+    },
+    "max_lag_days": 100,
+    "refresh_full_history": true,
+    "months": 175,
+    "income_price_base": "2026-08"
+  }
+]
