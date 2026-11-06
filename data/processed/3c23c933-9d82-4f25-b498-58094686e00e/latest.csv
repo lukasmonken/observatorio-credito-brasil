@@ -1,0 +1,45 @@
+code,name,unit,segment,date,value,run_id
+188,INPC,% a.m.,Total,2026-09-01,0.82,3c23c933-9d82-4f25-b498-58094686e00e
+189,IGP-M,% a.m.,Total,2026-10-01,1.47,3c23c933-9d82-4f25-b498-58094686e00e
+432,Taxa de juros - Meta Selic definida pelo Copom,% a.a.,Total,2026-10-01,13.75,3c23c933-9d82-4f25-b498-58094686e00e
+433,Índice nacional de preços ao consumidor-amplo (IPCA),% a.m.,Total,2026-09-01,0.82,3c23c933-9d82-4f25-b498-58094686e00e
+1635,IPCA · Alimentação e bebidas,% a.m.,Total,2026-09-01,0.83,3c23c933-9d82-4f25-b498-58094686e00e
+1636,IPCA · Habitação,% a.m.,Total,2026-09-01,2.31,3c23c933-9d82-4f25-b498-58094686e00e
+1637,IPCA · Artigos de residência,% a.m.,Total,2026-09-01,0.27,3c23c933-9d82-4f25-b498-58094686e00e
+1638,IPCA · Vestuário,% a.m.,Total,2026-09-01,0.71,3c23c933-9d82-4f25-b498-58094686e00e
+1639,IPCA · Transportes,% a.m.,Total,2026-09-01,0.89,3c23c933-9d82-4f25-b498-58094686e00e
+1640,IPCA · Comunicação,% a.m.,Total,2026-09-01,0.64,3c23c933-9d82-4f25-b498-58094686e00e
+1641,IPCA · Saúde e cuidados pessoais,% a.m.,Total,2026-09-01,0.08,3c23c933-9d82-4f25-b498-58094686e00e
+1642,IPCA · Despesas pessoais,% a.m.,Total,2026-09-01,0.26,3c23c933-9d82-4f25-b498-58094686e00e
+1643,IPCA · Educação,% a.m.,Total,2026-09-01,0.04,3c23c933-9d82-4f25-b498-58094686e00e
+7456,INCC-M,% a.m.,Total,2026-10-01,0.35,3c23c933-9d82-4f25-b498-58094686e00e
+7478,IPCA-15,% a.m.,Total,2026-10-01,0.32,3c23c933-9d82-4f25-b498-58094686e00e
+20539,Saldo - Total,R$ milhões,Total,2026-09-01,7444208.0,3c23c933-9d82-4f25-b498-58094686e00e
+20540,Saldo - Pessoas jurídicas - Total,R$ milhões,PJ,2026-09-01,2759442.0,3c23c933-9d82-4f25-b498-58094686e00e
+20541,Saldo - Pessoas físicas - Total,R$ milhões,PF,2026-09-01,4684766.0,3c23c933-9d82-4f25-b498-58094686e00e
+20544,Saldo — Duplicatas e recebíveis (PJ),R$ milhões,PJ,2026-09-01,189758.0,3c23c933-9d82-4f25-b498-58094686e00e
+20550,Saldo — Capital de giro (PJ),R$ milhões,PJ,2026-09-01,483923.0,3c23c933-9d82-4f25-b498-58094686e00e
+20553,Saldo — Veículos (PJ),R$ milhões,PJ,2026-09-01,131735.0,3c23c933-9d82-4f25-b498-58094686e00e
+20579,Saldo — Consignado (PF),R$ milhões,PF,2026-09-01,798200.0,3c23c933-9d82-4f25-b498-58094686e00e
+20581,Saldo — Veículos (PF),R$ milhões,PF,2026-09-01,417366.0,3c23c933-9d82-4f25-b498-58094686e00e
+20609,Saldo — Rural (PF),R$ milhões,PF,2026-09-01,548535.0,3c23c933-9d82-4f25-b498-58094686e00e
+20612,Saldo — Imobiliário (PF),R$ milhões,PF,2026-09-01,1443006.0,3c23c933-9d82-4f25-b498-58094686e00e
+20631,Concessões de crédito - Total,R$ milhões,Total,2026-09-01,747130.0,3c23c933-9d82-4f25-b498-58094686e00e
+20632,Concessões de crédito - Pessoas jurídicas - Total,R$ milhões,PJ,2026-09-01,353698.0,3c23c933-9d82-4f25-b498-58094686e00e
+20633,Concessões de crédito - Pessoas físicas - Total,R$ milhões,PF,2026-09-01,393432.0,3c23c933-9d82-4f25-b498-58094686e00e
+20714,Juros - Total,% a.a.,Total,2026-09-01,32.36,3c23c933-9d82-4f25-b498-58094686e00e
+20715,Juros - Pessoas jurídicas - Total,% a.a.,PJ,2026-09-01,19.36,3c23c933-9d82-4f25-b498-58094686e00e
+20716,Juros - Pessoas físicas - Total,% a.a.,PF,2026-09-01,38.53,3c23c933-9d82-4f25-b498-58094686e00e
+20740,Juros com recursos livres - Pessoas físicas - Total,% a.a.,PF,2026-09-01,62.35,3c23c933-9d82-4f25-b498-58094686e00e
+20741,Juros com recursos livres - Pessoas físicas - Cheque especial,% a.a.,PF,2026-09-01,139.02,3c23c933-9d82-4f25-b498-58094686e00e
+20742,Juros com recursos livres - Pessoas físicas - Crédito pessoal não consignado,% a.a.,PF,2026-09-01,110.94,3c23c933-9d82-4f25-b498-58094686e00e
+20743,Juros com recursos livres - Pessoas físicas - Crédito pessoal não consignado vinculado à composição de dívidas,% a.a.,PF,2026-09-01,43.64,3c23c933-9d82-4f25-b498-58094686e00e
+20783,Spread médio das operações de crédito - Total,p.p.,Total,2026-09-01,21.61,3c23c933-9d82-4f25-b498-58094686e00e
+20784,Spread médio das operações de crédito - Pessoas jurídicas - Total,p.p.,PJ,2026-09-01,8.11,3c23c933-9d82-4f25-b498-58094686e00e
+20785,Spread médio das operações de crédito - Pessoas físicas - Total,p.p.,PF,2026-09-01,28.02,3c23c933-9d82-4f25-b498-58094686e00e
+21082,Inadimplência da carteira de crédito - Total,%,Total,2026-09-01,4.98,3c23c933-9d82-4f25-b498-58094686e00e
+21083,Inadimplência da carteira de crédito - Pessoas jurídicas - Total,%,PJ,2026-09-01,3.28,3c23c933-9d82-4f25-b498-58094686e00e
+21084,Inadimplência da carteira de crédito - Pessoas físicas - Total,%,PF,2026-09-01,5.99,3c23c933-9d82-4f25-b498-58094686e00e
+24364,Índice de Atividade Econômica do Banco Central (IBC-Br) - com ajuste sazonal,índice,Total,2026-08-01,110.40624,3c23c933-9d82-4f25-b498-58094686e00e
+29034,"Comprometimento de renda (RNDBF, dessaz.)",%,PF,2026-08-01,28.99,3c23c933-9d82-4f25-b498-58094686e00e
+29037,Endividamento das famílias (RNDBF),%,PF,2026-08-01,50.11,3c23c933-9d82-4f25-b498-58094686e00e
