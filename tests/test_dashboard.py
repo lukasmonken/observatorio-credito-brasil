@@ -12,6 +12,7 @@ from observatorio.config import ROOT
         "Juros e crédito",
         "Composição do crédito",
         "Trabalho e renda",
+        "Setor externo e câmbio",
         "Famílias e inadimplência",
         "Explorador de indicadores",
         "Relações e defasagens",

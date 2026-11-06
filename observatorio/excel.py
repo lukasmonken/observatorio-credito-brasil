@@ -7,6 +7,8 @@ import math
 import pandas as pd
 
 METRIC_LABELS = {
+    "sum12": "Acumulado em 12 meses",
+    "sum_ytd": "Acumulado no ano",
     "original": "Valor original",
     "ma3": "Média móvel de 3 meses",
     "mom_pct": "Variação mensal (%)",
@@ -21,6 +23,8 @@ METRIC_LABELS = {
 }
 
 METRIC_FORMULAS = {
+    "sum12": "Soma dos 12 meses até a referência; exige todos os meses presentes.",
+    "sum_ytd": "Soma de janeiro até a referência; exige todos os meses desde janeiro.",
             "original": "Valor da série após organização no calendário mensal.",
             "ma3": "(xₜ + xₜ₋₁ + xₜ₋₂) / 3; exige os três meses presentes.",
             "mom_pct": "(xₜ / xₜ₋₁ − 1) × 100; denominador zero ou ausente gera ausência.",

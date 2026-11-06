@@ -1777,5 +1777,241 @@
     },
     "max_lag_days": 100,
     "refresh_full_history": true
+  },
+  {
+    "code": 3698,
+    "name": "Dólar comercial — média mensal",
+    "short_name": "Dólar comercial — média mensal",
+    "official_name": "Taxa de câmbio - Livre - Dólar americano (venda) - média de período",
+    "description": "Cotação de venda média do mês. Alta indica desvalorização do real frente ao dólar; não é cotação em tempo real.",
+    "source": "Banco Central do Brasil / SGS",
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?method=consultarGraficoPorId&hdOidSeriesSelecionadas=3698",
+    "unit": "R$/US$",
+    "official_unit": "Unidades monetárias correntes/US$",
+    "frequency": "M",
+    "classification": "Setor externo e câmbio",
+    "measure_type": "exchange_rate",
+    "external_group": "Câmbio",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "mom_pct",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Sem ajuste sazonal. Valores sujeitos a revisões; histórico reconsultado integralmente.",
+      "Cotação de venda média do mês. Alta indica desvalorização do real frente ao dólar; não é cotação em tempo real."
+    ],
+    "metadata_verified_at": "2026-11-06",
+    "metadata_evidence": "docs/setor-externo.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 90,
+    "refresh_full_history": true
+  },
+  {
+    "code": 3546,
+    "name": "Reservas internacionais",
+    "short_name": "Reservas internacionais",
+    "official_name": "Reservas internacionais - Total - mensal",
+    "description": "Estoque de reservas internacionais ao final do mês. Variações incluem preços e câmbio dos ativos; não equivalem a intervenções cambiais.",
+    "source": "Banco Central do Brasil / SGS",
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?method=consultarGraficoPorId&hdOidSeriesSelecionadas=3546",
+    "unit": "US$ milhões",
+    "official_unit": "Milhões de dólares americanos",
+    "frequency": "M",
+    "classification": "Setor externo e câmbio",
+    "measure_type": "stock",
+    "external_group": "Reservas",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "mom_pct",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Sem ajuste sazonal. Valores sujeitos a revisões; histórico reconsultado integralmente.",
+      "Estoque de reservas internacionais ao final do mês. Variações incluem preços e câmbio dos ativos; não equivalem a intervenções cambiais."
+    ],
+    "metadata_verified_at": "2026-11-06",
+    "metadata_evidence": "docs/setor-externo.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 90,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22708,
+    "name": "Exportações de bens",
+    "short_name": "Exportações de bens",
+    "official_name": "Exportação de bens - Balanço de Pagamentos - mensal",
+    "description": "Exportações de bens pela metodologia do balanço de pagamentos (BPM6), com ajustes do BCB sobre registros de comércio exterior.",
+    "source": "Banco Central do Brasil / SGS",
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?method=consultarGraficoPorId&hdOidSeriesSelecionadas=22708",
+    "unit": "US$ milhões",
+    "official_unit": "Milhões de dólares americanos",
+    "frequency": "M",
+    "classification": "Setor externo e câmbio",
+    "measure_type": "flow",
+    "external_group": "Comércio exterior",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "sum_ytd",
+      "sum12",
+      "mom_pct",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Sem ajuste sazonal. Valores sujeitos a revisões; histórico reconsultado integralmente.",
+      "Exportações de bens pela metodologia do balanço de pagamentos (BPM6), com ajustes do BCB sobre registros de comércio exterior."
+    ],
+    "metadata_verified_at": "2026-11-06",
+    "metadata_evidence": "docs/setor-externo.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 90,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22709,
+    "name": "Importações de bens",
+    "short_name": "Importações de bens",
+    "official_name": "Importação de bens - Balanço de Pagamentos - mensal",
+    "description": "Importações de bens pela metodologia do balanço de pagamentos (BPM6), com ajustes do BCB sobre registros de comércio exterior.",
+    "source": "Banco Central do Brasil / SGS",
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?method=consultarGraficoPorId&hdOidSeriesSelecionadas=22709",
+    "unit": "US$ milhões",
+    "official_unit": "Milhões de dólares americanos",
+    "frequency": "M",
+    "classification": "Setor externo e câmbio",
+    "measure_type": "flow",
+    "external_group": "Comércio exterior",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "sum_ytd",
+      "sum12",
+      "mom_pct",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Sem ajuste sazonal. Valores sujeitos a revisões; histórico reconsultado integralmente.",
+      "Importações de bens pela metodologia do balanço de pagamentos (BPM6), com ajustes do BCB sobre registros de comércio exterior."
+    ],
+    "metadata_verified_at": "2026-11-06",
+    "metadata_evidence": "docs/setor-externo.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 90,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22707,
+    "name": "Saldo comercial de bens",
+    "short_name": "Saldo comercial de bens",
+    "official_name": "Balança comercial - Balanço de Pagamentos - mensal - saldo",
+    "description": "Exportações menos importações de bens, no balanço de pagamentos (BPM6). Valores negativos indicam déficit.",
+    "source": "Banco Central do Brasil / SGS",
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?method=consultarGraficoPorId&hdOidSeriesSelecionadas=22707",
+    "unit": "US$ milhões",
+    "official_unit": "Milhões de dólares americanos",
+    "frequency": "M",
+    "classification": "Setor externo e câmbio",
+    "measure_type": "balance",
+    "external_group": "Comércio exterior",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "sum_ytd",
+      "sum12"
+    ],
+    "limitations": [
+      "Sem ajuste sazonal. Valores sujeitos a revisões; histórico reconsultado integralmente.",
+      "Exportações menos importações de bens, no balanço de pagamentos (BPM6). Valores negativos indicam déficit."
+    ],
+    "metadata_verified_at": "2026-11-06",
+    "metadata_evidence": "docs/setor-externo.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 90,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22701,
+    "name": "Transações correntes",
+    "short_name": "Transações correntes",
+    "official_name": "Transações correntes - mensal - saldo",
+    "description": "Saldo de bens, serviços, renda primária e renda secundária no balanço de pagamentos (BPM6). Valores negativos indicam déficit.",
+    "source": "Banco Central do Brasil / SGS",
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?method=consultarGraficoPorId&hdOidSeriesSelecionadas=22701",
+    "unit": "US$ milhões",
+    "official_unit": "Milhões de dólares americanos",
+    "frequency": "M",
+    "classification": "Setor externo e câmbio",
+    "measure_type": "balance",
+    "external_group": "Contas externas",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "sum_ytd",
+      "sum12"
+    ],
+    "limitations": [
+      "Sem ajuste sazonal. Valores sujeitos a revisões; histórico reconsultado integralmente.",
+      "Saldo de bens, serviços, renda primária e renda secundária no balanço de pagamentos (BPM6). Valores negativos indicam déficit."
+    ],
+    "metadata_verified_at": "2026-11-06",
+    "metadata_evidence": "docs/setor-externo.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 90,
+    "refresh_full_history": true
   }
 ]

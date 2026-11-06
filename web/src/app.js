@@ -25,6 +25,7 @@ const pages = [
   ["composition", "Composição do crédito"],
   ["inflation", "Inflação detalhada"],
   ["labor", "Trabalho e renda"],
+  ["external", "Setor externo e câmbio"],
   ["comparison", "Comparação em base 100"],
   ["family", "Famílias e inadimplência"],
   ["explorer", "Explorador de indicadores"],
@@ -688,6 +689,40 @@ function composition() {
   main.append(note("As modalidades acompanhadas não esgotam a carteira e seus percentuais não precisam somar 100%. Cada participação usa o total do mesmo segmento e mês; não há interpolação nem combinação de referências diferentes. Valores nominais, sujeitos a revisões."));
   main.append(details("Fontes das modalidades",...specs.map(s=>el("p",{},el("a",{href:safeURL(s.source_url),target:"_blank",rel:"noopener noreferrer"},s.modality + " · SGS " + s.code)))));
 }
+function external() {
+  const specs = data.catalog.filter(s => s.classification === "Setor externo e câmbio");
+  const codes = specs.map(s => s.code), all = data.rows.filter(r => codes.includes(r.code));
+  main.append(note("Brasil · Dados mensais do Banco Central. Comércio de bens e transações correntes seguem o balanço de pagamentos (BPM6), com ajustes em relação ao Comex Stat/MDIC."));
+  if (!all.length) { main.append(message("Setor externo e câmbio ainda indisponível nesta coleta. Aguarde a atualização dos dados.")); return; }
+  main.append(period("external", all));
+  const rows = filtered("external", all);
+  if (!rows.length) { main.append(message("Não há observações no intervalo selecionado.")); return; }
+  const months = [...new Set(rows.map(r => r.date))].sort().reverse();
+  main.append(select("external-reference", "Referência do resumo", months.map(d => [d, month(d)]), months[0]));
+  const ref = state["external-reference"], cards = el("div", {class:"kpis external-kpis"});
+  for (const s of specs) {
+    const r = rows.find(r => r.code === s.code && r.date === ref);
+    cards.append(metric(s.short_name || s.name, finite(r?.original) ? `${number(r.original, s.code === 3698 ? 4 : 2)} ${s.unit}` : "—", `${month(ref)} · ${s.code === 3698 ? "Média do mês" : s.measure_type === "stock" ? "Fim do mês" : "Fluxo do mês"}${finite(r?.original) ? "" : " · Indisponível nesta referência"}`));
+  }
+  main.append(cards, note("Todos os cartões usam a referência escolhida. — indica dado indisponível, não zero. Os fluxos são mensais; reservas são estoque e dólar é cotação média."));
+  const controls = el("div", {class:"filters labor-filters"});
+  controls.append(select("external-code", "Indicador do histórico", specs.map(s => [s.code,s.short_name || s.name]), 3698));
+  const code = Number(state["external-code"]), spec = byCode.get(code);
+  controls.append(select("external-metric", "Medida do histórico", spec.allowed_transforms.filter(m => m !== "base100").map(m => [m, m === "original" ? `Valor (${spec.unit})` : data.labels[m]]), "original"));
+  main.append(controls);
+  const measure = state["external-metric"];
+  chart(main, [code], measure, rows, `${spec.short_name || spec.name} · ${data.labels[measure]}`);
+  main.append(note(spec.description), note("Acumulados somam apenas fluxos: exigem todos os meses desde janeiro ou os 12 meses consecutivos. São calculados antes do filtro. Saldos negativos indicam déficit. A alta do dólar em R$/US$ indica desvalorização do real."));
+  const exported = rows.map(r => {
+    const s = byCode.get(r.code);
+    return {date:r.date, code:r.code, indicator:s.short_name || s.name, value:r.original, unit:s.unit, year_to_date:r.sum_ytd ?? null, trailing_12_months:r.sum12 ?? null, monthly_change_pct:r.mom_pct ?? null, annual_change_pct:r.yoy_pct ?? null, source:s.source, source_url:s.source_url, snapshot_id:data.manifest.snapshot_id};
+  });
+  main.append(details("Ver histórico em tabela", table(rows.filter(r => r.code === code), [["date","Referência",month],[measure,`${data.labels[measure]} (${unit(spec,measure)})`,number]])));
+  main.append(download("Baixar setor externo e câmbio · CSV", exported, "setor-externo-cambio.csv"));
+  main.append(note("CSV inclui valores originais, acumulados dos fluxos, variações permitidas, unidades e fontes. Excel e outras comparações estão no Explorador de indicadores."));
+  main.append(details("Fontes e metodologia — setor externo", note("Valores em dólares correntes, sem deflação pelo IPCA. Reservas não medem apenas compras e vendas de moeda: seus valores também variam com preços dos ativos e taxas de câmbio. Câmbio mensal não representa cotação em tempo real. O histórico é atualizado integralmente para incorporar revisões."), ...specs.map(s => el("p", {}, link(`${s.short_name || s.name} · SGS ${s.code}`, s.source_url)))));
+}
+
 function labor() {
   const specs = data.catalog.filter(s => s.classification === "Trabalho e renda");
   const codes = specs.map(s => s.code), all = data.rows.filter(r => codes.includes(r.code));
@@ -1625,6 +1660,7 @@ function render() {
       overview,
       inflation,
       labor,
+      external,
       comparison,
       credit,
       composition,
