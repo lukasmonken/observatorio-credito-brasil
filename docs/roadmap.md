@@ -15,12 +15,16 @@ Este documento distingue funcionalidades planejadas de funcionalidades já dispo
 | 9 | Setor externo: balança comercial, câmbio, reservas e contas externas | Implementado: seis séries mensais BCB, filtros, acumulados e exportação. Detalhamento Comex Stat por parceiros/produtos permanece planejado. |
 | 10 | Mercado imobiliário e construção: FipeZap, Secovi-SP, INCC, SINAPI e crédito imobiliário | Planejado; acesso às fontes condicionado conforme catálogo |
 | 11 | Trabalho e renda: PNAD Contínua nacional | Primeira entrega implementada: desocupação, ocupados, desocupados e rendimento real habitual; contas públicas e recortes regionais permanecem futuros |
-| 12 | Exportações prontas para análise: CSV compatível com planilhas e melhoria do Excel existente | Planejado; relato de problema visual no CSV em 05/11/2026 |
+| 12 | Exportações prontas para análise: CSV compatível com planilhas e melhoria do Excel existente | Implementado: perfis Excel em português e análise, proteção de textos e planilha formatada com procedência |
 | 13 | Personalização e exportação de gráficos com título, números, unidades e fonte | Planejado |
 
 Os itens futuros são um backlog de possibilidades. O usuário esclareceu em 05/11/2026 que não deseja implementar todas essas expansões agora. O item 5 foi concluído separadamente, conforme combinado.
 
 ## 12. Exportações prontas para análise
+
+Implementado em 09/11/2026. Todos os downloads CSV do painel usam o perfil selecionado em **Opções de exportação**. O padrão é Excel em português (`;`, decimal `,`, cabeçalhos em português); análise preserva vírgula, ponto decimal e campos originais. Ambos usam UTF-8 com BOM, datas ISO, precisão sem arredondamento e proteção de textos contra fórmulas. Importar identificadores como texto preserva zeros à esquerda; o formato XLSX já define códigos como texto. O Excel do Explorador inclui fonte e coleta em cada linha, cabeçalhos alinhados, números e datas tipados, larguras, quebra de texto, filtros e congelamento de cabeçalho e identificação.
+
+Requisitos de origem:
 
 Relato do usuário: o CSV foi baixado e os dados aparentavam estar corretos, mas a apresentação ficou desconfigurada ao abrir. A causa ainda não foi reproduzida nem diagnosticada; investigar separador, codificação, convenções numéricas e programa de abertura antes de alterar o exportador.
 
@@ -41,7 +45,7 @@ Relato do usuário: o gráfico exportado saiu sem título e sem os números espe
 - Avaliar primeiro os recursos da biblioteca de gráficos já utilizada, sem pressupor uma integração externa ou serviço pago.
 - Respeitar as unidades e os dados: personalização visual não pode alterar valores, ocultar transformações ou produzir comparação enganosa.
 
-Critérios de aceite: título, eixos, legenda, unidades e fonte presentes no arquivo final; cores e rótulos refletem a prévia; funcionamento nos temas claro/escuro e em dispositivos móveis. Nenhuma dessas mudanças de exportação foi implementada nesta atualização do roadmap.
+Critérios de aceite: título, eixos, legenda, unidades e fonte presentes no arquivo final; cores e rótulos refletem a prévia; funcionamento nos temas claro/escuro e em dispositivos móveis. A personalização de gráficos deste item permanece planejada; a exportação de dados do item 12 foi implementada.
 
 ## Direção do produto: Observatório Econômico do Brasil
 

@@ -243,3 +243,16 @@ test("Trabalho e renda preserva trimestre móvel, ausências e unidades", async 
   const state = {"labor-code":"24382","labor-metric":"yoy_pct","labor-reference":"2026-01-01",laborstart:"2025-01-01",laborend:"2026-01-01"};
   assert.deepEqual(readShare(shareHash("labor",state)),{page:"labor",state});
 });
+
+test("CSV em português preserva precisão, separadores e protege texto", () => {
+  const rows = [{code:"00123", name:'Ação; "teste",\nlinha', original:-1234.567891234, zero:0, missing:null, text:"  =1+1"}];
+  const localized = csv(rows, undefined, "excel");
+  assert.ok(localized.startsWith('\ufeff"Código SGS";"Indicador";"Valor original"'));
+  assert.ok(localized.includes('"00123";"Ação; ""teste"",\nlinha";"-1234,567891234";"0";""'));
+  assert.ok(localized.includes("'  =1+1"));
+  const analysis = csv(rows, undefined, "analysis");
+  assert.ok(analysis.includes('"original"'));
+  assert.ok(analysis.includes('"-1234.567891234"'));
+  assert.throws(() => csv([{value:Infinity}]), /não finito/);
+  assert.throws(() => csv(rows, undefined, "invalid"), /Perfil/);
+});

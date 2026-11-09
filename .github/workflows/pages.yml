@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'web/**'
+      - 'observatorio/export_columns.json'
       - 'scripts/build_pages_data.py'
       - 'tests/test_pages_data.py'
       - 'docs/metodologia.md'

@@ -26,7 +26,7 @@ export async function excelFile(data, rows, spec, metric, period) {
     ws.addRows(values);
     ws.eachRow((row, i) => {
       row.eachCell((cell) => {
-        cell.font = { name: "Times New Roman", size: 11, bold: i === 1 };
+        cell.font = { name: "Calibri", size: 11, bold: i === 1 };
         cell.alignment = { vertical: "top", wrapText: true };
         if (i === 1)
           cell.fill = {
@@ -50,11 +50,12 @@ export async function excelFile(data, rows, spec, metric, period) {
   if (metric !== "original")
     headers.push(data.labels[metric], "Unidade da transformação");
   if (spec.frequency === "Q") headers.push("Trimestre");
+  headers.push("Fonte", "URL da fonte", "Coleta");
   const values = sorted.map((r) => {
     for (const key of new Set(["original", metric]))
       if (r[key] != null && !finite(r[key])) throw new Error("Valor inválido");
     const value = [
-      spec.code,
+      String(spec.code),
       new Date(r.date + "T00:00:00Z"),
       spec.name,
       r.original ?? null,
@@ -63,15 +64,23 @@ export async function excelFile(data, rows, spec, metric, period) {
     if (metric !== "original")
       value.push(r[metric] ?? null, unit(spec, metric, data.manifest));
     if (spec.frequency === "Q") value.push(`${Math.floor((Number(r.date.slice(5,7))-1)/3)+1}º tri/${r.date.slice(0,4)}`);
+    value.push(spec.source || "Banco Central do Brasil / SGS", spec.source_url, data.manifest.snapshot_id);
     return value;
   });
   const ws = sheet("Dados", headers, values);
+  ws.views = [{ state: "frozen", xSplit: 2, ySplit: 1, showGridLines: false }];
   ws.columns.forEach((column, i) => {
-    column.width = i === 0 ? 10 : i === 1 ? 15 : i === 2 ? 44 : 27;
+    column.width = i === 0 ? 10 : i === 1 ? 15 : i === 2 ? 44 : ["URL da fonte", "Coleta"].includes(headers[i]) ? 42 : 27;
   });
   ws.getColumn(2).numFmt = "mm/yyyy";
   ws.getColumn(4).numFmt = "#,##0.00######";
   if (metric !== "original") ws.getColumn(6).numFmt = "#,##0.00######";
+  for (const i of metric === "original" ? [4] : [4, 6]) {
+    ws.getColumn(i).alignment = { vertical: "top", horizontal: "right", wrapText: true };
+  }
+  ws.eachRow((row, i) => {
+    if (i > 1) row.height = Math.min(409, Math.max(22, ...row.values.slice(1).map(v => 15 * String(v ?? "").split("\n").reduce((n, line) => n + Math.max(1, Math.ceil(line.length / 40)), 0))));
+  });
   ws.autoFilter = {
     from: { row: 1, column: 1 },
     to: { row: rows.length + 1, column: headers.length },
