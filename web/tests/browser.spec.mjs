@@ -527,6 +527,7 @@ test("Atividade: frequências, componentes, gráficos e CSV", async ({ page }) =
 });
 
 test("Perfis CSV: Excel português e análise preservam o recorte", async ({page}) => {
+  const { readFile } = await import("node:fs/promises");
   await page.goto("#explorer");
   await page.locator("#explorer-code").selectOption("20539");
   await page.locator("#explorerstart").fill("2020-01-01");
