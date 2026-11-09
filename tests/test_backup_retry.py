@@ -89,3 +89,33 @@ def test_destructive_operations_are_rejected(execution, command):
         retry_backup.run_rclone([command, "backup:dest"])
     run.assert_not_called()
     sleep.assert_not_called()
+
+
+@pytest.mark.parametrize("summary", ["0 differences found", "1 differences found"])
+def test_check_summary_does_not_mask_rate_limit(execution, summary):
+    run, sleep = execution
+    run.side_effect = [result(1, "Error 403: userRateLimitExceeded\n" + summary), result()]
+    retry_backup.run_rclone(["check", "local", "backup:dest", "--download", "--one-way"])
+    assert run.call_count == 2
+    sleep.assert_called_once_with(34)
+
+
+@pytest.mark.parametrize("message", [
+    "sizes differ", "hashes differ", "files differ", "MD5 differ", "SHA1 differ",
+])
+def test_real_difference_overrides_transient_error(execution, message):
+    run, sleep = execution
+    run.return_value = result(1, message + "\nError 429: Too Many Requests\n1 differences found")
+    with pytest.raises(RuntimeError, match="integridade"):
+        retry_backup.run_rclone(["check", "local", "backup:dest", "--download"])
+    run.assert_called_once()
+    sleep.assert_not_called()
+
+
+def test_summary_alone_still_fails_closed(execution):
+    run, sleep = execution
+    run.return_value = result(1, "1 differences found")
+    with pytest.raises(RuntimeError):
+        retry_backup.run_rclone(["check", "local", "backup:dest"])
+    run.assert_called_once()
+    sleep.assert_not_called()
