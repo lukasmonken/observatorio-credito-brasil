@@ -93,13 +93,14 @@ def source_freshness(df, specs, today):
     for spec in specs:
         valid = df.loc[(df.code == spec["code"]) & df.original.notna(), "date"]
         latest = valid.max() if not valid.empty else None
-        lag = (today - latest.date()).days if latest is not None else None
+        reference_end = latest.to_period("Q").end_time.normalize() if latest is not None and spec.get("frequency", "M") == "Q" else latest
+        lag = (today - reference_end.date()).days if reference_end is not None else None
         limit = spec["max_lag_days"]
         rows.append(
             {
                 "SGS": spec["code"],
                 "Indicador": spec["name"],
-                "Última referência": latest.strftime("%m/%Y")
+                "Última referência": (f"{latest.quarter}º tri/{latest.year}" if spec.get("frequency", "M") == "Q" else latest.strftime("%m/%Y"))
                 if latest is not None
                 else "Sem dados",
                 "Dias desde a referência": lag,

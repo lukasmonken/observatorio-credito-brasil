@@ -708,8 +708,8 @@
       "base100"
     ],
     "limitations": [
-      "Revisões históricas podem alterar resultados; reconsulta de 18 meses não detecta revisões mais antigas.",
-      "IBC-Br com ajuste sazonal; não equivale ao PIB. Base original mantida."
+      "IBC-Br com ajuste sazonal; não equivale ao PIB. Base original mantida.",
+      "Histórico reconsultado integralmente para incorporar revisões do ajuste sazonal."
     ],
     "metadata_verified_at": "2026-10-26",
     "coverage_observed": {
@@ -717,7 +717,11 @@
       "end": null
     },
     "metadata_evidence": "data/metadata/24364.json",
-    "max_lag_days": 90
+    "max_lag_days": 90,
+    "short_name": "IBC-Br",
+    "activity_group": "Atividade mensal",
+    "seasonally_adjusted": true,
+    "refresh_full_history": true
   },
   {
     "code": 29034,
@@ -2012,6 +2016,513 @@
       "end": null
     },
     "max_lag_days": 90,
+    "refresh_full_history": true
+  },
+  {
+    "code": 21859,
+    "name": "Produção industrial",
+    "short_name": "Produção industrial",
+    "official_name": "Indicadores da produção (2022=100) - Geral",
+    "description": "Índice de volume nacional da pesquisa PIM-PF. Sem ajuste sazonal; comparação com o mesmo período do ano anterior.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=21859",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "M",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "activity_group": "Atividade mensal",
+    "seasonally_adjusted": false,
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 100,
+    "refresh_full_history": true
+  },
+  {
+    "code": 1455,
+    "name": "Comércio varejista",
+    "short_name": "Comércio varejista",
+    "official_name": "Índice volume de vendas no varejo - Total - Brasil",
+    "description": "Índice de volume nacional da pesquisa PMC. Sem ajuste sazonal; comparação com o mesmo período do ano anterior.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=1455",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "M",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "activity_group": "Atividade mensal",
+    "seasonally_adjusted": false,
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 100,
+    "refresh_full_history": true
+  },
+  {
+    "code": 23982,
+    "name": "Volume de serviços",
+    "short_name": "Volume de serviços",
+    "official_name": "PMS - Volume de serviços - Total - Brasil",
+    "description": "Índice de volume nacional da pesquisa PMS. Sem ajuste sazonal; comparação com o mesmo período do ano anterior.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=23982",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "M",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "activity_group": "Atividade mensal",
+    "seasonally_adjusted": false,
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 100,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22099,
+    "name": "PIB — série observada",
+    "short_name": "PIB — série observada",
+    "official_name": "PIB trimestral - Dados observados - Produto Interno Bruto a preços de mercado",
+    "description": "Índice de volume das Contas Nacionais Trimestrais, referência metodológica 2010. Sem ajuste sazonal; comparação com o mesmo período do ano anterior.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=22099",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "Q",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_quarter",
+    "activity_group": "PIB trimestral",
+    "seasonally_adjusted": false,
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 190,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22109,
+    "name": "PIB — ajuste sazonal",
+    "short_name": "PIB — ajuste sazonal",
+    "official_name": "PIB trimestral - Dados dessazonalizados - Produto Interno Bruto a preços de mercado",
+    "description": "Índice de volume das Contas Nacionais Trimestrais, referência metodológica 2010. Com ajuste sazonal.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=22109",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "Q",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_quarter",
+    "activity_group": "PIB trimestral",
+    "seasonally_adjusted": true,
+    "allowed_transforms": [
+      "original",
+      "qoq_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 190,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22083,
+    "name": "PIB · Agropecuária",
+    "short_name": "PIB · Agropecuária",
+    "official_name": "PIB trimestral - Dados observados - Agropecuária",
+    "description": "Índice de volume das Contas Nacionais Trimestrais, referência metodológica 2010. Sem ajuste sazonal; comparação com o mesmo período do ano anterior.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=22083",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "Q",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_quarter",
+    "activity_group": "Componentes do PIB",
+    "seasonally_adjusted": false,
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 190,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22084,
+    "name": "PIB · Indústria",
+    "short_name": "PIB · Indústria",
+    "official_name": "PIB trimestral - Dados observados - Indústria",
+    "description": "Índice de volume das Contas Nacionais Trimestrais, referência metodológica 2010. Sem ajuste sazonal; comparação com o mesmo período do ano anterior.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=22084",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "Q",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_quarter",
+    "activity_group": "Componentes do PIB",
+    "seasonally_adjusted": false,
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 190,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22089,
+    "name": "PIB · Serviços",
+    "short_name": "PIB · Serviços",
+    "official_name": "PIB trimestral - Dados observados - Serviços",
+    "description": "Índice de volume das Contas Nacionais Trimestrais, referência metodológica 2010. Sem ajuste sazonal; comparação com o mesmo período do ano anterior.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=22089",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "Q",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_quarter",
+    "activity_group": "Componentes do PIB",
+    "seasonally_adjusted": false,
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 190,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22100,
+    "name": "PIB · Consumo das famílias",
+    "short_name": "PIB · Consumo das famílias",
+    "official_name": "PIB trimestral - Dados observados - Consumo das famílias",
+    "description": "Índice de volume das Contas Nacionais Trimestrais, referência metodológica 2010. Sem ajuste sazonal; comparação com o mesmo período do ano anterior.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=22100",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "Q",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_quarter",
+    "activity_group": "Componentes do PIB",
+    "seasonally_adjusted": false,
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 190,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22101,
+    "name": "PIB · Consumo do governo",
+    "short_name": "PIB · Consumo do governo",
+    "official_name": "PIB trimestral - Dados observados - Consumo do governo",
+    "description": "Índice de volume das Contas Nacionais Trimestrais, referência metodológica 2010. Sem ajuste sazonal; comparação com o mesmo período do ano anterior.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=22101",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "Q",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_quarter",
+    "activity_group": "Componentes do PIB",
+    "seasonally_adjusted": false,
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 190,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22102,
+    "name": "PIB · Formação bruta de capital fixo",
+    "short_name": "PIB · Formação bruta de capital fixo",
+    "official_name": "PIB trimestral - Dados observados - Formação bruta de capital fixo",
+    "description": "Índice de volume das Contas Nacionais Trimestrais, referência metodológica 2010. Sem ajuste sazonal; comparação com o mesmo período do ano anterior.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=22102",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "Q",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_quarter",
+    "activity_group": "Componentes do PIB",
+    "seasonally_adjusted": false,
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 190,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22103,
+    "name": "PIB · Exportações",
+    "short_name": "PIB · Exportações",
+    "official_name": "PIB trimestral - Dados observados - Exportações",
+    "description": "Índice de volume das Contas Nacionais Trimestrais, referência metodológica 2010. Sem ajuste sazonal; comparação com o mesmo período do ano anterior.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=22103",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "Q",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_quarter",
+    "activity_group": "Componentes do PIB",
+    "seasonally_adjusted": false,
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 190,
+    "refresh_full_history": true
+  },
+  {
+    "code": 22104,
+    "name": "PIB · Importações",
+    "short_name": "PIB · Importações",
+    "official_name": "PIB trimestral - Dados observados - Importações",
+    "description": "Índice de volume das Contas Nacionais Trimestrais, referência metodológica 2010. Sem ajuste sazonal; comparação com o mesmo período do ano anterior.",
+    "source": "IBGE, distribuído pelo BCB/SGS",
+    "producer": "IBGE",
+    "distributor": "BCB/SGS",
+    "source_url": "https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=22104",
+    "unit": "índice",
+    "official_unit": "Índice",
+    "frequency": "Q",
+    "classification": "Crescimento e atividade",
+    "measure_type": "index",
+    "segment": "Brasil",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_quarter",
+    "activity_group": "Componentes do PIB",
+    "seasonally_adjusted": false,
+    "allowed_transforms": [
+      "original",
+      "yoy_pct",
+      "base100"
+    ],
+    "limitations": [
+      "Índices de volume não são valores monetários nem participações no PIB. Não somar componentes encadeados.",
+      "Histórico reconsultado integralmente; sujeito a revisões."
+    ],
+    "metadata_verified_at": "2026-11-09",
+    "metadata_evidence": "docs/crescimento-atividade.md",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "max_lag_days": 190,
     "refresh_full_history": true
   }
 ]

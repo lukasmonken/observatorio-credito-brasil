@@ -76,6 +76,8 @@ def build_snapshot(engine, specs, run_id, as_of, summary, output_root=ROOT):
             frame = indicators(x, s, prices)
             frame.index.name = "date"
             frame = frame.reset_index()
+            frame["reference_period"] = frame.date.map(lambda d: f"{d.quarter}º tri/{d.year}" if s["frequency"] == "Q" else d.strftime("%m/%Y"))
+            frame["frequency"] = s["frequency"]
             frame["code"] = code
             frame["name"] = s["name"]
             frame["unit"] = s["unit"]
@@ -254,7 +256,7 @@ def run_pipeline(
                 else SGSClient(
                     output_root / "data/raw",
                     run_id,
-                    monthly_codes=[s["code"] for s in specs if s["frequency"] == "M"],
+                    monthly_codes=[s["code"] for s in specs if s["frequency"] in ("M", "Q")],
                 )
             )
             summary = dict(

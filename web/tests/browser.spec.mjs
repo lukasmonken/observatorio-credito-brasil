@@ -5,6 +5,7 @@ const pages = [
   "inflation",
   "labor",
   "external",
+  "activity",
   "credit",
   "composition",
   "comparison",
@@ -480,5 +481,47 @@ test("Setor externo: déficit, acumulados, referência, CSV e celular", async ({
   await page.screenshot({path:"test-results/external-mobile-dark.png",fullPage:true});
   await page.locator("#externalstart").fill("2026-02-01");
   await page.locator("#externalend").fill("2025-01-01");
+  await expect(page.getByRole("alert")).toContainText("Selecione um período válido");
+});
+
+test("Atividade: frequências, componentes, gráficos e CSV", async ({ page }) => {
+  const {readFile}=await import("node:fs/promises"), {createHash}=await import("node:crypto");
+  const config=JSON.parse(await readFile(new URL("../generated/site.json",import.meta.url),"utf8"));
+  const payload=JSON.parse(await readFile(new URL("../generated/"+config.data,import.meta.url),"utf8"));
+  payload.catalog=JSON.parse(await readFile(new URL("../../catalog.json",import.meta.url),"utf8"));
+  payload.labels.qoq_pct="Variação trimestral (%)";
+  const specs=payload.catalog.filter(s=>s.activity_group);
+  payload.rows=payload.rows.filter(r=>!specs.some(s=>s.code===r.code));
+  for(const s of specs) for(let i=0;i<(s.frequency==="Q"?10:28);i++) {
+    const n=i*(s.frequency==="Q"?3:1), year=2024+Math.floor(n/12), month=String(n%12+1).padStart(2,"0");
+    payload.rows.push({code:s.code,date:`${year}-${month}-01`,reference_period:s.frequency==="Q"?`${Math.floor((n%12)/3)+1}º tri/${year}`:`${month}/${year}`,original:100+i,qoq_pct:i?1:null,mom_pct:i?1:null,yoy_pct:i>=4?4:null});
+  }
+  payload.manifest.rows=payload.rows.length;payload.manifest.series=payload.catalog.length;
+  const body=JSON.stringify(payload),hash=createHash("sha256").update(body).digest("hex"),name=`data-${hash.slice(0,16)}.json`;
+  await page.route("**/site.json",r=>r.fulfill({json:{...config,data:name,sha256:hash}}));
+  await page.route("**/"+name,r=>r.fulfill({body,contentType:"application/json"}));
+  await page.goto("#activity");
+  await expect(page.locator(".external-kpis .kpi")).toHaveCount(6);
+  await expect(page.locator(".external-kpis")).toContainText("2º tri/2026");
+  await expect(page.locator("#activity-code")).toHaveValue("22109");
+  await expect(page.locator("#activity-metric")).toHaveValue("qoq_pct");
+  await expect(page.locator(".js-plotly-plot")).toBeVisible();
+  await expect.poll(()=>page.locator(".js-plotly-plot").evaluate(n=>n.data[0].x.length)).toBe(10);
+  await page.locator("#activity-code").selectOption("21859");
+  await expect(page.locator("#activity-metric option[value=qoq_pct]")).toHaveCount(0);
+  await page.locator("#activity-metric").selectOption("yoy_pct");
+  await page.locator("#activity-quarter").selectOption("2025-01-01");
+  await expect(page.locator("main table").first()).toContainText("Consumo das famílias");
+  const pending=page.waitForEvent("download");
+  await page.getByRole("button",{name:"Baixar crescimento e atividade · CSV"}).click();
+  const text=await readFile(await (await pending).path(),"utf8");
+  expect(text).toContain("frequency");expect(text).toContain("seasonally_adjusted");expect(text).toContain("2º tri/2026");
+  await page.screenshot({path:"test-results/activity-desktop.png",fullPage:true});
+  await page.locator("#theme-toggle").click();
+  await page.setViewportSize({width:390,height:844});
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  await page.screenshot({path:"test-results/activity-mobile.png",fullPage:true});
+  await page.locator("#activitystart").fill("2026-04-01");
+  await page.locator("#activityend").fill("2025-01-01");
   await expect(page.getByRole("alert")).toContainText("Selecione um período válido");
 });

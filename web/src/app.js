@@ -26,6 +26,7 @@ const pages = [
   ["inflation", "Inflação detalhada"],
   ["labor", "Trabalho e renda"],
   ["external", "Setor externo e câmbio"],
+  ["activity", "Crescimento e atividade"],
   ["comparison", "Comparação em base 100"],
   ["family", "Famílias e inadimplência"],
   ["explorer", "Explorador de indicadores"],
@@ -689,6 +690,43 @@ function composition() {
   main.append(note("As modalidades acompanhadas não esgotam a carteira e seus percentuais não precisam somar 100%. Cada participação usa o total do mesmo segmento e mês; não há interpolação nem combinação de referências diferentes. Valores nominais, sujeitos a revisões."));
   main.append(details("Fontes das modalidades",...specs.map(s=>el("p",{},el("a",{href:safeURL(s.source_url),target:"_blank",rel:"noopener noreferrer"},s.modality + " · SGS " + s.code)))));
 }
+const quarter = d => d ? `${Math.floor((Number(d.slice(5,7))-1)/3)+1}º tri/${d.slice(0,4)}` : "—";
+function activity() {
+  const specs = data.catalog.filter(s => s.activity_group), codes = specs.map(s => s.code);
+  const all = data.rows.filter(r => codes.includes(r.code));
+  main.append(note("Brasil · PIB trimestral do IBGE e indicadores mensais de atividade. IBC-Br é um indicador do Banco Central e não substitui o PIB. Índices medem volume, não valores em reais."));
+  if (!all.length) { main.append(message("Crescimento e atividade ainda indisponível nesta coleta.")); return; }
+  main.append(period("activity",all));
+  const rows = filtered("activity",all);
+  if (!rows.length) { main.append(message("Não há observações no intervalo selecionado.")); return; }
+  const cards = el("div",{class:"kpis external-kpis"});
+  for (const [code,m,label] of [[22109,"qoq_pct","PIB · trimestre anterior"],[22099,"yoy_pct","PIB · mesmo trimestre do ano anterior"],[24364,"mom_pct","IBC-Br · mês anterior"],[21859,"yoy_pct","Indústria · mesmo mês do ano anterior"],[1455,"yoy_pct","Varejo · mesmo mês do ano anterior"],[23982,"yoy_pct","Serviços · mesmo mês do ano anterior"]]) {
+    const s=byCode.get(code), r=rows.filter(r=>r.code===code && finite(r.original)).at(-1);
+    cards.append(metric(label,r && finite(r[m]) ? `${number(r[m])} %` : "—",r ? `${s.frequency === "Q" ? quarter(r.date) : month(r.date)} · ${s.seasonally_adjusted ? "Com ajuste sazonal" : "Sem ajuste sazonal"}` : "Sem referência no período"));
+  }
+  main.append(cards,note("Cada cartão informa sua própria referência. Comparação trimestral usa PIB ajustado; comparação anual usa PIB observado. Variações são calculadas antes do filtro, sem preencher períodos ausentes."));
+  const controls=el("div",{class:"filters labor-filters"});
+  controls.append(select("activity-code","Indicador do histórico",specs.map(s=>[s.code,s.short_name||s.name]),22109));
+  const code=Number(state["activity-code"]), spec=byCode.get(code);
+  controls.append(select("activity-metric","Medida do histórico",spec.allowed_transforms.filter(m=>m!=="base100").map(m=>[m,data.labels[m]]),spec.frequency==="Q" && spec.seasonally_adjusted ? "qoq_pct" : "yoy_pct"));
+  main.append(controls);
+  chart(main,[code],state["activity-metric"],rows,`${spec.short_name||spec.name} · ${spec.frequency==="Q" ? "Trimestral" : "Mensal"}`);
+  main.append(note(spec.description));
+  if (spec.frequency==="Q") main.append(note("Datas do gráfico representam o início de cada trimestre. Não há interpolação nem repetição mensal do PIB."));
+  const componentSpecs=specs.filter(s=>s.activity_group==="Componentes do PIB");
+  const quarters=[...new Set(rows.filter(r=>componentSpecs.some(s=>s.code===r.code)).map(r=>r.date))].sort().reverse();
+  if (quarters.length) {
+    main.append(el("h3",{},"Componentes do PIB"),select("activity-quarter","Trimestre dos componentes",quarters.map(d=>[d,quarter(d)]),quarters[0]));
+    const summary=componentSpecs.map(s=>{const r=rows.find(r=>r.code===s.code && r.date===state["activity-quarter"]); return {name:s.short_name,value:r?.original??null,yoy:r?.yoy_pct??null};});
+    main.append(table(summary,[["name","Componente"],["value","Índice de volume",number],["yoy","Mesmo trimestre do ano anterior (%)",number]]),note("Componentes sem ajuste sazonal. Índices encadeados não são participações nem contribuições ao crescimento; não devem ser somados. Exportações e importações do PIB incluem bens e serviços e diferem dos valores em dólares do módulo externo."));
+  }
+  const exported=rows.map(r=>{const s=byCode.get(r.code);return {date:r.date,reference_period:s.frequency==="Q"?quarter(r.date):month(r.date),code:r.code,indicator:s.short_name||s.name,frequency:s.frequency,seasonally_adjusted:!!s.seasonally_adjusted,original:r.original,unit:s.unit,qoq_pct:r.qoq_pct??null,mom_pct:r.mom_pct??null,yoy_pct:r.yoy_pct??null,source:s.source,source_url:s.source_url,snapshot_id:data.manifest.snapshot_id};});
+  main.append(details("Ver histórico em tabela",table(exported.filter(r=>r.code===code),[["reference_period","Referência"],["original","Índice",number],[spec.frequency==="Q"&&spec.seasonally_adjusted?"qoq_pct":spec.seasonally_adjusted?"mom_pct":"yoy_pct","Variação (%)",number]])));
+  main.append(download("Baixar crescimento e atividade · CSV",exported,"crescimento-atividade.csv"));
+  main.append(note("Excel disponível no Explorador. Índices já medem volume; não aplicamos nova deflação pelo IPCA. Histórico reconsultado integralmente para incorporar revisões."));
+  main.append(details("Fontes — crescimento e atividade",...specs.map(s=>el("p",{},link(`${s.short_name||s.name} · SGS ${s.code}`,s.source_url)))));
+}
+
 function external() {
   const specs = data.catalog.filter(s => s.classification === "Setor externo e câmbio");
   const codes = specs.map(s => s.code), all = data.rows.filter(r => codes.includes(r.code));
@@ -936,6 +974,8 @@ function explorer() {
   const exported = rows.map((r) => ({
     code,
     date: r.date,
+    reference_period: spec.frequency === "Q" ? quarter(r.date) : month(r.date),
+    frequency: spec.frequency,
     name: spec.name,
     unit: spec.unit,
     original: r.original,
@@ -1008,7 +1048,7 @@ const permitted = (spec) =>
 function relations() {
   main.append(
     note(
-      "Compare dois indicadores e explore a associação entre referências mensais.",
+      "Compare dois indicadores e explore a associação entre referências mensais. PIB trimestral fica fora desta análise de defasagens mensais.",
     ),
   );
   const controls = el("div", { class: "filters" });
@@ -1020,7 +1060,7 @@ function relations() {
       select(
         "relation-" + axis,
         label,
-        data.catalog.map((s) => [s.code, s.name]),
+        data.catalog.filter(s => s.frequency !== "Q").map((s) => [s.code, s.name]),
         initial,
       ),
     );
@@ -1448,9 +1488,9 @@ function dictionary() {
           ],
           [
             "Periodicidade de origem",
-            spec.frequency === "D" ? "Diária" : "Mensal",
+            spec.frequency === "Q" ? "Trimestral" : spec.frequency === "D" ? "Diária" : "Mensal",
           ],
-          ["Periodicidade no painel", "Mensal"],
+          ["Periodicidade no painel", spec.frequency === "Q" ? "Trimestral" : "Mensal"],
           [
             "Tratamento temporal",
             spec.frequency === "D"
@@ -1584,12 +1624,12 @@ function quality() {
           .filter((r) => finite(r.original))
           .at(-1),
         lag = last
-          ? Math.floor((today - Date.parse(last.date)) / 86400000)
+          ? Math.floor((today - (s.frequency === "Q" ? Date.parse(monthDate(monthNumber(last.date)+3))-86400000 : Date.parse(last.date))) / 86400000)
           : null;
       return {
         code: s.code,
         name: s.name,
-        last: last?.date,
+        last: last ? (s.frequency === "Q" ? quarter(last.date) : month(last.date)) : "—",
         lag,
         limit: s.max_lag_days,
         status:
@@ -1604,13 +1644,13 @@ function quality() {
     table(freshness, [
       ["code", "SGS"],
       ["name", "Indicador"],
-      ["last", "Última referência", month],
+      ["last", "Última referência"],
       ["lag", "Dias desde a referência"],
       ["limit", "Limite operacional (dias)"],
       ["status", "Situação"],
     ]),
     note(
-      "Dias desde o início do mês de referência. Limites do catálogo são critérios operacionais, não prazos oficiais. Coleta sem observação nova não comprova atraso do Bacen.",
+      "Dias desde o início do mês ou encerramento do trimestre de referência. Limites do catálogo são critérios operacionais, não prazos oficiais. Coleta sem observação nova não comprova atraso do Bacen.",
     ),
     el("h3", {}, "Base publicada"),
     note(
@@ -1661,6 +1701,7 @@ function render() {
       inflation,
       labor,
       external,
+      activity,
       comparison,
       credit,
       composition,
@@ -1767,7 +1808,7 @@ async function load() {
       el(
         "div",
         {},
-        `${data.manifest.series} séries · ${number(data.manifest.rows, 0)} registros mensais`,
+        `${data.manifest.series} séries · ${number(data.manifest.rows, 0)} observações`,
       ),
       el("div", {}, "Snapshot: " + data.manifest.snapshot_id.slice(0, 8)),
       el(

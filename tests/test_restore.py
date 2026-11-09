@@ -23,7 +23,7 @@ def test_restore_loads_real_snapshot_and_dashboard_without_changing_source(archi
     result = restore_backup(archive[0], destination, archive[1])
     assert result["snapshot_id"] == json.loads(pointer)["snapshot_id"]
     assert len(load_snapshot(destination)[0]) == result["rows"]
-    assert check_dashboard(destination) == 13
+    assert check_dashboard(destination) == 14
     assert (ROOT / "data/processed/latest.json").read_bytes() == pointer
 
 

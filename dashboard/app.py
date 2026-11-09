@@ -107,6 +107,7 @@ pages = [
     "Inflação detalhada",
     "Trabalho e renda",
     "Setor externo e câmbio",
+    "Crescimento e atividade",
     "Comparação em base 100",
     "Famílias e inadimplência",
     "Explorador de indicadores",
@@ -120,7 +121,7 @@ page = st.sidebar.radio("Navegação", pages)
 st.sidebar.divider()
 st.sidebar.caption("FONTES OFICIAIS · BCB / SGS")
 st.sidebar.write(
-    f"{manifest['series']} séries · {number(manifest['rows'], 0)} registros mensais"
+    f"{manifest['series']} séries · {number(manifest['rows'], 0)} observações"
 )
 st.sidebar.caption(
     f"Coleta: {pd.Timestamp(manifest['as_of']):%d/%m/%Y}\n\nSnapshot: {manifest['snapshot_id'][:8]}"
@@ -176,7 +177,7 @@ st.caption(
 
 
 def unit_for(code, metric):
-    if metric in ("mom_pct", "yoy_pct", "real_yoy_pct", "inflation12", "inflation_ytd"):
+    if metric in ("qoq_pct", "mom_pct", "yoy_pct", "real_yoy_pct", "inflation12", "inflation_ytd"):
         return "%"
     if metric in ("diff_pp", "diff12_pp"):
         return "p.p."
@@ -385,6 +386,62 @@ elif page == "Inflação detalhada":
         st.write('Acumulados compostos antes do filtro: janeiro até a referência, ou doze meses consecutivos. Exigem todos os meses; lacunas permanecem ausentes. Arredondamentos podem gerar diferenças frente ao acumulado oficial.')
         for spec in inflation_specs:
             st.markdown(f"[{spec.get('short_name', spec['name'])}]({spec['source_url']})")
+
+elif page == "Crescimento e atividade":
+    st.caption("Brasil · PIB trimestral do IBGE e indicadores mensais. IBC-Br não substitui o PIB. Índices medem volume, não valores em reais.")
+    activity_specs = [s for s in specs if s.get('activity_group')]
+    activity_data = df[df.code.isin([s['code'] for s in activity_specs])]
+    if activity_data.empty:
+        st.info("Crescimento e atividade ainda indisponível nesta coleta.")
+    else:
+        activity_data = date_filter(activity_data, 'activity_period')
+        def reference_label(d, spec):
+            return f"{pd.Timestamp(d).quarter}º tri/{pd.Timestamp(d).year}" if spec['frequency'] == 'Q' else pd.Timestamp(d).strftime('%m/%Y')
+        cards = [(22109,'qoq_pct','PIB · trimestre anterior'),(22099,'yoy_pct','PIB · mesmo trimestre do ano anterior'),(24364,'mom_pct','IBC-Br · mês anterior'),(21859,'yoy_pct','Indústria · mesmo mês do ano anterior'),(1455,'yoy_pct','Varejo · mesmo mês do ano anterior'),(23982,'yoy_pct','Serviços · mesmo mês do ano anterior')]
+        for offset in range(0,len(cards),3):
+            for col,(code,measure,label) in zip(st.columns(3),cards[offset:offset+3]):
+                values=activity_data[(activity_data.code==code)&activity_data.original.notna()]
+                with col:
+                    value=values.iloc[-1].get(measure) if len(values) else None
+                    st.metric(label,number(value)+' %' if pd.notna(value) else '—')
+                    if len(values):
+                        st.caption(reference_label(values.iloc[-1].date,by_code[code])+' · '+('Com ajuste sazonal' if by_code[code].get('seasonally_adjusted') else 'Sem ajuste sazonal'))
+                    else:
+                        st.caption('Sem referência no período')
+        st.caption("Cada cartão informa sua própria referência. Cálculos anteriores ao filtro, sem preencher períodos ausentes. Comparação trimestral usa PIB ajustado; anual usa PIB observado.")
+        code=st.selectbox('Indicador do histórico',[s['code'] for s in activity_specs],format_func=lambda c:by_code[c].get('short_name',names[c]))
+        spec=by_code[code]
+        measures=[m for m in spec['allowed_transforms'] if m!='base100']
+        measure=st.selectbox('Medida do histórico',measures,format_func=lambda m:labels[m])
+        chart([code],measure,activity_data,title=spec.get('short_name',spec['name'])+' · '+('Trimestral' if spec['frequency']=='Q' else 'Mensal'))
+        st.caption(spec['description'])
+        if spec['frequency']=='Q':
+            st.caption('Datas representam o início de cada trimestre. Não há interpolação nem repetição mensal do PIB.')
+        components=[s for s in activity_specs if s['activity_group']=='Componentes do PIB']
+        component_data=activity_data[activity_data.code.isin([s['code'] for s in components])]
+        if not component_data.empty:
+            st.subheader('Componentes do PIB')
+            selected_quarter=st.selectbox('Trimestre dos componentes',sorted(component_data.date.unique(),reverse=True),format_func=lambda d:reference_label(d,{'frequency':'Q'}))
+            summary=[]
+            for s in components:
+                values=component_data[(component_data.code==s['code'])&(component_data.date==selected_quarter)]
+                row=values.iloc[0] if len(values) else {}
+                summary.append({'Componente':s['short_name'],'Índice de volume':row.get('original'),'Mesmo trimestre do ano anterior (%)':row.get('yoy_pct')})
+            st.dataframe(pd.DataFrame(summary),hide_index=True)
+            st.caption('Componentes sem ajuste sazonal. Índices encadeados não são participações nem contribuições e não devem ser somados. Exportações e importações do PIB incluem bens e serviços, diferindo dos valores em dólares do módulo externo.')
+        export=activity_data.reindex(columns=['date','code','original','qoq_pct','mom_pct','yoy_pct']).copy()
+        export['reference_period']=[reference_label(r.date,by_code[r.code]) for r in export.itertuples()]
+        for field in ['name','unit','frequency','source','source_url']:
+            export[field]=export.code.map(lambda c:by_code[c][field])
+        export['seasonally_adjusted']=export.code.map(lambda c:by_code[c].get('seasonally_adjusted',False))
+        export['snapshot_id']=manifest['snapshot_id']
+        with st.expander('Ver histórico em tabela'):
+            st.dataframe(export[export.code==code],hide_index=True)
+        st.download_button('Baixar crescimento e atividade · CSV',export.to_csv(index=False).encode('utf-8-sig'),'crescimento-atividade.csv','text/csv')
+        st.caption('Excel disponível no Explorador. Índices já medem volume, sem nova deflação pelo IPCA. Histórico reconsultado integralmente para incorporar revisões.')
+        with st.expander('Fontes — crescimento e atividade'):
+            for s in activity_specs:
+                st.markdown(f"[{s.get('short_name',s['name'])} · SGS {s['code']}]({s['source_url']})")
 
 elif page == "Setor externo e câmbio":
     st.caption("Brasil · Dados mensais do Banco Central. Comércio de bens e transações correntes seguem o balanço de pagamentos (BPM6), com ajustes em relação ao Comex Stat/MDIC.")
@@ -640,6 +697,8 @@ elif page == "Explorador de indicadores":
         .loc[:, lambda d: ~d.columns.duplicated()]
         .copy()
     )
+    download["reference_period"] = data.date.map(lambda d: f"{d.quarter}º tri/{d.year}" if by_code[code]["frequency"] == "Q" else d.strftime("%m/%Y"))
+    download["frequency"] = by_code[code]["frequency"]
     download["transformed_unit"] = unit_for(code, metric)
     st.download_button(
         "Baixar dados filtrados · CSV",
@@ -662,22 +721,23 @@ elif page == "Explorador de indicadores":
         st.dataframe(download, width="stretch", hide_index=True)
 elif page == "Relações e defasagens":
     st.caption(
-        "Compare dois indicadores e explore a associação entre referências mensais."
+        "Compare dois indicadores e explore a associação entre referências mensais. PIB trimestral fica fora desta análise."
     )
+    monthly_names = {c:n for c,n in names.items() if by_code[c]["frequency"] != "Q"}
     c1, c2 = st.columns(2)
     with c1:
         xcode = st.selectbox(
             "X · indicador antecedente",
-            list(names),
+            list(monthly_names),
             format_func=lambda c: names[c],
-            index=list(names).index(432) if 432 in names else 0,
+            index=list(monthly_names).index(432) if 432 in names else 0,
         )
     with c2:
         ycode = st.selectbox(
             "Y · indicador posterior",
-            list(names),
+            list(monthly_names),
             format_func=lambda c: names[c],
-            index=list(names).index(21084) if 21084 in names else 0,
+            index=list(monthly_names).index(21084) if 21084 in names else 0,
         )
 
     def permitted(c):
@@ -695,6 +755,7 @@ elif page == "Relações e defasagens":
             )
         ]
 
+    monthly_names = {c:n for c,n in names.items() if by_code[c]["frequency"] != "Q"}
     c1, c2 = st.columns(2)
     with c1:
         opts = permitted(xcode)
@@ -982,8 +1043,8 @@ elif page == "Dicionário e metodologia":
             {"Campo": "Código SGS", "Informação": str(code)},
             {"Campo": "Unidade no painel", "Informação": spec["unit"]},
             {"Campo": "Unidade nos metadados oficiais", "Informação": spec.get("official_unit", "Não informada")},
-            {"Campo": "Periodicidade de origem", "Informação": {"D": "Diária", "M": "Mensal"}.get(spec["frequency"], spec["frequency"])},
-            {"Campo": "Periodicidade no painel", "Informação": "Mensal"},
+            {"Campo": "Periodicidade de origem", "Informação": {"D": "Diária", "M": "Mensal", "Q": "Trimestral"}.get(spec["frequency"], spec["frequency"])},
+            {"Campo": "Periodicidade no painel", "Informação": "Trimestral" if spec["frequency"] == "Q" else "Mensal"},
             {"Campo": "Tratamento temporal", "Informação": "Última observação de cada mês concluído; não é média mensal." if spec["frequency"] == "D" else "Referência mensal preservada, sem somar ou reponderar."},
             {"Campo": "Categoria", "Informação": spec["classification"]},
             {"Campo": "Segmento", "Informação": spec["segment"]},

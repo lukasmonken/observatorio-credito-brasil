@@ -23,6 +23,8 @@ def build_data(root, output):
     bulletin = build_bulletin(frame, catalog, manifest, history, meta)
     numeric_columns = sorted(set().union(*(s["allowed_transforms"] for s in catalog)))
     frame = frame[["code", "date", *[m for m in numeric_columns if m in frame]]].copy()
+    quarterly_codes = {s["code"] for s in catalog if s["frequency"] == "Q"}
+    frame["reference_period"] = [f"{r.date.quarter}º tri/{r.date.year}" if r.code in quarterly_codes else r.date.strftime("%m/%Y") for r in frame.itertuples()]
     frame["date"] = frame.date.dt.strftime("%Y-%m-%d")
     monitoring_error = None
     try:

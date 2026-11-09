@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS series (
  code INTEGER PRIMARY KEY, name TEXT NOT NULL, unit TEXT NOT NULL,
- frequency TEXT NOT NULL CHECK (frequency IN ('D','M')), measure_type TEXT NOT NULL,
+ frequency TEXT NOT NULL CHECK (frequency IN ('D','M','Q')), measure_type TEXT NOT NULL,
  segment TEXT NOT NULL, classification TEXT NOT NULL, metadata_json TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS runs (

@@ -7,6 +7,7 @@ import math
 import pandas as pd
 
 METRIC_LABELS = {
+    "qoq_pct": "Variação trimestral (%)",
     "sum12": "Acumulado em 12 meses",
     "sum_ytd": "Acumulado no ano",
     "original": "Valor original",
@@ -23,12 +24,13 @@ METRIC_LABELS = {
 }
 
 METRIC_FORMULAS = {
+    "qoq_pct": "(xₜ / xₜ₋₁ trimestre − 1) × 100, com ajuste sazonal; denominador zero ou ausente gera ausência.",
     "sum12": "Soma dos 12 meses até a referência; exige todos os meses presentes.",
     "sum_ytd": "Soma de janeiro até a referência; exige todos os meses desde janeiro.",
             "original": "Valor da série após organização no calendário mensal.",
             "ma3": "(xₜ + xₜ₋₁ + xₜ₋₂) / 3; exige os três meses presentes.",
             "mom_pct": "(xₜ / xₜ₋₁ − 1) × 100; denominador zero ou ausente gera ausência.",
-            "yoy_pct": "(xₜ / xₜ₋₁₂ − 1) × 100; compara com o mesmo mês do ano anterior.",
+            "yoy_pct": "(xₜ / xₜ₋₁₂ − 1) × 100; compara com o mesmo mês ou trimestre do ano anterior, conforme a frequência.",
             "diff_pp": "xₜ − xₜ₋₁, em pontos percentuais.",
             "diff12_pp": "xₜ − xₜ₋₁₂, em pontos percentuais.",
             "base100": "100 × xₜ / primeiro valor válido. No explorador, a base é recalculada no intervalo selecionado; base zero gera ausência.",
@@ -64,6 +66,8 @@ def build_excel(data, spec, manifest, metric, transformed_unit, period, methodol
     if metric != "original":
         values[METRIC_LABELS[metric]] = data[metric]
         values["Unidade da transformação"] = transformed_unit
+    if spec["frequency"] == "Q":
+        values["Trimestre"] = dates.map(lambda d: f"{d.quarter}º tri/{d.year}")
     values = values.sort_values("Referência")
     indicator = [
         ("Código SGS", spec["code"]), ("Nome", spec["name"]),
@@ -72,9 +76,9 @@ def build_excel(data, spec, manifest, metric, transformed_unit, period, methodol
         ("Fonte primária", spec.get("source", "Banco Central do Brasil / SGS")),
         ("Fonte oficial e metadados", spec["source_url"]),
         ("Unidade original", spec["unit"]),
-        ("Periodicidade de origem", {"D": "Diária", "M": "Mensal"}.get(spec["frequency"], spec["frequency"])),
-        ("Periodicidade exportada", "Mensal — trimestres móveis" if spec.get("reference_period") == "trimestre móvel" else "Mensal"),
-        ("Tratamento temporal", "Última observação de cada mês concluído, sem média mensal." if spec["frequency"] == "D" else "Referência mensal preservada."),
+        ("Periodicidade de origem", {"D": "Diária", "M": "Mensal", "Q": "Trimestral"}.get(spec["frequency"], spec["frequency"])),
+        ("Periodicidade exportada", "Mensal — trimestres móveis" if spec.get("reference_period") == "trimestre móvel" else "Trimestral" if spec["frequency"] == "Q" else "Mensal"),
+        ("Tratamento temporal", "Última observação de cada mês concluído, sem média mensal." if spec["frequency"] == "D" else "Data representa o início do trimestre; não há mensalização." if spec["frequency"] == "Q" else "Referência mensal preservada."),
         ("Categoria", spec["classification"]), ("Segmento", spec["segment"]),
         ("Modalidade", spec.get("modality", "Não informada")),
         ("Recursos", spec.get("resources", "Não informado")),
@@ -107,7 +111,7 @@ def build_excel(data, spec, manifest, metric, transformed_unit, period, methodol
         ("Última referência exportada", dates.max().strftime("%m/%Y")),
         ("Observações exportadas", len(data)), ("Transformação", metric),
         ("Fonte", "Catálogo e dados do snapshot identificado acima."),
-        ("Datas", "Referência mensal não é data de divulgação. Coleta/exportação não identificam a publicação original do Bacen."),
+        ("Datas", "Referência não é data de divulgação. Coleta/exportação não identificam a publicação original do Bacen."),
     ]
     output = BytesIO()
     with pd.ExcelWriter(output, engine="xlsxwriter", datetime_format="mm/yyyy",

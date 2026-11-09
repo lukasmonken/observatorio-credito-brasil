@@ -30,11 +30,48 @@ def engine_for(url):
 
 
 def initialize(engine):
+    migrate_quarterly_frequency(engine)
     with engine.begin() as conn:
         for filename in ("schema.sql", "views.sql"):
             for statement in (ROOT / "sql" / filename).read_text().split(";"):
                 if statement.strip():
                     conn.execute(text(statement))
+
+
+def migrate_quarterly_frequency(engine):
+    """Expand the legacy frequency constraint without changing stored observations."""
+    if engine.dialect.name == "sqlite":
+        with engine.connect() as conn:
+            schema = conn.execute(text("SELECT sql FROM sqlite_master WHERE type='table' AND name='series'")).scalar()
+            conn.commit()
+            if not schema or "'Q'" in schema:
+                return
+            conn.execute(text("PRAGMA foreign_keys=OFF"))
+            conn.commit()
+            try:
+                with conn.begin():
+                    conn.execute(text("BEGIN IMMEDIATE"))
+                    # Views are recreated by initialize after this atomic table replacement.
+                    for name in ("v_latest", "v_coverage", "v_monthly_changes"):
+                        conn.execute(text("DROP VIEW IF EXISTS " + name))
+                    conn.execute(text("""CREATE TABLE series_quarterly (
+                        code INTEGER PRIMARY KEY, name TEXT NOT NULL, unit TEXT NOT NULL,
+                        frequency TEXT NOT NULL CHECK (frequency IN ('D','M','Q')),
+                        measure_type TEXT NOT NULL, segment TEXT NOT NULL,
+                        classification TEXT NOT NULL, metadata_json TEXT NOT NULL)"""))
+                    conn.execute(text("INSERT INTO series_quarterly SELECT * FROM series"))
+                    conn.execute(text("DROP TABLE series"))
+                    conn.execute(text("ALTER TABLE series_quarterly RENAME TO series"))
+                    if conn.execute(text("PRAGMA foreign_key_check")).first():
+                        raise ValueError("Migração com referências inválidas")
+            finally:
+                conn.execute(text("PRAGMA foreign_keys=ON"))
+                conn.commit()
+    elif engine.dialect.name == "postgresql":
+        with engine.begin() as conn:
+            if conn.execute(text("SELECT to_regclass('series')")).scalar():
+                conn.execute(text("ALTER TABLE series DROP CONSTRAINT IF EXISTS series_frequency_check"))
+                conn.execute(text("ALTER TABLE series ADD CONSTRAINT series_frequency_check CHECK (frequency IN ('D','M','Q'))"))
 
 
 def register_catalog(engine, specs):

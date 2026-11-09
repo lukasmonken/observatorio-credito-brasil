@@ -20,7 +20,7 @@ WITH windows AS (
  LAG(value,12) OVER(PARTITION BY code ORDER BY date) AS previous_year,
  AVG(value) OVER(PARTITION BY code ORDER BY date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS average3,
  COUNT(value) OVER(PARTITION BY code ORDER BY date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS count3
- FROM monthly_observations o
+ FROM monthly_observations o WHERE code IN (SELECT code FROM series WHERE frequency <> 'Q')
 )
 SELECT w.code,s.name,s.unit,w.date,w.value,
  CASE WHEN s.measure_type IN ('stock','flow','index') THEN 100.0*(w.value/NULLIF(w.previous,0)-1) END AS mom_pct,

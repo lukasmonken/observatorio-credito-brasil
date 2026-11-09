@@ -38,12 +38,13 @@ export async function drawLines(node, series, units) {
     mode: "lines",
     name: s.name,
     x: s.rows.map((r) => r.date),
+    customdata: s.rows.map(r => r.reference_period || (r.date.slice(5,7)+"/"+r.date.slice(0,4))),
     y: s.rows.map((r) => r[s.metric] ?? null),
     connectgaps: false,
     line: { color: themeColor(s.color), width: 2 },
     yaxis: s.unit !== units[0] ? "y2" : "y",
     hovertemplate:
-      "%{x|%m/%Y}<br>%{y:,.3f} " + s.unit + "<extra>%{fullData.name}</extra>",
+      "%{customdata}<br>%{y:,.3f} " + s.unit + "<extra>%{fullData.name}</extra>",
   }));
   node.replaceChildren();
   await Plotly.newPlot(
