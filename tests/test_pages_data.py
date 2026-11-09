@@ -27,7 +27,7 @@ def test_public_package_preserves_values_and_integrity(source):
     assert hashlib.sha256(content).hexdigest() == config['sha256']
     assert result['manifest']['rows'] == len(result['rows'])
     assert len(result['catalog']) == result['manifest']['series']
-    assert all(set(row) <= {'code', 'date', *result['labels']} for row in result['rows'])
+    assert all(set(row) <= {'code', 'date', 'reference_period', *result['labels']} for row in result['rows'])
     assert any(row['original'] == 0 for row in result['rows'])
     assert any(row.get('diff_pp') is None for row in result['rows'])
     assert 'NaN' not in content.decode()

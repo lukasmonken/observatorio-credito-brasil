@@ -42,14 +42,15 @@ def build_bulletin(frame, specs, manifest, history, meta):
             code = int(event['code'])
             spec = catalog[code]
             date = pd.Timestamp(event['reference_date'])
-            prefix = f"{spec['name']} (SGS {code}), referência {month(date)}"
+            reference = f"{date.quarter}º tri/{date.year}" if spec.get("frequency", "M") == "Q" else month(date)
+            prefix = f"{spec['name']} (SGS {code}), referência {reference}"
             if event['event_type'] == 'revision':
                 text = f"{prefix}: {number(event['old_value'])} → {number(event['new_value'])} {event['unit']}; diferença de {number(event['difference'])} {event['difference_unit']}."
                 revisions.append({'code': code, 'reference_date': event['reference_date'], 'text': text, 'source_url': spec['source_url']})
             elif event['event_type'] == 'new_observation':
                 text = f"{prefix}: {number(event['new_value'])} {event['unit']}."
                 # Compare consecutive calendar months inside the CURRENT validated snapshot.
-                previous_date = date - pd.offsets.MonthBegin(1)
+                previous_date = date - pd.DateOffset(months=3 if spec.get("frequency", "M") == "Q" else 1)
                 previous = frame.loc[(frame.code == code) & (frame.date == previous_date), 'original']
                 before = decimal_value(previous.iloc[0]) if len(previous) else None
                 current = decimal_value(event['new_value'])
@@ -58,16 +59,16 @@ def build_bulletin(frame, specs, manifest, history, meta):
                 if before is not None and current is not None:
                     if 'diff_pp' in spec['allowed_transforms']:
                         delta, delta_unit = current - before, 'p.p.'
-                    elif 'mom_pct' in spec['allowed_transforms'] and before > 0:
+                    elif {'mom_pct','qoq_pct'} & set(spec['allowed_transforms']) and before > 0:
                         delta, delta_unit = (current / before - 1) * 100, '%'
                 if delta is not None:
                     text += f" Variação frente a {month(previous_date)}: {number(delta.quantize(Decimal('0.01')))} {delta_unit}."
                 elif spec.get('measure_type') != 'variation':
-                    text += ' Variação mensal não calculada: ausência de base comparável ou transformação não permitida.'
+                    text += (' Variação trimestral não calculada: ausência de base comparável ou transformação não permitida.' if spec.get('frequency') == 'Q' else ' Variação mensal não calculada: ausência de base comparável ou transformação não permitida.')
                 highlights.append({'code': code, 'reference_date': event['reference_date'], 'text': text, 'source_url': spec['source_url']})
     notes = [
-        'Contagens representam observações (indicador × mês). Preenchimentos históricos e séries incluídas não são novas referências.',
-        'Variações mensais comparam meses consecutivos na base atual. Revisões comparam o mesmo mês entre duas coletas. Não se ordenam grandezas de unidades diferentes como se fossem comparáveis.',
+        'Contagens representam observações (indicador × período). Preenchimentos históricos e séries incluídas não são novas referências.',
+        'Variações comparam períodos consecutivos na frequência da série. Revisões comparam o mesmo período entre duas coletas. Não se ordenam grandezas de unidades diferentes como se fossem comparáveis.',
         'O horário de coleta/detecção não é a data oficial de divulgação. Coleta sem mudanças não significa ausência de inflação, juros ou movimento econômico.',
         'Resumo descritivo dos dados do BCB/SGS, sem interpretação causal. Atrasos e falhas posteriores são apresentados separadamente pelo monitor do painel.',
     ]

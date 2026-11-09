@@ -49,6 +49,7 @@ export async function excelFile(data, rows, spec, metric, period) {
     ];
   if (metric !== "original")
     headers.push(data.labels[metric], "Unidade da transformação");
+  if (spec.frequency === "Q") headers.push("Trimestre");
   const values = sorted.map((r) => {
     for (const key of new Set(["original", metric]))
       if (r[key] != null && !finite(r[key])) throw new Error("Valor inválido");
@@ -61,6 +62,7 @@ export async function excelFile(data, rows, spec, metric, period) {
     ];
     if (metric !== "original")
       value.push(r[metric] ?? null, unit(spec, metric, data.manifest));
+    if (spec.frequency === "Q") value.push(`${Math.floor((Number(r.date.slice(5,7))-1)/3)+1}º tri/${r.date.slice(0,4)}`);
     return value;
   });
   const ws = sheet("Dados", headers, values);
@@ -85,13 +87,13 @@ export async function excelFile(data, rows, spec, metric, period) {
     ],
     ["Fonte oficial e metadados", spec.source_url],
     ["Unidade original", spec.unit],
-    ["Periodicidade de origem", spec.frequency === "D" ? "Diária" : "Mensal"],
-    ["Periodicidade exportada", spec.reference_period === "trimestre móvel" ? "Mensal — trimestres móveis" : "Mensal"],
+    ["Periodicidade de origem", spec.frequency === "Q" ? "Trimestral" : spec.frequency === "D" ? "Diária" : "Mensal"],
+    ["Periodicidade exportada", spec.reference_period === "trimestre móvel" ? "Mensal — trimestres móveis" : spec.frequency === "Q" ? "Trimestral" : "Mensal"],
     [
       "Tratamento temporal",
       spec.frequency === "D"
         ? "Última observação de cada mês concluído, sem média mensal."
-        : "Referência mensal preservada.",
+        : spec.frequency === "Q" ? "Data representa o início do trimestre; não há mensalização." : "Referência mensal preservada.",
     ],
     ["Categoria", spec.classification],
     ["Segmento", spec.segment],
@@ -153,7 +155,7 @@ export async function excelFile(data, rows, spec, metric, period) {
     ["Fonte", "Catálogo e dados do snapshot identificado acima."],
     [
       "Datas",
-      "Referência mensal não é data de divulgação. Coleta/exportação não identificam a publicação original do Bacen.",
+      "Referência não é data de divulgação. Coleta/exportação não identificam a publicação original do Bacen.",
     ],
   ];
   for (const [name, values] of [

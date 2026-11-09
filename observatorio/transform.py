@@ -40,6 +40,15 @@ def parse_rows(rows, as_of=None):
 
 def monthly(df, spec, as_of):
     x = df.set_index("date").value.sort_index()
+    if spec["frequency"] == "Q":
+        periods = x.index.to_period("Q")
+        if periods.duplicated().any():
+            raise ValueError("Mais de uma observação no mesmo trimestre")
+        x.index = periods.to_timestamp()
+        x = x[x.index.to_period("Q").end_time.date <= as_of]
+        if x.empty:
+            raise ValueError("Sem trimestres concluídos")
+        return x.reindex(pd.date_range(x.index.min(), x.index.max(), freq="QS")).rename("value")
     if spec["frequency"] == "M":
         p = x.index.to_period("M")
         if p.duplicated().any():
@@ -80,8 +89,12 @@ def indicators(x, spec, prices=None):
         out["ma3"] = x.rolling(3, min_periods=3).mean()
     if "mom_pct" in allowed:
         out["mom_pct"] = x.pct_change(fill_method=None).mul(100)
+    if "qoq_pct" in allowed:
+        if spec["frequency"] != "Q":
+            raise ValueError("Variação trimestral exige frequência trimestral")
+        out["qoq_pct"] = x.pct_change(fill_method=None).mul(100)
     if "yoy_pct" in allowed:
-        out["yoy_pct"] = x.pct_change(12, fill_method=None).mul(100)
+        out["yoy_pct"] = x.pct_change(4 if spec["frequency"] == "Q" else 12, fill_method=None).mul(100)
     if "diff_pp" in allowed:
         out["diff_pp"] = x.diff()
     if "diff12_pp" in allowed:
