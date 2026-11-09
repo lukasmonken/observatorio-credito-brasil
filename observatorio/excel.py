@@ -57,7 +57,7 @@ def build_excel(data, spec, manifest, metric, transformed_unit, period, methodol
         if not data[column].map(lambda value: pd.isna(value) or math.isfinite(value)).all():
             raise ValueError("Valor infinito na exportação")
     values = pd.DataFrame({
-        "SGS": data.code,
+        "SGS": data.code.map(str),
         "Referência": dates,
         "Indicador": data["name"] if "name" in data else spec["name"],
         "Valor original": data.original,
@@ -68,6 +68,9 @@ def build_excel(data, spec, manifest, metric, transformed_unit, period, methodol
         values["Unidade da transformação"] = transformed_unit
     if spec["frequency"] == "Q":
         values["Trimestre"] = dates.map(lambda d: f"{d.quarter}º tri/{d.year}")
+    values["Fonte"] = spec.get("source", "Banco Central do Brasil / SGS")
+    values["URL da fonte"] = spec["source_url"]
+    values["Coleta"] = manifest["snapshot_id"]
     values = values.sort_values("Referência")
     indicator = [
         ("Código SGS", spec["code"]), ("Nome", spec["name"]),
@@ -117,10 +120,10 @@ def build_excel(data, spec, manifest, metric, transformed_unit, period, methodol
     with pd.ExcelWriter(output, engine="xlsxwriter", datetime_format="mm/yyyy",
                         engine_kwargs={"options": {"in_memory": True, "strings_to_formulas": False, "strings_to_urls": False}}) as writer:
         book = writer.book
-        body = book.add_format({"font_name": "Times New Roman", "font_size": 11, "valign": "top"})
-        numeric = book.add_format({"font_name": "Times New Roman", "font_size": 11, "num_format": "#,##0.00######", "align": "right"})
-        text = book.add_format({"font_name": "Times New Roman", "font_size": 11, "text_wrap": True, "valign": "top"})
-        header = book.add_format({"font_name": "Times New Roman", "font_size": 11, "bold": True, "bg_color": "#F4F5F5", "bottom": 1, "bottom_color": "#DDE1E1", "text_wrap": True})
+        body = book.add_format({"font_name": "Calibri", "font_size": 11, "valign": "top", "text_wrap": True})
+        numeric = book.add_format({"font_name": "Calibri", "font_size": 11, "num_format": "#,##0.00######", "align": "right"})
+        text = book.add_format({"font_name": "Calibri", "font_size": 11, "text_wrap": True, "valign": "top"})
+        header = book.add_format({"font_name": "Calibri", "font_size": 11, "bold": True, "bg_color": "#F4F5F5", "bottom": 1, "bottom_color": "#DDE1E1", "text_wrap": True})
         sheets = {"Dados": values, **{name: pd.DataFrame(rows, columns=["Campo", "Informação"]) for name, rows in (
             ("Indicador", indicator), ("Metodologia", methods), ("Coleta", collection),
         )}}
@@ -128,7 +131,7 @@ def build_excel(data, spec, manifest, metric, transformed_unit, period, methodol
             table.to_excel(writer, sheet_name=name, index=False, startrow=1, header=False)
             sheet = writer.sheets[name]
             sheet.hide_gridlines(2)
-            sheet.freeze_panes(1, 0)
+            sheet.freeze_panes(1, 2 if name == "Dados" else 0)
             sheet.set_row(0, 32)
             sheet.write_row(0, 0, table.columns.tolist(), header)
             if name == "Dados":
@@ -136,7 +139,15 @@ def build_excel(data, spec, manifest, metric, transformed_unit, period, methodol
                 for index, column in enumerate(table.columns):
                     width = 10 if column == "SGS" else 15 if column == "Referência" else 44 if column == "Indicador" else 27
                     style = numeric if column in ("Valor original", METRIC_LABELS[metric]) else body
+                    if column in ("URL da fonte", "Coleta"):
+                        width = 42
                     sheet.set_column(index, index, width, style)
+                    if column in ("Valor original", METRIC_LABELS[metric]):
+                        numeric_header = book.add_format({"font_name": "Calibri", "font_size": 11, "bold": True, "bg_color": "#F4F5F5", "text_wrap": True, "align": "right", "bottom": 1, "bottom_color": "#DDE1E1"})
+                        sheet.write(0, index, column, numeric_header)
+                for row_index, record in enumerate(table.itertuples(index=False, name=None), 1):
+                    lines = max(sum(max(1, (len(line) + 39) // 40) for line in str(v).split("\n")) for v in record)
+                    sheet.set_row(row_index, min(409, max(22, lines * 15)))
             else:
                 sheet.set_column(0, 0, 42, text)
                 sheet.set_column(1, 1, 105, text)

@@ -339,7 +339,7 @@ test("Inflação: catálogo ampliado, acumulados, grupos, exportação e tema", 
   const file=await download;
   const csv=await readFile(await file.path(),"utf8");
   expect(csv).toContain("2025-01-01");
-  expect(csv).toContain("trailing_12_months_pct");
+  expect(csv).toContain("Acumulado em 12 meses (%)");
   expect(csv).toContain("IBGE");
   await page.screenshot({path:"test-results/inflation-desktop.png",fullPage:true});
   await page.setViewportSize({width:390,height:844});
@@ -382,7 +382,7 @@ test("Composição: modalidades PF/PJ, participação, CSV e dispositivo móvel"
   const pending=page.waitForEvent("download");
   await page.getByRole("button",{name:"Baixar modalidades · CSV",exact:true}).click();
   const downloaded=await pending, text=await readFile(await downloaded.path(),"utf8");
-  expect(text).toContain("20540");expect(text).toContain("snapshot_id");expect(text).toContain("Banco Central");
+  expect(text).toContain("20540");expect(text).toContain("Identificador da coleta");expect(text).toContain("Banco Central");
   await page.screenshot({path:"test-results/composition-desktop.png",fullPage:true});
   await page.setViewportSize({width:390,height:844});
   await page.getByRole("button",{name:"Ativar modo escuro"}).click();
@@ -425,9 +425,9 @@ test("Trabalho e renda: trimestres, referência comum, gráfico, CSV e modo escu
   const downloading = page.waitForEvent("download");
   await page.getByRole("button",{name:"Baixar trabalho e renda · CSV"}).click();
   const file = await downloading, csvText=await readFile(await file.path(),"utf8");
-  expect(csvText).toContain("reference_period");
+  expect(csvText).toContain("Período de referência");
   expect(csvText).toContain("11/2025–01/2026");
-  expect(csvText).toContain("income_price_base");
+  expect(csvText).toContain("Base de preços do rendimento");
   expect(csvText).toContain(payload.manifest.snapshot_id);
   await page.screenshot({path:"test-results/labor-desktop.png",fullPage:true});
   await page.locator("#theme-toggle").click();
@@ -471,7 +471,7 @@ test("Setor externo: déficit, acumulados, referência, CSV e celular", async ({
   const downloading=page.waitForEvent("download");
   await page.getByRole("button",{name:"Baixar setor externo e câmbio · CSV"}).click();
   const csvText=await readFile(await (await downloading).path(),"utf8");
-  expect(csvText).toContain("trailing_12_months");
+  expect(csvText).toContain("Acumulado em 12 meses");
   expect(csvText).toContain(payload.manifest.snapshot_id);
   expect(csvText).toContain("-10");
   await page.screenshot({path:"test-results/external-desktop.png",fullPage:true});
@@ -515,7 +515,7 @@ test("Atividade: frequências, componentes, gráficos e CSV", async ({ page }) =
   const pending=page.waitForEvent("download");
   await page.getByRole("button",{name:"Baixar crescimento e atividade · CSV"}).click();
   const text=await readFile(await (await pending).path(),"utf8");
-  expect(text).toContain("frequency");expect(text).toContain("seasonally_adjusted");expect(text).toContain("2º tri/2026");
+  expect(text).toContain("Periodicidade");expect(text).toContain("Ajuste sazonal");expect(text).toContain("2º tri/2026");
   await page.screenshot({path:"test-results/activity-desktop.png",fullPage:true});
   await page.locator("#theme-toggle").click();
   await page.setViewportSize({width:390,height:844});
@@ -524,4 +524,44 @@ test("Atividade: frequências, componentes, gráficos e CSV", async ({ page }) =
   await page.locator("#activitystart").fill("2026-04-01");
   await page.locator("#activityend").fill("2025-01-01");
   await expect(page.getByRole("alert")).toContainText("Selecione um período válido");
+});
+
+test("Perfis CSV: Excel português e análise preservam o recorte", async ({page}) => {
+  const { readFile } = await import("node:fs/promises");
+  await page.goto("#explorer");
+  await page.locator("#explorer-code").selectOption("20539");
+  await page.locator("#explorerstart").fill("2020-01-01");
+  await page.locator("#explorerend").fill("2020-06-01");
+  let pending = page.waitForEvent("download");
+  await page.getByRole("button", {name:"Baixar dados filtrados · CSV",exact:true}).click();
+  const localized = await readFile(await (await pending).path(), "utf8");
+  expect(localized).toMatch(/^\ufeff"Código SGS";"Data de referência"/);
+  expect(localized).toContain('"URL da fonte"');
+  expect(localized).toContain('"Identificador da coleta"');
+  expect(localized).toContain('"2020-01-01"');
+  expect(localized).toContain('"2020-06-01"');
+  expect(localized).not.toContain('"2020-07-01"');
+  expect(localized.split("\r\n")).toHaveLength(7);
+  await page.getByText("Opções de exportação", {exact:true}).click();
+  await page.locator("#csv-profile").selectOption("analysis");
+  pending = page.waitForEvent("download");
+  await page.getByRole("button", {name:"Baixar dados filtrados · CSV",exact:true}).click();
+  const analysis = await readFile(await (await pending).path(), "utf8");
+  expect(analysis).toMatch(/^\ufeff"code","date"/);
+  expect(analysis).toContain('"source_url"');
+  expect(analysis.split("\r\n")).toHaveLength(7);
+  // Dados numéricos mantêm a precisão; só mudam os separadores do perfil.
+  const a = analysis.split("\r\n")[1].split('","');
+  const b = localized.split("\r\n")[1].split('";"');
+  expect(b[6].replace(",", ".")).toBe(a[6]);
+  pending = page.waitForEvent("download");
+  await page.locator("#download-excel").click();
+  const book = new ExcelJS.Workbook();
+  await book.xlsx.readFile(await (await pending).path());
+  const sheet = book.getWorksheet("Dados");
+  expect(sheet.getCell("A2").value).toBe("20539");
+  expect(sheet.views[0].xSplit).toBe(2);
+  expect(sheet.getCell("D1").alignment.horizontal).toBe("right");
+  expect(sheet.getCell("D2").type).toBe(ExcelJS.ValueType.Number);
+  expect(sheet.autoFilter).toBeTruthy();
 });

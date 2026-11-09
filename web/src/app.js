@@ -104,7 +104,7 @@ function save(content, filename, type = "text/csv;charset=utf-8") {
 function download(label, rows, filename, columns) {
   return el(
     "button",
-    { type: "button", onclick: () => save(csv(rows, columns), filename) },
+    { type: "button", onclick: () => save(csv(rows, columns, state["csv-profile"] || "excel"), filename) },
     label,
   );
 }
@@ -981,6 +981,9 @@ function explorer() {
     original: r.original,
     ...(metricName === "original" ? {} : { [metricName]: r[metricName] }),
     transformed_unit: unit(spec, metricName, data.manifest),
+    source: spec.source || "Banco Central do Brasil / SGS",
+    source_url: spec.source_url,
+    snapshot_id: data.manifest.snapshot_id,
   }));
   const actions = el(
     "div",
@@ -1695,6 +1698,10 @@ function render() {
       "As referências variam por indicador. A Selic considera apenas meses concluídos.",
     ),
   );
+  main.append(details("Opções de exportação",
+    select("csv-profile", "Formato dos arquivos CSV", [["excel", "Excel em português"], ["analysis", "CSV para análise"]], "excel"),
+    note("Excel em português: ponto e vírgula entre colunas, vírgula decimal e cabeçalhos em português. CSV para análise: vírgula entre colunas, ponto decimal e nomes de campos estáveis. Ambos preservam acentos, datas ISO e a precisão dos valores; células vazias indicam ausência."),
+    note("CSV não guarda cores nem larguras de coluna. Para uma planilha formatada e identificadores como texto, baixe Excel no Explorador. Ao importar CSV, defina códigos e identificadores como texto para preservar zeros à esquerda.")));
   try {
     ({
       overview,

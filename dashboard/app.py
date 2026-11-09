@@ -12,6 +12,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from html import escape
 import streamlit as st
+from observatorio.csv_export import build_csv
 from observatorio.composition import composition_rows
 from observatorio.labor import labor_period, labor_export
 from observatorio.config import ROOT
@@ -175,6 +176,11 @@ st.caption(
 )
 
 
+with st.expander("Opções de exportação"):
+    csv_profile = st.segmented_control("Formato dos arquivos CSV", ["excel", "analysis"], default="excel", format_func=lambda value: "Excel em português" if value == "excel" else "CSV para análise", selection_mode="single", key="csv_profile") or "excel"
+    st.caption("Excel em português: ponto e vírgula entre colunas, vírgula decimal e cabeçalhos em português. CSV para análise: vírgula entre colunas, ponto decimal e nomes de campos estáveis. Ambos preservam acentos, datas ISO e a precisão dos valores; células vazias indicam ausência.")
+    st.caption("CSV não guarda cores nem larguras de coluna. Para uma planilha formatada e identificadores como texto, baixe Excel no Explorador. Ao importar CSV, defina códigos e identificadores como texto para preservar zeros à esquerda.")
+
 
 def unit_for(code, metric):
     if metric in ("qoq_pct", "mom_pct", "yoy_pct", "real_yoy_pct", "inflation12", "inflation_ytd"):
@@ -306,7 +312,7 @@ if page == "Visão geral":
                 )
                 st.download_button(
                     "Baixar mudanças da última coleta · CSV",
-                    changes["events"].to_csv(index=False).encode("utf-8-sig"),
+                    build_csv(changes["events"], csv_profile),
                     file_name=f"mudancas-{changes['snapshot_id']}.csv",
                     mime="text/csv", key="latest_changes_csv",
                 )
@@ -359,7 +365,7 @@ elif page == "Inflação detalhada":
         exported['source'] = exported.code.map(lambda c: by_code[c]['source'])
         exported['source_url'] = exported.code.map(lambda c: by_code[c]['source_url'])
         columns = ['date', 'code', 'name', 'original', *[m for m in ['inflation_ytd', 'inflation12'] if m in exported], 'unit', 'source', 'source_url', 'snapshot_id']
-        st.download_button('Baixar índices · CSV', exported[columns].to_csv(index=False).encode('utf-8-sig'), 'inflacao_indices.csv', 'text/csv')
+        st.download_button('Baixar índices · CSV', build_csv(exported[columns], csv_profile), 'inflacao_indices.csv', 'text/csv')
         with st.expander('Ver dados dos índices'):
             st.dataframe(exported[columns], hide_index=True)
     st.markdown('### Grupos do IPCA')
@@ -375,7 +381,7 @@ elif page == "Inflação detalhada":
             records.append({'Referência': pd.Timestamp(reference).strftime('%Y-%m-%d'), 'Grupo': spec['modality'], 'No mês (%)': row.get('original'), 'No ano (%)': row.get('inflation_ytd'), 'Em 12 meses (%)': row.get('inflation12'), 'Fonte': spec['source'], 'URL': spec['source_url'], 'Coleta': manifest['snapshot_id']})
         group_table = pd.DataFrame(records)
         st.dataframe(group_table.iloc[:, :5], hide_index=True)
-        st.download_button('Baixar grupos · CSV', group_table.to_csv(index=False).encode('utf-8-sig'), 'inflacao_grupos.csv', 'text/csv')
+        st.download_button('Baixar grupos · CSV', build_csv(group_table, csv_profile), 'inflacao_grupos.csv', 'text/csv')
         selected_groups = st.multiselect('Grupos no gráfico', [s['code'] for s in groups], max_selections=6, default=[c for c in [1635, 1636, 1639] if c in by_code], format_func=lambda c: by_code[c]['modality'])
         inflation_plot(selected_groups, 'Evolução dos grupos selecionados')
     else:
@@ -437,7 +443,7 @@ elif page == "Crescimento e atividade":
         export['snapshot_id']=manifest['snapshot_id']
         with st.expander('Ver histórico em tabela'):
             st.dataframe(export[export.code==code],hide_index=True)
-        st.download_button('Baixar crescimento e atividade · CSV',export.to_csv(index=False).encode('utf-8-sig'),'crescimento-atividade.csv','text/csv')
+        st.download_button('Baixar crescimento e atividade · CSV',build_csv(export, csv_profile),'crescimento-atividade.csv','text/csv')
         st.caption('Excel disponível no Explorador. Índices já medem volume, sem nova deflação pelo IPCA. Histórico reconsultado integralmente para incorporar revisões.')
         with st.expander('Fontes — crescimento e atividade'):
             for s in activity_specs:
@@ -473,7 +479,7 @@ elif page == "Setor externo e câmbio":
         for field in ['name','unit','source','source_url']:
             export[field] = export.code.map(lambda c: by_code[c][field])
         export['snapshot_id'] = manifest['snapshot_id']
-        st.download_button("Baixar setor externo e câmbio · CSV", export.to_csv(index=False).encode('utf-8-sig'), 'setor-externo-cambio.csv', 'text/csv')
+        st.download_button("Baixar setor externo e câmbio · CSV", build_csv(export, csv_profile), 'setor-externo-cambio.csv', 'text/csv')
         st.caption("Excel e outras comparações estão no Explorador de indicadores. Valores em dólares correntes, sem deflação pelo IPCA. Reservas também variam com preços e taxas de câmbio dos ativos. Cotação mensal não é cotação em tempo real.")
         with st.expander("Fontes e metodologia — setor externo"):
             for spec in external_specs:
@@ -511,7 +517,7 @@ elif page == "Trabalho e renda":
         st.caption("O eixo de datas indica o mês final do trimestre móvel. Referências consecutivas compartilham dois meses de pesquisa.")
         with st.expander("Ver histórico em tabela"):
             st.dataframe(exported[exported.code == code][['reference_period','value','unit','change12','change_unit']].rename(columns={'reference_period':'Trimestre móvel','value':'Valor','unit':'Unidade','change12':'Variação em 12 meses','change_unit':'Unidade da variação'}), hide_index=True)
-        st.download_button("Baixar trabalho e renda · CSV", exported.to_csv(index=False).encode('utf-8-sig'), 'trabalho-renda.csv', 'text/csv')
+        st.download_button("Baixar trabalho e renda · CSV", build_csv(exported, csv_profile), 'trabalho-renda.csv', 'text/csv')
         st.caption(f"Rendimento já corrigido pela fonte. Base de preços: {income_base or 'indisponível'} (mês central do trimestre mais recente da série), independente do filtro. Histórico reconsultado integralmente para incorporar revisões.")
         with st.expander("Fontes e metodologia — trabalho e renda"):
             st.write("Estimativas amostrais de pessoas de 14 anos ou mais. Diferenças numéricas não implicam significância estatística. Rendimento habitual do trabalho principal conforme metadados SGS; não é renda domiciliar per capita nem salário mínimo. Não aplicamos nova deflação.")
@@ -548,7 +554,7 @@ elif page == "Composição do crédito":
                 st.plotly_chart(fig, width="stretch", theme=None)
             else:
                 st.info("Selecione uma modalidade para exibir o histórico.")
-            st.download_button("Baixar modalidades · CSV", comp.to_csv(index=False).encode("utf-8-sig"), f"composicao-credito-{segment}.csv", "text/csv")
+            st.download_button("Baixar modalidades · CSV", build_csv(comp, csv_profile), f"composicao-credito-{segment}.csv", "text/csv")
             st.caption("Seleção parcial: as modalidades não esgotam a carteira e não precisam somar 100%. Percentuais exigem saldo compatível e total positivo do mesmo segmento e mês. Valores nominais, sujeitos a revisões.")
             with st.expander("Fontes das modalidades"):
                 for spec in specs:
@@ -645,7 +651,7 @@ elif page == "Comparação em base 100":
             exported['original_unit'] = exported.code.map(lambda c: by_code[c]['unit'])
             exported['base_month'] = base.strftime('%Y-%m-%d')
             exported['snapshot_id'] = manifest['snapshot_id']
-            st.download_button("Baixar comparação · CSV", exported.to_csv(index=False).encode('utf-8-sig'),
+            st.download_button("Baixar comparação · CSV", build_csv(exported, csv_profile),
                                'comparacao_base100.csv', 'text/csv', key="comparison_csv")
             with st.expander("Ver valores comparados"):
                 st.dataframe(exported, hide_index=True, width="stretch")
@@ -700,9 +706,12 @@ elif page == "Explorador de indicadores":
     download["reference_period"] = data.date.map(lambda d: f"{d.quarter}º tri/{d.year}" if by_code[code]["frequency"] == "Q" else d.strftime("%m/%Y"))
     download["frequency"] = by_code[code]["frequency"]
     download["transformed_unit"] = unit_for(code, metric)
+    download["source"] = by_code[code].get("source", "Banco Central do Brasil / SGS")
+    download["source_url"] = by_code[code]["source_url"]
+    download["snapshot_id"] = manifest["snapshot_id"]
     st.download_button(
         "Baixar dados filtrados · CSV",
-        download.to_csv(index=False).encode("utf-8-sig"),
+        build_csv(download, csv_profile),
         file_name=f"sgs_{code}_{metric}.csv",
         mime="text/csv",
     )
@@ -961,7 +970,7 @@ elif page == "Histórico de revisões":
                     )
                     st.download_button(
                         "Baixar histórico filtrado · CSV",
-                        filtered.to_csv(index=False).encode("utf-8-sig"),
+                        build_csv(filtered, csv_profile),
                         "historico_revisoes.csv",
                         "text/csv",
                     )
@@ -973,7 +982,7 @@ elif page == "Histórico de revisões":
             st.dataframe(comparisons, hide_index=True, width="stretch")
             st.download_button(
                 "Baixar registro de comparações · CSV",
-                comparisons.to_csv(index=False).encode("utf-8-sig"),
+                build_csv(comparisons, csv_profile),
                 "comparacoes_coletas.csv",
                 "text/csv",
             )
@@ -1019,7 +1028,7 @@ elif page == "Histórico de revisões":
                                 "difference": "Diferença líquida", "unit": "Unidade", "difference_unit": "Unidade da diferença",
                                 "previous_snapshot_id": "Coleta inicial", "snapshot_id": "Coleta final",
                             }), hide_index=True, width="stretch")
-                        st.download_button("Baixar comparação · CSV", compared.to_csv(index=False).encode("utf-8-sig"),
+                        st.download_button("Baixar comparação · CSV", build_csv(compared, csv_profile),
                                            file_name=f"comparacao-{earlier}-{later}.csv", mime="text/csv", key="comparison_csv")
                         st.caption(f"Coleta inicial: {earlier} · Coleta final: {later}")
                         st.caption("Diferença = valor final − valor inicial. Taxas em p.p.; demais valores na unidade original. Novas observações não têm valor inicial. Adições incluem novos meses, lacunas preenchidas e séries incluídas. A comparação não altera a base publicada.")

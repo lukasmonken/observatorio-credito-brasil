@@ -1,3 +1,4 @@
+import exportColumns from "../../observatorio/export_columns.json" with { type: "json" };
 export const eventLabels = {
   revision: "Revisão de valor",
   new_observation: "Nova referência",
@@ -181,20 +182,23 @@ export function health(monitor, manifest, now = Date.now()) {
   if (!monitor) return ["unknown", "Detalhes operacionais indisponíveis."];
   return ["ok", "Última coleta concluída com sucesso."];
 }
-export function csv(rows, columns) {
-  const keys = columns || Object.keys(rows[0] || {});
-  const value = (v) => {
+export function csv(rows, columns, profile = "analysis") {
+  if (!["excel", "analysis"].includes(profile)) throw new Error("Perfil CSV inválido");
+  const keys = columns || [...new Set(rows.flatMap(r => Object.keys(r)))];
+  const localized = profile === "excel", separator = localized ? ";" : ",";
+  const value = (v, key) => {
+    if (typeof v === "number" && !Number.isFinite(v)) throw new Error("Número não finito na exportação");
     let s = v == null ? "" : String(v);
-    if (/^[=+@\t\r]/.test(s) || /^-[^\d.]/.test(s)) s = "'" + s;
+    if (typeof v === "number" && localized) s = s.replace(".", ",");
+    const decimalText = ["old_value", "new_value", "difference"].includes(key) && /^-?\d+(?:\.\d+)?$/.test(s);
+    if (decimalText && localized) s = s.replace(".", ",");
+    if (typeof v === "string" && !decimalText && (/^\s*[=+@-]/.test(s) || /^[\t\r\n]/.test(s))) s = "'" + s;
     return '"' + s.replaceAll('"', '""') + '"';
   };
-  return (
-    "\ufeff" +
-    [
-      keys.map(value).join(","),
-      ...rows.map((r) => keys.map((k) => value(r[k])).join(",")),
-    ].join("\r\n")
-  );
+  return "\ufeff" + [
+    keys.map(k => value(localized ? (exportColumns[k] || k) : k)).join(separator),
+    ...rows.map(r => keys.map(k => value(r[k], k)).join(separator)),
+  ].join("\r\n");
 }
 
 export function compareBase100(rows, codes) {

@@ -51,6 +51,7 @@ def read_workbook(content):
 def test_workbook_has_numeric_zero_missing_blank_dates_and_provenance():
     sheets, xml = read_workbook(export())
     assert list(sheets) == ["Dados", "Indicador", "Metodologia", "Coleta"]
+    assert sheets["Dados"][1]["A2"] == "1"
     assert sheets["Dados"][1]["D2"] == 0.0
     assert "D3" not in sheets["Dados"][2]
     assert sheets["Dados"][1]["B2"] == (date(2026, 1, 1) - date(1899, 12, 30)).days
@@ -58,6 +59,9 @@ def test_workbook_has_numeric_zero_missing_blank_dates_and_provenance():
     assert fields["Snapshot"] == "test-snapshot"
     assert fields["Início solicitado"] == "2026-01-01"
     assert fields["Observações exportadas"] == 2
+    assert sheets["Dados"][1]["G2"] == SPEC["source_url"]
+    assert sheets["Dados"][1]["H2"] == MANIFEST["snapshot_id"]
+    assert xml["xl/worksheets/sheet1.xml"].find("x:sheetViews/x:sheetView/x:pane", NS).get("xSplit") == "2"
     assert xml["xl/worksheets/sheet1.xml"].find("x:autoFilter", NS) is not None
     assert xml["xl/worksheets/sheet1.xml"].find("x:sheetViews/x:sheetView/x:pane", NS).get("state") == "frozen"
 
