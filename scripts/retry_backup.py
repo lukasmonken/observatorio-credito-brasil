@@ -19,12 +19,16 @@ def failure_reason(output):
     permanent = {
         "autorização": ("invalid_grant", "invalid_client", "unauthorized", "insufficientpermissions", "access denied", "permission denied"),
         "armazenamento": ("storagequotaexceeded", "no space left", "dailylimitexceeded"),
-        "integridade": ("corrupted", "hashes differ", "sizes differ", "immutable", "files differ", "differences found"),
+        "integridade": ("corrupted", "hashes differ", "sizes differ", "immutable", "files differ"),
         "configuração": ("didn't find section", "unknown flag", "config file not found"),
     }
     for reason, markers in permanent.items():
         if any(marker in text for marker in markers):
             return reason, False
+    # O resumo "differences found" também conta erros de leitura/rede.
+    # Somente divergências explícitas devem impedir uma nova tentativa.
+    if re.search(r"\b(?:md5|sha1|sha256) differ\b", text):
+        return "integridade", False
     if ("ratelimitexceeded" in text or "too many requests" in text
             or ("quota exceeded" in text and "per minute" in text)
             or re.search(r"\b(?:error|status(?: code)?)[: ]+429\b", text)):
