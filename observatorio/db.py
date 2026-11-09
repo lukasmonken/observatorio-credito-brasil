@@ -50,6 +50,7 @@ def migrate_quarterly_frequency(engine):
             conn.commit()
             try:
                 with conn.begin():
+                    conn.execute(text("BEGIN IMMEDIATE"))
                     # Views are recreated by initialize after this atomic table replacement.
                     for name in ("v_latest", "v_coverage", "v_monthly_changes"):
                         conn.execute(text("DROP VIEW IF EXISTS " + name))
