@@ -16,7 +16,7 @@ Este documento distingue funcionalidades planejadas de funcionalidades já dispo
 | 10 | Mercado imobiliário e construção: FipeZap, Secovi-SP, INCC, SINAPI e crédito imobiliário | Planejado; acesso às fontes condicionado conforme catálogo |
 | 11 | Trabalho e renda: PNAD Contínua nacional | Primeira entrega implementada: desocupação, ocupados, desocupados e rendimento real habitual; contas públicas e recortes regionais permanecem futuros |
 | 12 | Exportações prontas para análise: CSV compatível com planilhas e melhoria do Excel existente | Implementado: perfis Excel em português e análise, proteção de textos e planilha formatada com procedência |
-| 13 | Personalização e exportação de gráficos com título, números, unidades e fonte | Planejado |
+| 13 | Personalização e exportação de gráficos com título, números, unidades e fonte | Implementado: prévia, PNG/SVG, título/subtítulo, cores, tema, dimensões, resolução e rótulos |
 
 Os itens futuros são um backlog de possibilidades. O usuário esclareceu em 05/11/2026 que não deseja implementar todas essas expansões agora. O item 5 foi concluído separadamente, conforme combinado.
 
@@ -36,6 +36,10 @@ Relato do usuário: o CSV foi baixado e os dados aparentavam estar corretos, mas
 
 ## 13. Gráficos personalizáveis para download
 
+Implementado em 09/11/2026. Abra **Personalizar e baixar gráfico**, ajuste a composição e gere a prévia. No site, o link baixa exatamente a imagem da prévia (PNG ou SVG); alterar um controle invalida o download até gerar uma nova prévia. Na versão Streamlit, ative **Personalizar imagem** e use a câmera da prévia, com o formato escolhido. Fonte, coleta, período, unidades e eixos integram a composição. Linhas, barras e pontos estão disponíveis nas séries temporais; dispersão mantém seu tipo. Rótulos podem ser ocultos, no último valor ou em todos os pontos até o limite de 60. A exportação usa todas as séries e o intervalo escolhidos nos filtros, preservando lacunas e sem aplicar ocultações/zoom temporários do gráfico principal.
+
+Requisitos de origem:
+
 Relato do usuário: o gráfico exportado saiu sem título e sem os números esperados. Reproduzir a exportação e distinguir números dos eixos de rótulos nos pontos antes da implementação.
 
 - Criar uma prévia de exportação com título/subtítulo editáveis, período, unidade, legenda, fonte e data-base.
@@ -45,7 +49,7 @@ Relato do usuário: o gráfico exportado saiu sem título e sem os números espe
 - Avaliar primeiro os recursos da biblioteca de gráficos já utilizada, sem pressupor uma integração externa ou serviço pago.
 - Respeitar as unidades e os dados: personalização visual não pode alterar valores, ocultar transformações ou produzir comparação enganosa.
 
-Critérios de aceite: título, eixos, legenda, unidades e fonte presentes no arquivo final; cores e rótulos refletem a prévia; funcionamento nos temas claro/escuro e em dispositivos móveis. A personalização de gráficos deste item permanece planejada; a exportação de dados do item 12 foi implementada.
+Critérios de aceite: título, eixos, legenda, unidades e fonte presentes no arquivo final; cores e rótulos refletem a prévia; funcionamento nos temas claro/escuro e em dispositivos móveis. Os itens 12 e 13 estão implementados.
 
 ## Direção do produto: Observatório Econômico do Brasil
 

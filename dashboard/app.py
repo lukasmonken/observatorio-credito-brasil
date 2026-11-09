@@ -13,6 +13,7 @@ from plotly.subplots import make_subplots
 from html import escape
 import streamlit as st
 from observatorio.csv_export import build_csv
+from observatorio.chart_export import exportable_chart
 from observatorio.composition import composition_rows
 from observatorio.labor import labor_period, labor_export
 from observatorio.config import ROOT
@@ -225,8 +226,10 @@ def chart(codes, metric="original", data=None, title=None, color=ACCENT):
         )
         style_chart(fig)
         fig.update_layout(hovermode="x unified")
-        st.plotly_chart(
+        exportable_chart(
             fig,
+            export_title=title or names[code],
+            export_source=f"Fonte: BCB/SGS {code} · {labels[metric]} · {d.date.min():%m/%Y}–{d.date.max():%m/%Y} · Coleta: {manifest['as_of']}",
             width="stretch",
             theme=None,
             config={"displaylogo": False, "scrollZoom": False},
@@ -357,7 +360,7 @@ elif page == "Inflação detalhada":
         fig = px.line(rows, x='date', y=measure, color='name', labels={'date': 'Referência', measure: '%', 'name': 'Indicador'}, color_discrete_sequence=SERIES_COLORS)
         fig.update_traces(connectgaps=False)
         st.markdown('#### ' + title)
-        st.plotly_chart(style_chart(fig), width='stretch', key=title)
+        exportable_chart(style_chart(fig), export_title=title, export_source=f"Fonte: BCB/SGS {', '.join(map(str,codes))} · {labels[measure]} · {rows.date.min():%m/%Y}–{rows.date.max():%m/%Y} · Coleta: {manifest['as_of']}", width='stretch', key=title)
 
     inflation_plot(selected, 'Evolução dos índices de inflação')
     exported = inflation_data[inflation_data.code.isin(selected)].copy()
@@ -551,7 +554,7 @@ elif page == "Composição do crédito":
                               labels={"date":"Referência", measure:"R$ milhões" if measure == "original" else f"% do total {segment}", "modality":"Modalidade"})
                 fig.update_traces(connectgaps=False)
                 style_chart(fig)
-                st.plotly_chart(fig, width="stretch", theme=None)
+                exportable_chart(fig, export_title=f"Evolução das modalidades — {segment}", export_source=f"Fonte: BCB/SGS · {comp.date.min():%m/%Y}–{comp.date.max():%m/%Y} · Coleta: {manifest['as_of']}", width="stretch", theme=None, key="composition_chart")
             else:
                 st.info("Selecione uma modalidade para exibir o histórico.")
             st.download_button("Baixar modalidades · CSV", build_csv(comp, csv_profile), f"composicao-credito-{segment}.csv", "text/csv")
@@ -614,7 +617,7 @@ elif page == "Juros e crédito":
             fig.update_yaxes(title_text=units[1] if len(units) == 2 else None,
                              visible=len(units) == 2, showgrid=False, secondary_y=True)
             fig.update_layout(hovermode="x unified", legend={"itemclick": "toggle", "itemdoubleclick": "toggleothers"})
-            st.plotly_chart(fig, width="stretch", theme=None, key="credit_combined",
+            exportable_chart(fig, export_title="Juros e crédito", export_source=f"Fonte: BCB/SGS {', '.join(map(str,selection))} · Valores originais · {data.date.min():%m/%Y}–{data.date.max():%m/%Y} · Coleta: {manifest['as_of']}", width="stretch", theme=None, key="credit_combined",
                             config={"displaylogo": False, "scrollZoom": False})
             st.caption("Valores originais, sem normalização. Eixos com escalas independentes: cruzamentos e inclinações entre unidades diferentes não indicam igualdade de valores. Clique na legenda para ocultar ou reexibir uma série.")
     st.caption(
@@ -642,7 +645,7 @@ elif page == "Comparação em base 100":
             style_chart(fig, height=440)
             fig.update_yaxes(title_text="Índice base 100")
             fig.update_layout(hovermode="x unified")
-            st.plotly_chart(fig, width="stretch", theme=None, key="comparison_base100")
+            exportable_chart(fig, export_title="Evolução relativa · base 100", export_source=f"Fonte: BCB/SGS {', '.join(map(str,selection))} · Base: {base:%m/%Y} · {data.date.min():%m/%Y}–{data.date.max():%m/%Y} · Coleta: {manifest['as_of']}", width="stretch", theme=None, key="comparison_base100")
             st.caption("Índice = valor original ÷ valor no mês-base × 100. 120 significa alta de 20%, não 20 p.p. A normalização não corrige inflação, sazonalidade ou diferenças de conceito. Lacunas permanecem vazias e as séries podem terminar em meses diferentes.")
             if compared.loc[compared.date == base, 'original'].lt(0).any():
                 st.warning("Há denominador negativo no mês-base: a direção do índice se inverte em relação ao valor original.")
@@ -818,8 +821,9 @@ elif page == "Relações e defasagens":
             hovertemplate="X: %{x:,.3f}<br>Y: %{y:,.3f}<extra></extra>",
         )
         st.caption(f"X: {names[xcode]} · Y: {names[ycode]}")
-        st.plotly_chart(
-            fig,
+        exportable_chart(
+            fig, key="relations_scatter", export_title="Relações e defasagens",
+            export_source=f"Fonte: BCB/SGS · X: {xcode} ({labels[xm]}) · Y: {ycode} ({labels[ym]}) · Defasagem de X: {lag} meses · {data.date.min():%m/%Y}–{data.date.max():%m/%Y} · Coleta: {manifest['as_of']}",
             width="stretch",
             theme=None,
             config={"displaylogo": False, "scrollZoom": False},

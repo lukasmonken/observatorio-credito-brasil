@@ -545,3 +545,12 @@ header { padding-right: 46px; }
 @media (max-width: 600px) {
   .external-kpis { grid-template-columns: 1fr; }
 }
+
+.chart-export { margin: 12px 0 24px; }
+.export-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 16px 0; }
+.export-controls label { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.export-controls input, .export-controls select { width: 100%; box-sizing: border-box; }
+.export-controls input[type=color] { min-height: 38px; }
+.export-preview { display: block; max-width: 100%; height: auto; border: 1px solid var(--border, #ddd); margin: 12px 0; }
+.export-preview[hidden], .export-download[hidden] { display: none; }
+.export-download { display: inline-block; padding: 10px 16px; border: 1px solid currentColor; border-radius: 4px; }
