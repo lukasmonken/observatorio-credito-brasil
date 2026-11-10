@@ -608,6 +608,9 @@ test('Panorama inicial, histórico, exportação e atalhos', async ({page}) => {
   await expect(page.locator('main h2')).toHaveText('Panorama Brasil');
   await expect(page.locator('.panorama-kpis .kpi')).toHaveCount(6);
   await expect(page.locator('.panorama-kpis')).toContainText('trimestre');
+  const header = await page.locator('#metadata').innerText();
+  const collection = header.match(/Coleta: (\d{2}\/\d{2}\/\d{4})/)[1];
+  await expect(page.locator('main')).toContainText(`Data-base da coleta: ${collection}`);
   await page.locator('#panorama-code').selectOption('22109');
   await expect(page.locator('.js-plotly-plot')).toHaveCount(1);
   await expect.poll(()=>page.locator('.js-plotly-plot').evaluate(n=>n.data[0].y.some(v=>v!==null))).toBe(true);
