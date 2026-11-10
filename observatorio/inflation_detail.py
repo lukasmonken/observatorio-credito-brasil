@@ -16,10 +16,12 @@ TABLES = {
 }
 GROUPS = "7169,7170,7445,7486,7558,7625,7660,7712,7766,7786"
 COLUMNS = ["date", "location", "category", "monthly", "ytd", "annual", "weight"]
-MISSING = {"...", "..", "-", "X", ""}
+MISSING = {"...", "..", "X", "x", ""}
 
 
 def number(value):
+    if value == "-":
+        return 0.0
     if value in MISSING:
         return None
     result = float(value)
@@ -40,7 +42,8 @@ def category_level(name):
 
 def normalize(table, responses):
     variables = TABLES[table]["variables"]
-    cells, categories, locations = {}, {}, {}
+    cells: dict[tuple, dict[str, float | None]] = {}
+    categories, locations = {}, {}
     for response in responses:
         if not isinstance(response, list) or len(response) < 2:
             raise ValueError("Resposta SIDRA vazia ou inválida")
@@ -105,8 +108,11 @@ def validate(data):
         if row[6] is not None and not 0 <= row[6] <= 100:
             raise ValueError("Peso fora do intervalo")
     general = [r for r in rows if r[1:3] == ["1", "7169"] and r[3] is not None]
-    if len(general) < 12:
+    if len(general) != 24:
         raise ValueError("Histórico nacional insuficiente")
+    months = sorted(int(r[0][:4]) * 12 + int(r[0][5:7]) for r in general)
+    if any(b - a != 1 for a, b in zip(months, months[1:])):
+        raise ValueError("Lacuna no histórico nacional")
     latest = max(r[0] for r in general)
     for loc in data["locations"]:
         if not any(r[0] == latest and r[1] == loc and r[2] == "7169" and r[3] is not None for r in rows):

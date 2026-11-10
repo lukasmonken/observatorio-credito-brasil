@@ -12,7 +12,7 @@ on:
       - '.github/workflows/pages.yml'
   pull_request:
   workflow_run:
-    workflows: ['Atualizar dados do Bacen']
+    workflows: ['Atualizar dados do Bacen', 'Atualizar inflação do IBGE']
     types: [completed]
     branches: [main]
 permissions:

@@ -203,3 +203,25 @@ def test_credit_combined_chart_uses_stable_colors_and_distinct_units():
     app.multiselect[0].set_value([20631, 20714]).run()
     traces = json.loads(app.get("plotly_chart")[0].proto.spec)["data"]
     assert [t["line"]["color"] for t in traces] == separate[1:]
+
+
+def test_inflation_detail_controls():
+    if not (ROOT / 'data/inflation/7060.json').exists():
+        pytest.skip('Detalhamento IBGE ausente')
+    app = AppTest.from_file(str(ROOT / 'dashboard/app.py'), default_timeout=30).run()
+    app.sidebar.radio[0].set_value('Inflação detalhada').run()
+    assert not app.exception
+    app.selectbox(key='inflation_view').set_value('Regiões e subitens · IBGE').run()
+    assert not app.exception
+    def control(label):
+        return next(c for c in app.selectbox if c.label == label)
+    control('Nível de detalhe').set_value(4).run()
+    control('Categoria no histórico').set_value('7173').run()
+    assert not app.exception
+    assert any('Arroz' in x.value for x in app.subheader)
+    for table in ['7063', '7062', '7060']:
+        control('Índice detalhado').set_value(table).run()
+        control('Localidade pesquisada').set_value('3501').run()
+        assert not app.exception
+        assert 'Subitens' not in control('Nível de detalhe').options
+        assert any('Comparação entre localidades' in x.value for x in app.subheader)

@@ -627,3 +627,33 @@ test('Panorama inicial, histórico, exportação e atalhos', async ({page}) => {
   await page.getByRole('link',{name:'Abrir Trabalho e renda',exact:true}).click();
   await expect(page.locator('main h2')).toHaveText('Trabalho e renda');
 });
+
+test('Inflação ampliada: índices, subitens, localidades e CSV oficial', async ({page}) => {
+  const errors = [];
+  page.on('pageerror', e => errors.push(e.message));
+  await page.goto('#inflation');
+  await page.getByLabel('Visão da inflação', {exact:true}).selectOption('detail');
+  await expect(page.getByLabel('Localidade pesquisada', {exact:true})).toBeVisible();
+  await page.getByLabel('Nível de detalhe', {exact:true}).selectOption('4');
+  await expect(page.getByLabel('Categoria no histórico', {exact:true})).toContainText('Arroz');
+  await page.getByLabel('Categoria no histórico', {exact:true}).selectOption('7173');
+  await expect(page.locator('.js-plotly-plot')).toHaveCount(1);
+  const pending = page.waitForEvent('download');
+  await page.getByRole('button',{name:'Baixar histórico detalhado · CSV',exact:true}).click();
+  const downloaded = await pending;
+  const {readFile} = await import('node:fs/promises');
+  const content = await readFile(await downloaded.path(),'utf8');
+  expect(content).toContain('IBGE/SIDRA');
+  expect(content).toContain('Arroz');
+  expect(content).toContain('7060');
+  for (const index of ['7063','7062','7060']) {
+    await page.getByLabel('Índice detalhado',{exact:true}).selectOption(index);
+    await expect(page.getByLabel('Localidade pesquisada',{exact:true})).toBeVisible();
+    await page.getByLabel('Localidade pesquisada',{exact:true}).selectOption('3501');
+    await expect(page.getByLabel('Nível de detalhe',{exact:true})).not.toContainText('Subitens');
+    await expect(page.getByRole('heading',{name:'Comparação entre localidades',exact:true})).toBeVisible();
+  }
+  await page.setViewportSize({width:390,height:844});
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
+  expect(errors).toEqual([]);
+});

@@ -1,3 +1,4 @@
+import { renderInflationDetail } from "./inflation-detail.js";
 import "./style.css";
 import { panoramaRows, referenceLabel } from "./panorama.js";
 import { laborPeriod, laborExport } from "./labor.js";
@@ -823,6 +824,11 @@ function labor() {
 }
 
 function inflation() {
+  main.append(select("inflation-view", "Visão da inflação", [["general", "Índices e grupos nacionais"], ["detail", "Regiões e subitens · IBGE"]], "general"));
+  if (state["inflation-view"] === "detail") {
+    renderInflationDetail(main, {el, select, state, note, message, table, number, month, download, charts}, data.inflation_files);
+    return;
+  }
   const specs = data.catalog.filter(s => s.classification === "Inflação"),
     general = specs.filter(s => s.inflation_group !== "Grupos do IPCA"),
     groups = specs.filter(s => s.inflation_group === "Grupos do IPCA"),

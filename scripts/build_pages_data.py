@@ -14,6 +14,7 @@ from observatorio.excel import METRIC_FORMULAS, METRIC_LABELS
 from observatorio.monitoring import read_status
 from observatorio.revisions import read_history
 from observatorio.snapshot import load_snapshot
+from observatorio.inflation_detail import TABLES, load_detail
 
 
 def build_data(root, output):
@@ -47,11 +48,23 @@ def build_data(root, output):
         "methodology": (root / "docs/metodologia.md").read_text(),
         "built_at": datetime.now(timezone.utc).isoformat(),
     }
+    inflation_files = {}
+    output.mkdir(parents=True, exist_ok=True)
+    for table in TABLES:
+        if not (root / "data/inflation" / f"{table}.json").exists():
+            continue
+        details = load_detail(root, table)
+        encoded = json.dumps(details, ensure_ascii=False, separators=(",", ":"), allow_nan=False).encode()
+        digest = hashlib.sha256(encoded).hexdigest()
+        name = f"inflation-{digest[:16]}.json"
+        (output / name).write_bytes(encoded)
+        inflation_files[table] = {"file": name, "sha256": digest, "name": details["name"]}
+    payload["inflation_files"] = inflation_files
     content = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), allow_nan=False).encode()
     output.mkdir(parents=True, exist_ok=True)
     filename = f"data-{hashlib.sha256(content).hexdigest()[:16]}.json"
     (output / filename).write_bytes(content)
-    (output / "site.json").write_text(json.dumps({"schema_version": 1, "data": filename, "sha256": hashlib.sha256(content).hexdigest(), "snapshot_id": manifest["snapshot_id"]}))
+    (output / "site.json").write_text(json.dumps({"schema_version": 1, "data": filename, "inflation": list(inflation_files.values()), "sha256": hashlib.sha256(content).hexdigest(), "snapshot_id": manifest["snapshot_id"]}))
     return payload
 
 

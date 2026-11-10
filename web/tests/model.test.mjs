@@ -291,3 +291,14 @@ test('Panorama preserva referências distintas, ausências, zeros e déficits', 
   assert.equal(referenceLabel('2026-01-01','rolling'),'Trimestre móvel: 11/2025–01/2026');
   assert.equal(readShare('').page,'panorama');
 });
+
+test('Detalhamento IBGE preserva zeros, negativos, ausências e códigos separados', async () => {
+  const {detailRows} = await import('../src/inflation-detail.js');
+  const rows = detailRows({name:'IPCA',table:'7060',source_url:'https://sidra.ibge.gov.br/tabela/7060',created_at:'2026-11-10T00:00:00Z',categories:{'7173':{name:'1101002.Arroz',level:4}},locations:{'1':{name:'Brasil'}},rows:[['2026-09-01','1','7173',0,-0.5,null,0.8]]});
+  assert.equal(rows[0].monthly,0);
+  assert.equal(rows[0].ytd,-0.5);
+  assert.equal(rows[0].annual,null);
+  assert.equal(rows[0].category,'7173');
+  assert.equal(rows[0].source,'IBGE/SIDRA');
+  assert.equal(rows[0].code,undefined);
+});
