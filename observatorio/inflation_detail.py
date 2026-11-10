@@ -105,6 +105,8 @@ def validate(data):
         keys.add(key)
         if any(v is not None and (not isinstance(v, (float, int)) or not math.isfinite(v)) for v in row[3:]):
             raise ValueError("Valor inválido")
+        if any(v is not None and v <= -100 for v in row[3:6]):
+            raise ValueError("Variação de preços impossível")
         if row[6] is not None and not 0 <= row[6] <= 100:
             raise ValueError("Peso fora do intervalo")
     general = [r for r in rows if r[1:3] == ["1", "7169"] and r[3] is not None]
@@ -132,6 +134,11 @@ def collect(table, session=None):
         raw = response.json()
         responses.append(raw)
     return normalize(table, responses)
+
+
+def location_label(location):
+    suffix = {"6": "Município", "7": "Região metropolitana"}.get(location.get("level"))
+    return location["name"] + (f" · {suffix}" if suffix else "")
 
 
 def load_detail(root: Path, table):

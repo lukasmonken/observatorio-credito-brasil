@@ -1,12 +1,16 @@
 const cache = new Map();
 const labels = {monthly: 'No mês (%)', ytd: 'No ano (%)', annual: 'Em 12 meses (%)', weight: 'Peso na cesta (%)'};
 export const levelLabels = ['Índice geral', 'Grupos', 'Subgrupos', 'Itens', 'Subitens'];
+export function locationLabel(location) {
+  const suffix = {'6':'Município','7':'Região metropolitana'}[location.level];
+  return location.name + (suffix ? ` · ${suffix}` : '');
+}
 export function detailRows(dataset) {
   return dataset.rows.map(([date, location, category, monthly, ytd, annual, weight]) => ({
     date, location, category, monthly, ytd, annual, weight,
     name: dataset.categories[category].name,
     level: dataset.categories[category].level,
-    locality: dataset.locations[location].name,
+    locality: locationLabel(dataset.locations[location]),
     index: dataset.name, table: dataset.table, unit: '%',
     source: 'IBGE/SIDRA', source_url: dataset.source_url, collected_at: dataset.created_at,
   }));
@@ -38,7 +42,7 @@ export async function renderInflationDetail(host, ui, files) {
   const rows = detailRows(dataset);
   target.append(note(`Fonte: IBGE/SIDRA · tabela ${dataset.table} · Coleta: ${new Date(dataset.created_at).toLocaleString('pt-BR', {timeZone:'America/Sao_Paulo'})}. Acumulados publicados pelo IBGE; podem diferir dos cálculos com taxas arredondadas da visão geral.`));
   const filters = el('div', {class:'filters'}); target.append(filters);
-  filters.append(select('ibge-location', 'Localidade pesquisada', Object.entries(dataset.locations).map(([id,l]) => [id, l.name]), '1'));
+  filters.append(select('ibge-location', 'Localidade pesquisada', Object.entries(dataset.locations).map(([id,l]) => [id, locationLabel(l)]), '1'));
   const local = rows.filter(r => r.location === state['ibge-location']);
   const levels = [...new Set(local.map(r => r.level))].sort();
   filters.append(select('ibge-level', 'Nível de detalhe', levels.map(l => [String(l),levelLabels[l]]), '1'));
@@ -57,7 +61,7 @@ export async function renderInflationDetail(host, ui, files) {
   target.append(el('h3', {}, title));
   const chart = el('div', {class:'chart'}); target.append(chart);
   const metric = state['ibge-metric'];
-  charts().then(({drawLines}) => { if(chart.isConnected) drawLines(chart,[{name:history[0].name,unit:'%',metric,rows:history}],['%'],{title,source:`IBGE/SIDRA ${dataset.table} · ${labels[metric]}`,period:`${month(history[0].date)}–${month(history.at(-1).date)}`,asOf:dataset.created_at}); });
+  charts().then(({drawLines}) => { if(chart.isConnected) drawLines(chart,[{name:history[0].name,unit:'%',metric,rows:history,color:"#285c50"}],['%'],{title,source:`IBGE/SIDRA ${dataset.table} · ${labels[metric]}`,period:`${month(history[0].date)}–${month(history.at(-1).date)}`,asOf:dataset.created_at}); });
   target.append(download('Baixar histórico detalhado · CSV',history,'inflacao_historico_detalhado.csv'));
   if (Number(state['ibge-level']) <= 1) {
     const comparison = rows.filter(r => r.category === state['ibge-category'] && r.date === state['ibge-month']);

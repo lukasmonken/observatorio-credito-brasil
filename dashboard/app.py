@@ -17,7 +17,7 @@ from observatorio.chart_export import exportable_chart
 from observatorio.composition import composition_rows
 from observatorio.labor import labor_period, labor_export
 from observatorio.config import ROOT
-from observatorio.inflation_detail import TABLES as INFLATION_TABLES, load_detail
+from observatorio.inflation_detail import TABLES as INFLATION_TABLES, load_detail, location_label
 from observatorio.bulletin import build_bulletin
 from observatorio.excel import METRIC_FORMULAS as formulas, METRIC_LABELS as labels, build_excel
 from observatorio.monitoring import collection_health, read_status, source_freshness
@@ -391,14 +391,14 @@ elif page == "Inflação detalhada":
             records = pd.DataFrame(detail['rows'], columns=detail['columns'])
             records['Categoria'] = records.category.map(lambda c: detail['categories'][c]['name'])
             records['Nível'] = records.category.map(lambda c: detail['categories'][c]['level'])
-            records['Localidade'] = records.location.map(lambda c: detail['locations'][c]['name'])
+            records['Localidade'] = records.location.map(lambda c: location_label(detail['locations'][c]))
             records['Índice'] = detail['name']
             records['Tabela IBGE'] = detail['table']
             records['Unidade'] = '%'
             records['Fonte'] = detail['source_url']
             records['Coleta'] = detail['created_at']
             st.caption(f"IBGE/SIDRA · tabela {selected_table} · Coleta: {detail['created_at']}. Acumulados publicados pelo IBGE; podem diferir dos cálculos da visão geral.")
-            location = st.selectbox('Localidade pesquisada', list(detail['locations']), format_func=lambda l: detail['locations'][l]['name'])
+            location = st.selectbox('Localidade pesquisada', list(detail['locations']), format_func=lambda l: location_label(detail['locations'][l]))
             local = records[records.location == location]
             level_names = ['Índice geral', 'Grupos', 'Subgrupos', 'Itens', 'Subitens']
             levels = sorted(local['Nível'].unique())

@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: '43 22 * * *'
   push:
-    branches: [main, codex/inflacao-ampliada]
+    branches: [main]
     paths:
       - 'observatorio/inflation_detail.py'
       - 'scripts/update_inflation.py'
