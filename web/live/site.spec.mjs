@@ -2,6 +2,11 @@ import {test,expect} from '@playwright/test';
 test('Publicação carrega dados e renderiza gráficos no navegador',async({page})=>{
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto('',{waitUntil:'domcontentloaded'});
+  await expect(page.locator('main h2')).toHaveText('Panorama Brasil');
+  await expect(page.locator('.panorama-kpis .kpi')).toHaveCount(6);
+  await expect(page.locator('.js-plotly-plot')).toHaveCount(1);
+  await expect(page.locator('.scatterlayer .trace').first()).toBeVisible();
+  await page.getByRole('link',{name:'Visão geral',exact:true}).click();
   await expect(page.locator('main h2')).toHaveText('Visão geral');
   await expect(page.locator('main > .kpis > .kpi')).toHaveCount(4);
   await expect(page.locator('.js-plotly-plot')).toHaveCount(2);
