@@ -8,6 +8,7 @@ from observatorio.config import ROOT
 @pytest.mark.parametrize(
     "page",
     [
+        "Panorama Brasil",
         "Visão geral",
         "Juros e crédito",
         "Composição do crédito",
@@ -156,7 +157,7 @@ def test_monitoring_failure_is_visible_without_hiding_snapshot(tmp_path, monkeyp
     app = AppTest.from_file(str(ROOT / "dashboard/app.py"), default_timeout=30).run()
     assert not app.exception
     assert any("última tentativa" in item.value for item in app.warning)
-    assert len(app.get("plotly_chart")) == 2
+    assert len(app.get("plotly_chart")) == 1
     app.sidebar.radio[0].set_value("Fontes e qualidade").run()
     assert not app.exception
     assert any("432" in item.value for item in app.warning)

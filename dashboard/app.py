@@ -24,13 +24,13 @@ from observatorio.revisions import EVENT_LABELS, compare_collections, latest_cha
 from observatorio.snapshot import load_snapshot
 from observatorio.transform import lag_pairs, compare_base100
 
-st.set_page_config(page_title="Observatório de Crédito | Brasil", layout="wide")
+st.set_page_config(page_title="Observatório Econômico | Brasil", layout="wide")
 st.markdown(
     "<style>" + (Path(__file__).with_name("styles.css")).read_text() + "</style>",
     unsafe_allow_html=True,
 )
-st.title("Observatório de Crédito Brasil")
-st.caption("Dados e indicadores do mercado de crédito brasileiro")
+st.title("Observatório Econômico do Brasil")
+st.caption("Dados oficiais para acompanhar a economia brasileira")
 
 ACCENT = "#285c50"
 SERIES_COLORS = [ACCENT, "#526f9d", "#a16b36", "#805b83", "#637445", "#9b5555"]
@@ -103,6 +103,7 @@ except Exception:
 by_code = {s["code"]: s for s in specs}
 names = {s["code"]: s["name"] for s in specs}
 pages = [
+    "Panorama Brasil",
     "Visão geral",
     "Juros e crédito",
     "Composição do crédito",
@@ -119,7 +120,9 @@ pages = [
     "Fontes e qualidade",
 ]
 st.sidebar.markdown("**OBSERVATÓRIO / BRASIL**")
-page = st.sidebar.radio("Navegação", pages)
+if "panorama_destination" in st.session_state:
+    st.session_state["navigation"] = st.session_state.pop("panorama_destination")
+page = st.sidebar.radio("Navegação", pages, key="navigation")
 st.sidebar.divider()
 st.sidebar.caption("FONTES OFICIAIS · BCB / SGS")
 st.sidebar.write(
@@ -264,7 +267,35 @@ def date_filter(data, key):
     return filtered
 
 
-if page == "Visão geral":
+if page == "Panorama Brasil":
+    from observatorio.panorama import panorama_rows, reference_label
+
+    st.caption("Um retrato da economia brasileira com a última referência de cada indicador. As datas diferem e os valores estão sujeitos a revisões.")
+    summary = panorama_rows(df, specs)
+    for offset in range(0, len(summary), 3):
+        for col, item in zip(st.columns(3), summary[offset:offset + 3]):
+            with col, st.container(border=True):
+                value = item["value"]
+                st.metric(item["label"], f"{number(value, 4 if item['code'] == 3698 else 2)} {item['unit']}" if value is not None else "Indisponível")
+                st.caption(reference_label(item["date"], item["period"]))
+                st.caption(item["description"])
+                st.caption(f"{item['source']} · SGS {item['code']}")
+                if item["source_url"]:
+                    st.link_button("Consultar fonte", item["source_url"])
+                if st.button(f"Abrir {item['module']}", key=f"panorama_module_{item['code']}"):
+                    st.session_state["panorama_destination"] = item["module"]
+                    st.rerun()
+    st.caption(f"Coleta validada: {pd.Timestamp(manifest['as_of']):%d/%m/%Y}. Data de coleta e período de referência são informações diferentes.")
+    code = st.selectbox("Indicador do panorama", [r["code"] for r in summary], index=1, format_func=lambda c: next(r["label"] for r in summary if r["code"] == c), key="panorama_code")
+    selected = next(r for r in summary if r["code"] == code)
+    st.caption(selected["description"])
+    chart([code], selected["metric"], title=selected["label"])
+    exported = pd.DataFrame([{"code":r["code"], "indicator":r["label"], "reference":r["date"], "reference_period":reference_label(r["date"], r["period"]), "value":r["value"], "unit":r["unit"], "measure":r["metric"], "description":r["description"], "source":r["source"], "source_url":r["source_url"], "snapshot_id":manifest["snapshot_id"]} for r in summary])
+    st.download_button("Baixar resumo do Panorama Brasil · CSV", build_csv(exported, csv_profile), "panorama-brasil.csv", "text/csv", key="panorama_csv")
+    with st.expander("Como ler o panorama"):
+        st.write("Cada cartão usa a última observação original disponível da série. Se o cálculo dessa referência estiver indisponível, o cartão não recua silenciosamente para um valor antigo. Ausências não são zeros. As unidades e os períodos não devem ser somados ou comparados diretamente.")
+        st.write("O histórico mantém a medida do cartão. Para filtros, outras medidas e Excel, abra o módulo correspondente ou o Explorador de indicadores.")
+elif page == "Visão geral":
     with st.expander("Boletim da coleta"):
         bulletin = build_bulletin(df, specs, manifest, history, history_meta)
         st.markdown(bulletin["markdown"])

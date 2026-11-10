@@ -10,7 +10,7 @@ Este documento distingue funcionalidades planejadas de funcionalidades já dispo
 | 4 | Compartilhamento dos filtros por URL | Disponível |
 | 5 | Boletim automático da coleta, com novas referências, variações e revisões separadas | Implementado |
 | 6 | Instituições financeiras: capital, Basileia e comparação entre instituições | Planejado; adicionado em 05/11/2026 |
-| 7 | Evolução para Observatório Econômico do Brasil, com navegação por módulos e panorama geral de KPIs | Planejado; adicionado em 05/11/2026 |
+| 7 | Evolução para Observatório Econômico do Brasil, com navegação por módulos e panorama geral de KPIs | Panorama Brasil implementado em 10/11/2026; módulos futuros permanecem no backlog |
 | 8 | Crescimento e atividade: PIB, IBC-Br, indústria, comércio e serviços | Implementado: PIB trimestral, oito componentes e quatro indicadores mensais; filtros, comparação anual e exportações |
 | 9 | Setor externo: balança comercial, câmbio, reservas e contas externas | Implementado: seis séries mensais BCB, filtros, acumulados e exportação. Detalhamento Comex Stat por parceiros/produtos permanece planejado. |
 | 10 | Mercado imobiliário e construção: FipeZap, Secovi-SP, INCC, SINAPI e crédito imobiliário | Planejado; acesso às fontes condicionado conforme catálogo |
@@ -53,7 +53,7 @@ Critérios de aceite: título, eixos, legenda, unidades e fonte presentes no arq
 
 ## Direção do produto: Observatório Econômico do Brasil
 
-Solicitação registrada em 05/11/2026. Ampliar o escopo do Observatório para a economia brasileira, preservando o crédito como módulo próprio. A mudança de nome, navegação e páginas ainda não foi implementada.
+Solicitação registrada em 05/11/2026. Ampliar o escopo do Observatório para a economia brasileira, preservando o crédito como módulo próprio. Panorama Brasil implementado em 10/11/2026 como página inicial no site e no Streamlit, com a marca Observatório Econômico do Brasil. A visão anterior de crédito permanece disponível em Visão geral.
 
 Menu proposto:
 
@@ -109,3 +109,7 @@ Preservar valores ausentes como indisponíveis, nunca como zero. Não presumir c
 Validar os requisitos regulatórios por entidade e período antes de oferecer qualquer comparação com mínimos exigidos. Basileia isoladamente não será convertida em selo de segurança ou ranking de solvência.
 
 Critérios de aceite: reconciliar amostras com o IFData oficial; validar unidades, zeros, ausências e duplicidades; testar atualização e revisões; mostrar fonte e perímetro em cada visualização. Este módulo ainda não está implementado.
+
+## Panorama Brasil — implementado
+
+Seis cartões com referências próprias: PIB trimestral com ajuste sazonal (variação trimestral), IPCA em 12 meses, Meta Selic no fim do mês concluído, desocupação no trimestre móvel, dólar médio mensal e saldo mensal de bens do balanço de pagamentos. Inclui histórico selecionável, exportação de imagem, resumo CSV com medida, unidade e fonte, e atalhos aos módulos. Não recua para uma referência anterior quando o cálculo da última observação estiver ausente. Rotas antigas preservadas.

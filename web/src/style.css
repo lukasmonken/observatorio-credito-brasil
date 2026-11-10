@@ -554,3 +554,8 @@ header { padding-right: 46px; }
 .export-preview { display: block; width: 100%; max-width: 100%; box-sizing: border-box; height: auto; border: 1px solid var(--border, #ddd); margin: 12px 0; }
 .export-preview[hidden], .export-download[hidden] { display: none; }
 .export-download { display: inline-block; padding: 10px 16px; border: 1px solid currentColor; border-radius: 4px; }
+
+.panorama-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.panorama-kpis .value { font-size: clamp(1.3rem, 2vw, 2rem); overflow-wrap: anywhere; }
+@media (max-width: 1000px) { .panorama-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .panorama-kpis { grid-template-columns: minmax(0, 1fr); } }

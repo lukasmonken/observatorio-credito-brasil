@@ -59,6 +59,7 @@ def test_overview_matches_published_comparison_and_preserves_charts():
     events, meta = read_history(ROOT / pointer["path"], manifest)
     summary = latest_changes(events, meta)
     app = AppTest.from_file(str(ROOT / "dashboard/app.py"), default_timeout=30).run()
+    app.sidebar.radio[0].set_value("Visão geral").run()
     assert not app.exception
     assert any(expander.label == "O que mudou na última atualização" for expander in app.expander)
     assert len(app.get("plotly_chart")) == 2

@@ -1,0 +1,68 @@
+[
+  {
+    "code": 22109,
+    "label": "PIB · crescimento trimestral",
+    "metric": "qoq_pct",
+    "unit": "%",
+    "period": "quarter",
+    "source": "IBGE / BCB-SGS",
+    "page": "activity",
+    "module": "Crescimento e atividade",
+    "description": "Variação do volume frente ao trimestre anterior, com ajuste sazonal."
+  },
+  {
+    "code": 433,
+    "label": "IPCA · acumulado em 12 meses",
+    "metric": "inflation12",
+    "unit": "%",
+    "period": "month",
+    "source": "IBGE / BCB-SGS",
+    "page": "inflation",
+    "module": "Inflação detalhada",
+    "description": "Variação acumulada por composição das taxas mensais nos últimos 12 meses."
+  },
+  {
+    "code": 432,
+    "label": "Meta Selic",
+    "metric": "original",
+    "unit": "% a.a.",
+    "period": "month",
+    "source": "BCB / SGS",
+    "page": "credit",
+    "module": "Juros e crédito",
+    "description": "Meta no encerramento do último mês concluído; não é uma cotação em tempo real."
+  },
+  {
+    "code": 24369,
+    "label": "Taxa de desocupação",
+    "metric": "original",
+    "unit": "%",
+    "period": "rolling",
+    "source": "IBGE / PNAD Contínua / BCB-SGS",
+    "page": "labor",
+    "module": "Trabalho e renda",
+    "description": "Brasil, trimestre móvel terminado na referência indicada, sem ajuste sazonal."
+  },
+  {
+    "code": 3698,
+    "label": "Dólar comercial · média mensal",
+    "metric": "original",
+    "unit": "R$/US$",
+    "period": "month",
+    "source": "BCB / SGS",
+    "page": "external",
+    "module": "Setor externo e câmbio",
+    "description": "Média do mês em reais por dólar; não representa a cotação de hoje."
+  },
+  {
+    "code": 22707,
+    "label": "Saldo comercial de bens · mês",
+    "metric": "original",
+    "unit": "US$ milhões",
+    "period": "month",
+    "source": "BCB / SGS",
+    "page": "external",
+    "module": "Setor externo e câmbio",
+    "description": "Fluxo mensal de bens do balanço de pagamentos. Valores negativos indicam déficit; não é o acumulado no ano."
+  }
+]
