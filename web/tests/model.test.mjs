@@ -271,3 +271,23 @@ test("Composição exportável preserva dados, unidades e lacunas", async () => 
   const bars=exportFigure(many,{xaxis:{},yaxis:{}},meta,{labels:"all",kind:"bar"});
   assert.equal(bars.data[0].type,"bar");assert.ok(bars.notice);assert.equal(bars.data[0].text.filter(Boolean).length,1);
 });
+
+import { readShare } from '../src/share.js';
+import { panoramaRows, referenceLabel } from '../src/panorama.js';
+test('Panorama preserva referências distintas, ausências, zeros e déficits', () => {
+  const result = panoramaRows([
+    {code:433,date:'2026-08-01',original:0.2,inflation12:4.5},
+    {code:433,date:'2026-09-01',original:0.1,inflation12:null},
+    {code:432,date:'2026-09-01',original:0},
+    {code:22707,date:'2026-08-01',original:-123},
+  ],[]);
+  assert.equal(result.length,6);
+  assert.equal(result.find(r=>r.code===433).date,'2026-09-01');
+  assert.equal(result.find(r=>r.code===433).value,null);
+  assert.equal(result.find(r=>r.code===432).value,0);
+  assert.equal(result.find(r=>r.code===22707).value,-123);
+  assert.equal(result.find(r=>r.code===22109).date,null);
+  assert.equal(referenceLabel('2026-04-01','quarter'),'2º trimestre de 2026');
+  assert.equal(referenceLabel('2026-01-01','rolling'),'Trimestre móvel: 11/2025–01/2026');
+  assert.equal(readShare('').page,'panorama');
+});

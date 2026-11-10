@@ -55,5 +55,7 @@
   "collection_date": "Data da coleta",
   "collected_at": "Coletado em",
   "status": "Situação",
-  "reference": "Referência"
+  "reference": "Referência",
+  "measure": "Medida",
+  "description": "Descrição"
 }

@@ -1,6 +1,7 @@
 // Only public, supported controls are serialized. No arbitrary application state.
 const periods = (prefix) => [prefix + "start", prefix + "end"];
 export const pageKeys = {
+  panorama: ["panorama-code"],
   overview: [],
   activity: ["activity-code", "activity-metric", "activity-quarter", ...periods("activity")],
   external: ["external-code", "external-metric", "external-reference", ...periods("external")],
@@ -34,7 +35,7 @@ function valid(key, value) {
 }
 export function readShare(hash) {
   const [route, query = ""] = hash.replace(/^#/, "").split("?");
-  const page = Object.hasOwn(pageKeys, route) ? route : "overview";
+  const page = Object.hasOwn(pageKeys, route) ? route : (route ? "overview" : "panorama");
   const state = {};
   if (query.length > 16000) return { page, state };
   const params = new URLSearchParams(query);

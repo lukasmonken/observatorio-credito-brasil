@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import ExcelJS from "exceljs";
 const pages = [
+  "panorama",
   "overview",
   "inflation",
   "labor",
@@ -600,4 +601,26 @@ test("Gráfico exporta PNG e SVG com título, fonte, unidades e prévia fiel", a
   await page.setViewportSize({width:390,height:844});
   await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
   await page.screenshot({path:'test-results/chart-export-mobile.png',fullPage:true});
+});
+
+test('Panorama inicial, histórico, exportação e atalhos', async ({page}) => {
+  await page.goto('./');
+  await expect(page.locator('main h2')).toHaveText('Panorama Brasil');
+  await expect(page.locator('.panorama-kpis .kpi')).toHaveCount(6);
+  await expect(page.locator('.panorama-kpis')).toContainText('trimestre');
+  await page.locator('#panorama-code').selectOption('22109');
+  await expect(page.locator('.js-plotly-plot')).toHaveCount(1);
+  await expect.poll(()=>page.locator('.js-plotly-plot').evaluate(n=>n.data[0].y.some(v=>v!==null))).toBe(true);
+  const pending=page.waitForEvent('download');
+  await page.getByRole('button',{name:'Baixar resumo do Panorama Brasil · CSV',exact:true}).click();
+  const file=await pending;
+  const {readFile}=await import('node:fs/promises');
+  const csv=await readFile(await file.path(),'utf8');
+  expect(csv).toContain('PIB · crescimento trimestral');
+  expect(csv).toContain('qoq_pct');
+  expect(csv).toContain('US$ milhões');
+  await page.setViewportSize({width:390,height:844});
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
+  await page.getByRole('link',{name:'Abrir Trabalho e renda',exact:true}).click();
+  await expect(page.locator('main h2')).toHaveText('Trabalho e renda');
 });

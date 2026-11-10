@@ -1,4 +1,5 @@
 import "./style.css";
+import { panoramaRows, referenceLabel } from "./panorama.js";
 import { laborPeriod, laborExport } from "./labor.js";
 import { readShare, shareHash, pageKeys } from "./share.js";
 import {
@@ -20,6 +21,7 @@ import {
   csv,
 } from "./model.js";
 const pages = [
+  ["panorama", "Panorama Brasil"],
   ["overview", "Visão geral"],
   ["credit", "Juros e crédito"],
   ["composition", "Composição do crédito"],
@@ -506,6 +508,27 @@ function collectionBulletin() {
       el("button", {type: "button", onclick: () => save(JSON.stringify(b, null, 2), `boletim-${b.snapshot_id}.json`, "application/json")}, "Baixar boletim completo · JSON")),
     note(`Coleta: ${b.snapshot_id} · Anterior: ${b.previous_snapshot_id || "não disponível"}`));
   main.append(box);
+}
+function panorama() {
+  main.append(note("Um retrato da economia brasileira com a última referência de cada indicador. As datas diferem e os valores estão sujeitos a revisões."));
+  const rows = panoramaRows(data.rows, data.catalog);
+  const cards = el("div", {class:"kpis panorama-kpis"});
+  for (const row of rows) {
+    const card = metric(row.label, finite(row.value) ? `${number(row.value, row.code === 3698 ? 4 : 2)} ${row.unit}` : "Indisponível", referenceLabel(row.date,row.period));
+    card.append(note(row.description), note(`${row.source} · SGS ${row.code}`));
+    if (row.source_url) card.append(link("Consultar fonte",row.source_url));
+    card.append(el("p",{},el("a",{href:`#${row.page}`},`Abrir ${row.module}`)));
+    cards.append(card);
+  }
+  main.append(cards, note(`Coleta validada: ${localTime(data.manifest.as_of)} · Brasília. Data de coleta e período de referência são informações diferentes.`));
+  main.append(el("h3",{},"Evolução dos indicadores"), select("panorama-code","Indicador do panorama",rows.map(r=>[r.code,r.label]),433));
+  const selected = rows.find(r=>r.code === Number(state["panorama-code"]));
+  const history = data.rows.filter(r=>r.code === selected.code);
+  main.append(note(selected.description));
+  chart(main,[selected.code],selected.metric,history,selected.label);
+  main.append(download("Baixar resumo do Panorama Brasil · CSV",rows.map(r=>({code:r.code,indicator:r.label,reference:r.date,reference_period:referenceLabel(r.date,r.period),value:r.value,unit:r.unit,measure:r.metric,description:r.description,source:r.source,source_url:r.source_url,snapshot_id:data.manifest.snapshot_id})),"panorama-brasil.csv"));
+  main.append(details("Como ler o panorama",note("Cada cartão usa a última observação original disponível da série. Se o cálculo dessa referência estiver indisponível, o cartão não recua silenciosamente para um valor antigo. Ausências não são zeros. As unidades e os períodos não devem ser somados ou comparados diretamente."), note("O histórico mantém a medida do cartão e inclui todas as referências da base. Para filtros, outras medidas e Excel, abra o módulo correspondente ou o Explorador de indicadores.")));
+  collectionBulletin();
 }
 function overview() {
   const kpis = el("div", { class: "kpis" });
@@ -1705,6 +1728,7 @@ function render() {
     note("CSV não guarda cores nem larguras de coluna. Para uma planilha formatada e identificadores como texto, baixe Excel no Explorador. Ao importar CSV, defina códigos e identificadores como texto para preservar zeros à esquerda.")));
   try {
     ({
+      panorama,
       overview,
       inflation,
       labor,
