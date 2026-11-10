@@ -56,3 +56,17 @@ def test_monitoring_exports_only_operational_fields(source):
     }))
     result = build_data(source, source / 'output')
     assert result['monitoring'] == {'status': 'success', 'stage': 'snapshot_validado'}
+
+
+def test_ibge_package_is_separate_and_hash_verified(source):
+    from tests.test_inflation_detail import response
+    from observatorio.inflation_detail import normalize, publish
+    publish(source, {'7060': normalize('7060', [response()])})
+    result = build_data(source, source / 'output')
+    descriptor = result['inflation_files']['7060']
+    content = (source / 'output' / descriptor['file']).read_bytes()
+    assert hashlib.sha256(content).hexdigest() == descriptor['sha256']
+    assert json.loads(content)['table'] == '7060'
+    config = json.loads((source / 'output/site.json').read_text())
+    assert config['inflation'] == [descriptor]
+    assert all('location' not in row for row in result['rows'])

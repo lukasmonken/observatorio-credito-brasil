@@ -38,3 +38,8 @@ await writeFile(path.join(dist, ".nojekyll"), "");
 for (const name of ["site.json", config.data])
   await copyFile(path.join(root, "generated", name), path.join(dist, name));
 console.log(`Site gerado: ${dist}`);
+
+for (const item of config.inflation || []) {
+  if (!/^inflation-[a-f0-9]{16}\.json$/.test(item.file)) throw new Error("Arquivo de inflação inválido");
+  await copyFile(path.join(root, "generated", item.file), path.join(dist, item.file));
+}

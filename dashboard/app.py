@@ -17,6 +17,7 @@ from observatorio.chart_export import exportable_chart
 from observatorio.composition import composition_rows
 from observatorio.labor import labor_period, labor_export
 from observatorio.config import ROOT
+from observatorio.inflation_detail import TABLES as INFLATION_TABLES, load_detail, location_label
 from observatorio.bulletin import build_bulletin
 from observatorio.excel import METRIC_FORMULAS as formulas, METRIC_LABELS as labels, build_excel
 from observatorio.monitoring import collection_health, read_status, source_freshness
@@ -34,6 +35,11 @@ st.caption("Dados oficiais para acompanhar a economia brasileira")
 
 ACCENT = "#285c50"
 SERIES_COLORS = [ACCENT, "#526f9d", "#a16b36", "#805b83", "#637445", "#9b5555"]
+
+
+@st.cache_data(ttl=3600, max_entries=6)
+def cached_inflation_detail(table, modified):
+    return load_detail(ROOT, table)
 
 
 def number(value, decimals=2, signed=False):
@@ -367,65 +373,121 @@ elif page == "Visão geral":
         "Leitura conjunta: crescimento real do crédito, custo e atrasos. As séries mostram associações históricas; não estabelecem causalidade."
     )
 elif page == "Inflação detalhada":
-    inflation_specs = [s for s in specs if s['classification'] == 'Inflação']
-    general = [s for s in inflation_specs if s.get('inflation_group') != 'Grupos do IPCA']
-    groups = [s for s in inflation_specs if s.get('inflation_group') == 'Grupos do IPCA']
-    st.caption('Compare índices e acompanhe os nove grupos do IPCA. Cada indicador mantém sua própria referência.')
-    inflation_data = date_filter(df[df.code.isin([s['code'] for s in inflation_specs])], 'inflation_period')
-    measures = [m for m in ['original', 'inflation_ytd', 'inflation12'] if any(m in s['allowed_transforms'] for s in general)]
-    measure = st.selectbox('Medida', measures, format_func=lambda m: 'Variação mensal (%)' if m == 'original' else labels[m])
-    for col, spec in zip(st.columns(len(general)), general):
-        available = inflation_data[(inflation_data.code == spec['code']) & inflation_data.original.notna()]
-        last = available.iloc[-1] if len(available) else None
-        value = last.get(measure) if last is not None else None
-        col.metric(spec.get('short_name', spec['name']), f'{number(value)} %' if pd.notna(value) else '—')
-        col.caption(last.date.strftime('%m/%Y') if last is not None else 'Sem referência no recorte')
-    st.caption('Última referência de cada índice no período. Acumulados ausentes aparecem como —, não como zero.')
-    selected = st.multiselect('Índices para comparar', [s['code'] for s in general], default=[s['code'] for s in general], format_func=lambda c: by_code[c].get('short_name', names[c]))
-
-    def inflation_plot(codes, title):
-        rows = inflation_data[inflation_data.code.isin(codes)]
-        if rows.empty:
-            st.info('Selecione ao menos um indicador com dados no período.')
-            return
-        fig = px.line(rows, x='date', y=measure, color='name', labels={'date': 'Referência', measure: '%', 'name': 'Indicador'}, color_discrete_sequence=SERIES_COLORS)
-        fig.update_traces(connectgaps=False)
-        st.markdown('#### ' + title)
-        exportable_chart(style_chart(fig), export_title=title, export_source=f"Fonte: BCB/SGS {', '.join(map(str,codes))} · {labels[measure]} · {rows.date.min():%m/%Y}–{rows.date.max():%m/%Y} · Coleta: {manifest['as_of']}", width='stretch', key=title)
-
-    inflation_plot(selected, 'Evolução dos índices de inflação')
-    exported = inflation_data[inflation_data.code.isin(selected)].copy()
-    if not exported.empty:
-        exported['source'] = exported.code.map(lambda c: by_code[c]['source'])
-        exported['source_url'] = exported.code.map(lambda c: by_code[c]['source_url'])
-        columns = ['date', 'code', 'name', 'original', *[m for m in ['inflation_ytd', 'inflation12'] if m in exported], 'unit', 'source', 'source_url', 'snapshot_id']
-        st.download_button('Baixar índices · CSV', build_csv(exported[columns], csv_profile), 'inflacao_indices.csv', 'text/csv')
-        with st.expander('Ver dados dos índices'):
-            st.dataframe(exported[columns], hide_index=True)
-    st.markdown('### Grupos do IPCA')
-    st.caption('Variações dos grupos, não contribuições em pontos percentuais. Não some as taxas para reconstruir o IPCA.')
-    group_data = inflation_data[inflation_data.code.isin([s['code'] for s in groups])]
-    months = sorted(group_data.loc[group_data.original.notna(), 'date'].unique(), reverse=True)
-    if len(months):
-        reference = st.selectbox('Referência dos grupos', months, format_func=lambda d: pd.Timestamp(d).strftime('%m/%Y'))
-        records = []
-        for spec in groups:
-            found = group_data[(group_data.code == spec['code']) & (group_data.date == reference)]
-            row = found.iloc[0] if len(found) else {}
-            records.append({'Referência': pd.Timestamp(reference).strftime('%Y-%m-%d'), 'Grupo': spec['modality'], 'No mês (%)': row.get('original'), 'No ano (%)': row.get('inflation_ytd'), 'Em 12 meses (%)': row.get('inflation12'), 'Fonte': spec['source'], 'URL': spec['source_url'], 'Coleta': manifest['snapshot_id']})
-        group_table = pd.DataFrame(records)
-        st.dataframe(group_table.iloc[:, :5], hide_index=True)
-        st.download_button('Baixar grupos · CSV', build_csv(group_table, csv_profile), 'inflacao_grupos.csv', 'text/csv')
-        selected_groups = st.multiselect('Grupos no gráfico', [s['code'] for s in groups], max_selections=6, default=[c for c in [1635, 1636, 1639] if c in by_code], format_func=lambda c: by_code[c]['modality'])
-        inflation_plot(selected_groups, 'Evolução dos grupos selecionados')
+    view = st.selectbox('Visão da inflação', ['Índices e grupos nacionais', 'Regiões e subitens · IBGE'], key='inflation_view')
+    if view == 'Regiões e subitens · IBGE':
+        st.subheader('Regiões e subitens · IBGE')
+        st.caption('Últimas 24 referências publicadas. Brasil: índice geral, grupos, subgrupos, itens e subitens. Localidades pesquisadas: índice geral e grupos. A cobertura não representa todos os municípios ou estados.')
+        available_tables = [t for t in INFLATION_TABLES if (ROOT / 'data/inflation' / f'{t}.json').exists()]
+        if not available_tables:
+            st.info('Detalhamento aguardando uma coleta validada do IBGE.')
+        else:
+            selected_table = st.selectbox('Índice detalhado', available_tables, format_func=lambda t: INFLATION_TABLES[t]['name'])
+            detail_path = ROOT / 'data/inflation' / f'{selected_table}.json'
+            try:
+                detail = cached_inflation_detail(selected_table, detail_path.stat().st_mtime_ns)
+            except (ValueError, OSError, KeyError):
+                st.error('Não foi possível validar o detalhamento da inflação.')
+                st.stop()
+            records = pd.DataFrame(detail['rows'], columns=detail['columns'])
+            records['Categoria'] = records.category.map(lambda c: detail['categories'][c]['name'])
+            records['Nível'] = records.category.map(lambda c: detail['categories'][c]['level'])
+            records['Localidade'] = records.location.map(lambda c: location_label(detail['locations'][c]))
+            records['Índice'] = detail['name']
+            records['Tabela IBGE'] = detail['table']
+            records['Unidade'] = '%'
+            records['Fonte'] = detail['source_url']
+            records['Coleta'] = detail['created_at']
+            st.caption(f"IBGE/SIDRA · tabela {selected_table} · Coleta: {detail['created_at']}. Acumulados publicados pelo IBGE; podem diferir dos cálculos da visão geral.")
+            location = st.selectbox('Localidade pesquisada', list(detail['locations']), format_func=lambda l: location_label(detail['locations'][l]))
+            local = records[records.location == location]
+            level_names = ['Índice geral', 'Grupos', 'Subgrupos', 'Itens', 'Subitens']
+            levels = sorted(local['Nível'].unique())
+            level = st.selectbox('Nível de detalhe', levels, index=levels.index(1) if 1 in levels else 0, format_func=lambda l: level_names[l])
+            selected_rows = local[local['Nível'] == level]
+            category = st.selectbox('Categoria no histórico', list(selected_rows.category.unique()), format_func=lambda c: detail['categories'][c]['name'])
+            months = sorted(selected_rows.date.unique(), reverse=True)
+            reference = st.selectbox('Referência do detalhamento', months, format_func=lambda d: d[5:7] + '/' + d[:4])
+            metric_labels = {'monthly': 'No mês (%)', 'ytd': 'No ano (%)', 'annual': 'Em 12 meses (%)', 'weight': 'Peso na cesta (%)'}
+            metric_key = st.selectbox('Medida do histórico', list(metric_labels), format_func=metric_labels.get)
+            selected_rows = selected_rows[selected_rows.date == reference]
+            st.dataframe(selected_rows[['Categoria', *metric_labels]].rename(columns=metric_labels), hide_index=True)
+            st.download_button('Baixar detalhamento · CSV', build_csv(selected_rows, csv_profile), 'inflacao_detalhamento.csv', 'text/csv')
+            st.caption('Peso é a participação na cesta do índice e da localidade, não contribuição em pontos percentuais. Não some níveis hierárquicos nem taxas. Valores ausentes não são zeros.')
+            history = local[local.category == category].copy()
+            history['date'] = pd.to_datetime(history.date)
+            title = f"{detail['name']} · {detail['categories'][category]['name']} · {detail['locations'][location]['name']}"
+            st.subheader(title)
+            fig = px.line(history, x='date', y=metric_key, labels={'date':'Referência', metric_key:metric_labels[metric_key]}, color_discrete_sequence=SERIES_COLORS)
+            fig.update_traces(connectgaps=False)
+            exportable_chart(style_chart(fig), export_title=title, export_source=f"IBGE/SIDRA {selected_table} · {metric_labels[metric_key]} · Coleta: {detail['created_at']}", width='stretch', key='ibge_detail_chart')
+            st.download_button('Baixar histórico detalhado · CSV', build_csv(history, csv_profile), 'inflacao_historico_detalhado.csv', 'text/csv')
+            if level <= 1:
+                comparison = records[(records.category == category) & (records.date == reference)]
+                st.subheader('Comparação entre localidades')
+                st.dataframe(comparison[['Localidade', *metric_labels]].rename(columns=metric_labels), hide_index=True)
+                st.download_button('Baixar comparação regional · CSV', build_csv(comparison, csv_profile), 'inflacao_regional.csv', 'text/csv')
+            st.caption('IPCA, INPC e IPCA-15 têm populações, cestas e janelas de coleta distintas. Esta visão preserva as medidas oficiais de cada tabela.')
+            st.link_button('Consultar tabela oficial no SIDRA', detail['source_url'])
     else:
-        st.info('Sem dados dos grupos neste período ou catálogo ainda não atualizado.')
-    with st.expander('Fontes e como interpretar'):
-        st.write('IBGE: IPCA, IPCA-15, INPC e grupos. FGV IBRE: IGP-M e INCC-M. Distribuição: BCB/SGS.')
-        st.write('IPCA-15 possui janela e cobertura próprias. INCC-M mede custos de construção e não equivale a INCC-DI ou INCC-10.')
-        st.write('Acumulados compostos antes do filtro: janeiro até a referência, ou doze meses consecutivos. Exigem todos os meses; lacunas permanecem ausentes. Arredondamentos podem gerar diferenças frente ao acumulado oficial.')
-        for spec in inflation_specs:
-            st.markdown(f"[{spec.get('short_name', spec['name'])}]({spec['source_url']})")
+        inflation_specs = [s for s in specs if s['classification'] == 'Inflação']
+        general = [s for s in inflation_specs if s.get('inflation_group') != 'Grupos do IPCA']
+        groups = [s for s in inflation_specs if s.get('inflation_group') == 'Grupos do IPCA']
+        st.caption('Compare índices e acompanhe os nove grupos do IPCA. Cada indicador mantém sua própria referência.')
+        inflation_data = date_filter(df[df.code.isin([s['code'] for s in inflation_specs])], 'inflation_period')
+        measures = [m for m in ['original', 'inflation_ytd', 'inflation12'] if any(m in s['allowed_transforms'] for s in general)]
+        measure = st.selectbox('Medida', measures, format_func=lambda m: 'Variação mensal (%)' if m == 'original' else labels[m])
+        for col, spec in zip(st.columns(len(general)), general):
+            available = inflation_data[(inflation_data.code == spec['code']) & inflation_data.original.notna()]
+            last = available.iloc[-1] if len(available) else None
+            value = last.get(measure) if last is not None else None
+            col.metric(spec.get('short_name', spec['name']), f'{number(value)} %' if pd.notna(value) else '—')
+            col.caption(last.date.strftime('%m/%Y') if last is not None else 'Sem referência no recorte')
+        st.caption('Última referência de cada índice no período. Acumulados ausentes aparecem como —, não como zero.')
+        selected = st.multiselect('Índices para comparar', [s['code'] for s in general], default=[s['code'] for s in general], format_func=lambda c: by_code[c].get('short_name', names[c]))
+
+        def inflation_plot(codes, title):
+            rows = inflation_data[inflation_data.code.isin(codes)]
+            if rows.empty:
+                st.info('Selecione ao menos um indicador com dados no período.')
+                return
+            fig = px.line(rows, x='date', y=measure, color='name', labels={'date': 'Referência', measure: '%', 'name': 'Indicador'}, color_discrete_sequence=SERIES_COLORS)
+            fig.update_traces(connectgaps=False)
+            st.markdown('#### ' + title)
+            exportable_chart(style_chart(fig), export_title=title, export_source=f"Fonte: BCB/SGS {', '.join(map(str,codes))} · {labels[measure]} · {rows.date.min():%m/%Y}–{rows.date.max():%m/%Y} · Coleta: {manifest['as_of']}", width='stretch', key=title)
+
+        inflation_plot(selected, 'Evolução dos índices de inflação')
+        exported = inflation_data[inflation_data.code.isin(selected)].copy()
+        if not exported.empty:
+            exported['source'] = exported.code.map(lambda c: by_code[c]['source'])
+            exported['source_url'] = exported.code.map(lambda c: by_code[c]['source_url'])
+            columns = ['date', 'code', 'name', 'original', *[m for m in ['inflation_ytd', 'inflation12'] if m in exported], 'unit', 'source', 'source_url', 'snapshot_id']
+            st.download_button('Baixar índices · CSV', build_csv(exported[columns], csv_profile), 'inflacao_indices.csv', 'text/csv')
+            with st.expander('Ver dados dos índices'):
+                st.dataframe(exported[columns], hide_index=True)
+        st.markdown('### Grupos do IPCA')
+        st.caption('Variações dos grupos, não contribuições em pontos percentuais. Não some as taxas para reconstruir o IPCA.')
+        group_data = inflation_data[inflation_data.code.isin([s['code'] for s in groups])]
+        months = sorted(group_data.loc[group_data.original.notna(), 'date'].unique(), reverse=True)
+        if len(months):
+            reference = st.selectbox('Referência dos grupos', months, format_func=lambda d: pd.Timestamp(d).strftime('%m/%Y'))
+            records = []
+            for spec in groups:
+                found = group_data[(group_data.code == spec['code']) & (group_data.date == reference)]
+                row = found.iloc[0] if len(found) else {}
+                records.append({'Referência': pd.Timestamp(reference).strftime('%Y-%m-%d'), 'Grupo': spec['modality'], 'No mês (%)': row.get('original'), 'No ano (%)': row.get('inflation_ytd'), 'Em 12 meses (%)': row.get('inflation12'), 'Fonte': spec['source'], 'URL': spec['source_url'], 'Coleta': manifest['snapshot_id']})
+            group_table = pd.DataFrame(records)
+            st.dataframe(group_table.iloc[:, :5], hide_index=True)
+            st.download_button('Baixar grupos · CSV', build_csv(group_table, csv_profile), 'inflacao_grupos.csv', 'text/csv')
+            selected_groups = st.multiselect('Grupos no gráfico', [s['code'] for s in groups], max_selections=6, default=[c for c in [1635, 1636, 1639] if c in by_code], format_func=lambda c: by_code[c]['modality'])
+            inflation_plot(selected_groups, 'Evolução dos grupos selecionados')
+        else:
+            st.info('Sem dados dos grupos neste período ou catálogo ainda não atualizado.')
+        with st.expander('Fontes e como interpretar'):
+            st.write('IBGE: IPCA, IPCA-15, INPC e grupos. FGV IBRE: IGP-M e INCC-M. Distribuição: BCB/SGS.')
+            st.write('IPCA-15 possui janela e cobertura próprias. INCC-M mede custos de construção e não equivale a INCC-DI ou INCC-10.')
+            st.write('Acumulados compostos antes do filtro: janeiro até a referência, ou doze meses consecutivos. Exigem todos os meses; lacunas permanecem ausentes. Arredondamentos podem gerar diferenças frente ao acumulado oficial.')
+            for spec in inflation_specs:
+                st.markdown(f"[{spec.get('short_name', spec['name'])}]({spec['source_url']})")
 
 elif page == "Crescimento e atividade":
     st.caption("Brasil · PIB trimestral do IBGE e indicadores mensais. IBC-Br não substitui o PIB. Índices medem volume, não valores em reais.")

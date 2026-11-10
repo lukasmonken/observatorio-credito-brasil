@@ -51,3 +51,37 @@ As respostas JSON das 37 séries do catálogo ampliado foram coletadas em homolo
 Cobertura nacional. Não inclui ainda subitens, pesos/contribuições, recortes regionais ou outras variantes do INCC. IPCA-15 tem janela e cobertura próprias; não equivale aos primeiros quinze dias do IPCA. INCC-M mede custos de construção, não preços de venda de imóveis. Mudanças de metodologia, cesta e ponderações exigem cuidado na leitura histórica.
 
 A coleta diária consulta a fonte, mas a frequência das observações continua mensal. A inclusão de séries novas aparece no histórico como série incluída, sem ser confundida com nova referência mensal ou revisão.
+
+## Regiões e subitens — IBGE
+
+Na página **Inflação detalhada**, escolha **Visão da inflação → Regiões e subitens · IBGE**.
+
+- IPCA: [SIDRA 7060](https://sidra.ibge.gov.br/tabela/7060).
+- INPC: [SIDRA 7063](https://sidra.ibge.gov.br/tabela/7063).
+- IPCA-15: [SIDRA 7062](https://sidra.ibge.gov.br/tabela/7062).
+
+A ampliação conserva as últimas 24 referências mensais de cada tabela. Para Brasil,
+abrange toda a hierarquia oficial; para as localidades pesquisadas, o índice geral
+e os nove grupos. Municípios e regiões metropolitanas são recortes da pesquisa,
+não séries para todas as UFs ou cidades. Subitens regionais e histórico anterior
+à janela de 24 meses não fazem parte desta entrega.
+
+Variação mensal, acumulado no ano, acumulado em 12 meses e peso vêm diretamente
+do SIDRA. Não recalculamos os acumulados a partir das taxas arredondadas. Pesos
+representam participação na cesta de cada índice/localidade, não contribuição em
+pontos percentuais. Não se somam taxas, níveis hierárquicos ou pesos de regiões.
+Os índices têm populações e janelas de coleta próprias.
+
+As convenções do IBGE são preservadas: `-` significa zero absoluto; `..`, `...` e
+`X`/`x` são ausências. Negativos e zero numérico permanecem valores válidos.
+Os códigos de tabela, categoria e localidade são separados dos códigos SGS.
+
+A coleta diária usa `scripts/update_inflation.py`, valida as três tabelas antes
+da publicação e conserva a última coleta em caso de falha. A interface informa
+a data de coleta específica, distinta do snapshot SGS. A publicação empacota
+arquivos separados com hash SHA-256, carregados apenas ao abrir o detalhamento.
+CSV inclui índice, localidade, categoria, unidade, tabela, fonte e data de coleta.
+
+INCC-M continua na visão nacional. INCC-DI e INCC-10 não foram adicionados:
+dependem de validação específica de acesso ao histórico e condições da FGV;
+não devem ser substituídos por séries de janela diferente.
