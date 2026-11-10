@@ -50,8 +50,12 @@ def normalize(table, responses):
             if len(matches) != 1:
                 raise ValueError(f"Dimensão ausente: {label}")
             return matches[0]
-        locality, variable, period = dimension("Brasil, Município e Região Metropolitana"), dimension("Variável"), dimension("Mês")
+        variable, period = dimension("Variável"), dimension("Mês")
         category = dimension("Geral, grupo, subgrupo, item e subitem")
+        geographic = [k[:-1] for k in header if re.fullmatch(r"D\d+N", k) and k[:-1] not in {variable, period, category}]
+        if len(geographic) != 1:
+            raise ValueError("Dimensão geográfica ambígua")
+        locality = geographic[0]
         for item in response[1:]:
             var = item[variable + "C"]
             if var not in variables or item["MN"] != "%":
@@ -120,11 +124,6 @@ def collect(table, session=None):
         response = session.get(url, timeout=(15, 90))
         response.raise_for_status()
         raw = response.json()
-        # SIDRA changes the geographic dimension label according to the request.
-        if isinstance(raw, list) and raw:
-            for key, value in list(raw[0].items()):
-                if key.startswith("D") and key.endswith("N") and value in {"Brasil", "Município", "Região Metropolitana", "Município e Região Metropolitana"}:
-                    raw[0][key] = "Brasil, Município e Região Metropolitana"
         responses.append(raw)
     return normalize(table, responses)
 
