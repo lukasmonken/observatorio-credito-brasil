@@ -1,0 +1,29 @@
+name: Homologar fontes de inflacao
+on:
+  push:
+    branches: [codex/inflacao-ampliada]
+    paths: [.github/workflows/probe-inflation.yml]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.14'
+      - run: |
+          python - <<'PY'
+          import urllib.request, json
+          for table in ['7060','7063','7062']:
+              base='https://servicodados.ibge.gov.br/api/v3/agregados/'+table
+              for suffix in ['/metadados','/periodos','/localidades/N1|N6|N7']:
+                  try:
+                      with urllib.request.urlopen(base+suffix, timeout=45) as r: data=json.load(r)
+                      if suffix=='/metadados':
+                          print('METADATA',table,json.dumps(data,ensure_ascii=False))
+                      elif suffix=='/periodos': print('PERIODS',table,json.dumps(data[-3:],ensure_ascii=False))
+                      else: print('LOCATIONS',table,json.dumps(data,ensure_ascii=False))
+                  except Exception as e: print('ERROR',table,suffix,str(e))
+          PY
