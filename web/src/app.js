@@ -130,6 +130,7 @@ function select(key, label, options, initial) {
   if (!values.includes(String(state[key]))) state[key] = values[0];
   const input = el("select", {
     id: key,
+    "aria-label": label,
     onchange: (e) => {
       state[key] = e.target.value;
       render();
