@@ -1,3 +1,4 @@
+import { attachExport } from "./chart-export.js";
 import Plotly from "plotly.js-basic-dist-min";
 import { finite } from "./model.js";
 function chartLayout() {
@@ -25,7 +26,7 @@ function themeColor(color) {
   if (document.documentElement.dataset.theme !== "dark" || !/^#[0-9a-f]{6}$/i.test(color)) return color;
   return "#" + color.slice(1).match(/../g).map((v) => Math.round(parseInt(v, 16) * .6 + 255 * .4).toString(16).padStart(2, "0")).join("");
 }
-export async function drawLines(node, series, units) {
+export async function drawLines(node, series, units, meta = {}) {
   if (!node.isConnected) return;
   const layout = chartLayout();
   if (!series.some((s) => s.rows.some((r) => finite(r[s.metric])))) {
@@ -66,10 +67,11 @@ export async function drawLines(node, series, units) {
           }
         : {}),
     },
-    { responsive: true, displaylogo: false, scrollZoom: false },
+    { responsive: true, modeBarButtonsToRemove: ["toImage"], displaylogo: false, scrollZoom: false },
   );
+  attachExport(Plotly, node, node.data, node.layout, meta);
 }
-export async function drawScatter(node, pairs, xunit, yunit) {
+export async function drawScatter(node, pairs, xunit, yunit, meta = {}) {
   if (!node.isConnected) return;
   const layout = chartLayout();
   node.replaceChildren();
@@ -98,8 +100,9 @@ export async function drawScatter(node, pairs, xunit, yunit) {
       },
       yaxis: { ...layout.yaxis, title: { text: "Y · " + yunit } },
     },
-    { responsive: true, displaylogo: false },
+    { responsive: true, modeBarButtonsToRemove: ["toImage"], displaylogo: false },
   );
+  attachExport(Plotly, node, node.data, node.layout, {...meta, scatter:true});
 }
 export function dispose(node) {
   if (node.classList.contains("js-plotly-plot")) Plotly.purge(node);

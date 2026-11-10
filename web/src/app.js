@@ -465,7 +465,7 @@ function chart(
   );
   parent.append(box);
   charts()
-    .then((c) => c.drawLines(plot, selected, units))
+    .then((c) => c.drawLines(plot, selected, units, {title:title || specs.map(s=>s.short_name||s.name).join(" · "), source:`Fonte: BCB/SGS ${codes.join(", ")} · ${data.labels[metricName]}`, period:chartDates.length ? month(chartDates[0])+"–"+month(chartDates.at(-1)) : "", asOf:data.manifest.as_of}))
     .catch((error) => {
       console.error(error);
       if (plot.isConnected)
@@ -683,7 +683,7 @@ function composition() {
   if (selected.length) {
     const box = el("section",{class:"chart-wrap"},el("h3",{},"Evolução das modalidades — " + segment)), plot = el("div",{class:"chart","aria-label":"Evolução das modalidades"});
     box.append(plot,note("Fonte: BCB/SGS · " + units[0])); main.append(box);
-    charts().then(c=>c.drawLines(plot,specs.filter(s=>selected.includes(s.code)).map(s=>({name:s.modality,metric:measure,unit:units[0],rows:rows.filter(r=>r.code===s.code),color:colors[specs.indexOf(s)%colors.length]})),units)).catch(()=>{if(plot.isConnected) plot.textContent="Não foi possível carregar o gráfico.";});
+    charts().then(c=>c.drawLines(plot,specs.filter(s=>selected.includes(s.code)).map(s=>({name:s.modality,metric:measure,unit:units[0],rows:rows.filter(r=>r.code===s.code),color:colors[specs.indexOf(s)%colors.length]})),units,{title:"Evolução das modalidades — "+segment,source:"Fonte: BCB/SGS · "+specs.filter(s=>selected.includes(s.code)).map(s=>s.code).join(", "),period:month(rows[0].date)+"–"+month(rows.at(-1).date),asOf:data.manifest.as_of})).catch(()=>{if(plot.isConnected) plot.textContent="Não foi possível carregar o gráfico.";});
   } else main.append(message("Selecione uma modalidade para exibir o histórico."));
   const exported = rows.map(r=>({...r,unit:"R$ milhões",snapshot_id:data.manifest.snapshot_id}));
   main.append(download("Baixar modalidades · CSV",exported,"composicao-credito-"+segment+".csv"));
@@ -1150,6 +1150,7 @@ function relations() {
             state["relation-ym"],
             data.manifest,
           ),
+          {title:"Relações e defasagens", source:`Fonte: BCB/SGS · X: ${state["relation-x"]} (${data.labels[state["relation-xm"]]}) · Y: ${state["relation-y"]} (${data.labels[state["relation-ym"]]}) · Defasagem de X: ${state.lag} meses`, period:month(pairs[0].date)+"–"+month(pairs.at(-1).date),asOf:data.manifest.as_of},
         ),
       )
       .catch(() => {

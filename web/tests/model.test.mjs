@@ -256,3 +256,18 @@ test("CSV em português preserva precisão, separadores e protege texto", () => 
   assert.throws(() => csv([{value:Infinity}]), /não finito/);
   assert.throws(() => csv(rows, undefined, "invalid"), /Perfil/);
 });
+
+test("Composição exportável preserva dados, unidades e lacunas", async () => {
+  const {exportFigure} = await import("../src/chart-export.js");
+  const traces=[{name:"Série A",type:"scatter",mode:"lines",x:["2026-01-01","2026-02-01","2026-03-01"],y:[0,null,-1.25],yaxis:"y2",line:{color:"#285c50"}}];
+  const original=structuredClone(traces);
+  const meta={title:"Teste",source:"Fonte: BCB/SGS 432",period:"01/2026–03/2026",asOf:"2026-11-09"};
+  const result=exportFigure(traces,{xaxis:{},yaxis:{title:{text:"R$ milhões"}},yaxis2:{title:{text:"%"},overlaying:"y",side:"right"}},meta,{title:"Teste <script>",subtitle:"Ação & crédito",labels:"last",colors:["#abcdef"]});
+  assert.deepEqual(traces,original);assert.deepEqual(result.data[0].y,[0,null,-1.25]);assert.equal(result.data[0].yaxis,"y2");
+  assert.equal(result.layout.yaxis2.title.text,"%");assert.equal(result.data[0].connectgaps,false);
+  assert.deepEqual(result.data[0].text,["","","-1,25"]);assert.match(result.layout.title.text,/&lt;script&gt;/);
+  assert.match(result.layout.annotations[0].text,/Fonte: BCB/);
+  const many=[{...traces[0],x:Array.from({length:70},(_,i)=>i),y:Array.from({length:70},(_,i)=>i)}];
+  const bars=exportFigure(many,{xaxis:{},yaxis:{}},meta,{labels:"all",kind:"bar"});
+  assert.equal(bars.data[0].type,"bar");assert.ok(bars.notice);assert.equal(bars.data[0].text.filter(Boolean).length,1);
+});
