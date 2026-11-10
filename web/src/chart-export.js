@@ -41,7 +41,7 @@ export function exportFigure(traces, layout, meta, options = {}) {
     xaxis:axis(layout.xaxis),yaxis:axis(layout.yaxis),
     annotations:[{text:wrap(footer,100),xref:"paper",yref:"paper",x:0,y:0,yshift:-95,xanchor:"left",yanchor:"top",showarrow:false,align:"left",font:{size:11,color:fg}}],
   };
-  if (layout.yaxis2) { result.yaxis2 = axis(layout.yaxis2); result.margin.r = 380; }
+  if (layout.yaxis2) { result.yaxis2 = axis(layout.yaxis2); result.margin.r = 410; result.legend.x = 1.18; }
   return {data:cloned,layout:result,notice: options.labels === "all" && points > 60 ? "Para evitar sobreposição em mais de 60 pontos, os rótulos aparecem apenas no último valor de cada série." : ""};
 }
 

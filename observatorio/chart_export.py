@@ -54,8 +54,8 @@ def prepare_figure(figure, title, source, options=None):
     fig.update_layout(template='none', width=width, height=height, autosize=False,
                       title=dict(text=wrapped(options.get('title') or title, 65)+(('<br><sup>'+wrapped(subtitle,80)+'</sup>') if subtitle else ''),x=0.04,y=0.97,xanchor='left',yanchor='top',font=dict(size=size+6)),
                       font=dict(family='Arial, sans-serif',size=size,color=fg),paper_bgcolor=bg,plot_bgcolor=bg,
-                      margin=dict(l=90,r=380 if 'yaxis2' in fig.layout else 330,t=170,b=140),showlegend=True,separators=',.',
-                      barmode='group',legend=dict(orientation='v',x=1.03,y=1,xanchor='left',yanchor='top',font=dict(size=12)),
+                      margin=dict(l=90,r=410 if 'yaxis2' in fig.layout else 330,t=170,b=140),showlegend=True,separators=',.',
+                      barmode='group',legend=dict(orientation='v',x=1.18 if 'yaxis2' in fig.layout else 1.03,y=1,xanchor='left',yanchor='top',font=dict(size=12)),
                       annotations=[dict(text=wrapped(source,100),xref='paper',yref='paper',x=0,y=0,yshift=-95,xanchor='left',yanchor='top',showarrow=False,align='left',font=dict(size=11))])
     fig.update_xaxes(autorange=True,range=None,showticklabels=True,automargin=True,gridcolor='#333' if dark else '#e5e5e5')
     fig.update_yaxes(autorange=True,range=None,showticklabels=True,automargin=True,gridcolor='#333' if dark else '#e5e5e5')

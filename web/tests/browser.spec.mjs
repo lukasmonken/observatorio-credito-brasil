@@ -598,6 +598,6 @@ test("Gráfico exporta PNG e SVG com título, fonte, unidades e prévia fiel", a
   expect(svg).toContain('rgb(18, 52, 86)');expect(svg).toContain('width="1200"');
   await page.screenshot({path:'test-results/chart-export-desktop.png',fullPage:true});
   await page.setViewportSize({width:390,height:844});
-  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
   await page.screenshot({path:'test-results/chart-export-mobile.png',fullPage:true});
 });
