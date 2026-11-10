@@ -520,7 +520,7 @@ function panorama() {
     card.append(el("p",{},el("a",{href:`#${row.page}`},`Abrir ${row.module}`)));
     cards.append(card);
   }
-  main.append(cards, note(`Coleta validada: ${localTime(data.manifest.as_of)} · Brasília. Data de coleta e período de referência são informações diferentes.`));
+  main.append(cards, note(`Data-base da coleta: ${data.manifest.as_of.slice(0,10).split("-").reverse().join("/")}. Data de coleta e período de referência são informações diferentes.`));
   main.append(el("h3",{},"Evolução dos indicadores"), select("panorama-code","Indicador do panorama",rows.map(r=>[r.code,r.label]),433));
   const selected = rows.find(r=>r.code === Number(state["panorama-code"]));
   const history = data.rows.filter(r=>r.code === selected.code);
