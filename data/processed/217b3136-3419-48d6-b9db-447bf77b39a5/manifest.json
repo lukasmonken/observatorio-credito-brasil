@@ -1,0 +1,501 @@
+{
+  "snapshot_id": "217b3136-3419-48d6-b9db-447bf77b39a5",
+  "created_at": "2026-11-11T02:01:23.289731+00:00",
+  "as_of": "2026-11-10",
+  "price_base_month": "2026-09-01",
+  "rows": 11791,
+  "series": 67,
+  "summary": {
+    "results": [
+      {
+        "code": 20539,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20540,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20541,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20631,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20632,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20633,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20714,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20715,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20716,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20740,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20741,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20742,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20743,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20783,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20784,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20785,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 21082,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 21083,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 21084,
+        "status": "success",
+        "rows": 187,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 24364,
+        "status": "success",
+        "rows": 200,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 29034,
+        "status": "success",
+        "rows": 200,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 29037,
+        "status": "success",
+        "rows": 200,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 432,
+        "status": "success",
+        "rows": 6158,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 433,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 188,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 189,
+        "status": "success",
+        "rows": 202,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 7478,
+        "status": "success",
+        "rows": 202,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 7456,
+        "status": "success",
+        "rows": 202,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 1635,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 1636,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 1637,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 1638,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 1639,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 1640,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 1641,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 1642,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 1643,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20579,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20581,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20612,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20609,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20550,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20553,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 20544,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 24369,
+        "status": "success",
+        "rows": 175,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 24379,
+        "status": "success",
+        "rows": 175,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 24380,
+        "status": "success",
+        "rows": 175,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 24382,
+        "status": "success",
+        "rows": 175,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 3698,
+        "status": "success",
+        "rows": 202,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 3546,
+        "status": "success",
+        "rows": 202,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22708,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22709,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22707,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22701,
+        "status": "success",
+        "rows": 201,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 21859,
+        "status": "success",
+        "rows": 200,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 1455,
+        "status": "success",
+        "rows": 200,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 23982,
+        "status": "success",
+        "rows": 188,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22099,
+        "status": "success",
+        "rows": 66,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22109,
+        "status": "success",
+        "rows": 66,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22083,
+        "status": "success",
+        "rows": 66,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22084,
+        "status": "success",
+        "rows": 66,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22089,
+        "status": "success",
+        "rows": 66,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22100,
+        "status": "success",
+        "rows": 66,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22101,
+        "status": "success",
+        "rows": 66,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22102,
+        "status": "success",
+        "rows": 66,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22103,
+        "status": "success",
+        "rows": 66,
+        "revisions": 0,
+        "start": "2010-01-01"
+      },
+      {
+        "code": 22104,
+        "status": "success",
+        "rows": 66,
+        "revisions": 0,
+        "start": "2010-01-01"
+      }
+    ],
+    "source_replay": null,
+    "start": "2010-01-01",
+    "end": "2026-11-10",
+    "requery_months": 18,
+    "status": "success",
+    "successes": 67,
+    "failures": 0,
+    "requested_series": 67,
+    "catalog_series": 67
+  },
+  "files": {
+    "analytics.csv": "c3f858971f81328cf93a03607e3e256a2964488256da1e85d2038d21212658a9",
+    "latest.csv": "a4a88c8ccc6899cc736378380eb830956531c4e6029397d09413e1f01441281e",
+    "quality.csv": "1ff02d61feb98718b86e8248902cb124a4d0689c0d7081db1cc49155d60b6483",
+    "coverage.csv": "96200de90eaa5b5db6744f9788a2a87e7b5a8418e6704737bc2bd052ed9fd243",
+    "catalog.csv": "bbf1a38810f5d1762c7a7b3502059cdaab399ca08b5c745717cae8566bc5bd21",
+    "catalog.json": "698d384462c02870f1b2f1fcf00336734b54626839721ece0130d37f054b4812",
+    "revision_history.csv": "7031f18ef668e1cf7f18beb84c986f2740b2f73ded4a861445c777ef3e4494bb",
+    "revision_history.json": "bd00da0b8b016cdad896f0c59b925b9e5fd487e7a27897462446cea965b1322e"
+  },
+  "revision_history_version": 1
+}
