@@ -3,6 +3,8 @@ import json
 from pathlib import Path
 import shutil
 
+import pyarrow as pa
+import pyarrow.parquet as pq
 import pytest
 
 from scripts.build_pages_data import build_data
@@ -31,7 +33,26 @@ def test_public_package_preserves_values_and_integrity(source):
     assert any(row['original'] == 0 for row in result['rows'])
     assert any(row.get('diff_pp') is None for row in result['rows'])
     assert 'NaN' not in content.decode()
-    assert set(p.name for p in (source / 'output').iterdir()) == {'site.json', config['data']}
+    assert set(p.name for p in (source / 'output').iterdir()) == {'site.json', config['data'], config['parquet']['file']}
+
+
+def test_public_parquet_matches_json(source):
+    output = source / "output"
+    payload = build_data(source, output)
+    config = json.loads((output / "site.json").read_text())
+    descriptor = config["parquet"]
+    assert descriptor == payload["parquet"]
+    path = output / descriptor["file"]
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == descriptor["sha256"]
+    table = pq.read_table(path)
+    assert table.schema.metadata[b"snapshot_id"].decode() == config["snapshot_id"]
+    assert table.schema.field("date").type == pa.date32()
+    catalog = {s["code"]: s for s in payload["catalog"]}
+    for row, expected in zip(table.to_pylist(), payload["rows"], strict=True):
+        for key in ("name", "source", "unit", "frequency", "source_url"):
+            assert row.pop(key) == catalog[row["code"]][key]
+        row["date"] = row["date"].isoformat()
+        assert row == expected
 
 
 def test_corrupt_snapshot_cannot_be_published(source):
