@@ -19,12 +19,12 @@ class TransientAPIError(APIError):
     pass
 
 
-def windows(start: date, end: date):
+def windows(start: date, end: date, years: int = 5):
     if start > end:
         raise ValueError("Início posterior ao fim")
     cursor = start
     while cursor <= end:
-        stop = min(end, date(cursor.year + 4, 12, 31))
+        stop = min(end, date(cursor.year + years - 1, 12, 31))
         yield cursor, stop
         cursor = stop + timedelta(days=1)
 
@@ -53,9 +53,12 @@ class SGSClient:
         if not isinstance(code, int) or code <= 0 or start > end:
             raise ValueError("Código SGS ou intervalo inválido")
         all_rows = []
-        for a, b in (
-            [(start, end)] if code in self.monthly_codes else windows(start, end)
-        ):
+        if code in self.monthly_codes:
+            intervals = [(start, end)]
+        else:
+            # Smaller daily Selic responses avoid large historical requests.
+            intervals = windows(start, end, years=1 if code == 432 else 5)
+        for a, b in intervals:
             params = {
                 "formato": "json",
                 "dataInicial": a.strftime("%d/%m/%Y"),
