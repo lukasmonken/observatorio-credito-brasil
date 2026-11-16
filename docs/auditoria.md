@@ -135,7 +135,7 @@ A captura ampla de exceções por série foi mantida deliberadamente: a coleta d
 8. **P3 — Tipagem e estrutura:** não transformei toda a aplicação em código estritamente tipado nem dividi todas as páginas em módulos. A modularidade atual serve ao escopo; refatoração extensa aumentaria o diff sem corrigir um defeito demonstrado.
 9. **P3 — Ferramentas auxiliares e testes:** o caminho feliz completo do empacotador, o construtor de catálogo e a CLI merecem maior cobertura. Não foi criada cobertura artificial apenas para elevar o percentual.
 
-A recarga via CLI continua podendo publicar snapshot parcial com alerta, como já era documentado. O job público diário exige sucesso das 24 séries. Essa diferença é intencional e foi preservada.
+A recarga via CLI continua podendo publicar snapshot parcial com alerta, como já era documentado. Na data desta auditoria, o job público diário exigia sucesso das 24 séries então configuradas. A regra acompanha o catálogo de cada execução. Essa diferença é intencional e foi preservada.
 
 ## Avaliação final
 

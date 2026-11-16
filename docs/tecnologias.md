@@ -10,6 +10,7 @@
 | SQLite | Banco padrão local e banco temporário de cada atualização diária | Em uso |
 | PostgreSQL | Alternativa de banco para o pipeline; integração verificada na CI | Suportado e testado; não é o banco do site público |
 | SQLAlchemy / psycopg | Conexão e execução de SQL; driver PostgreSQL | Implementado |
+| JavaScript / GitHub Pages | Painel público, gráficos, filtros e exportações | Publicado |
 | Streamlit / Plotly | Páginas, filtros, tabelas, gráficos e download de CSV | Interface publicada |
 | GitHub Actions | Atualização diária e verificação automática do código | Em uso |
 | Power BI | Não há relatório, modelo semântico ou medidas DAX implementados | Não utilizado |
@@ -23,12 +24,15 @@ flowchart TD
     B --> C["SQLite temporário: persistência SQL"]
     C --> D["Python: calendário e indicadores"]
     D --> E["Snapshot CSV validado no GitHub"]
-    E --> F["Streamlit e Plotly: painel público"]
+    E --> F["Versão Streamlit"]
+    E --> G["Pacote público do site"]
+    H["Tabelas de inflação do IBGE validadas"] --> G
+    G --> I["Painel no GitHub Pages"]
 ```
 
-O GitHub Actions executa `scripts/update_data.py` diariamente às 19h17 de Brasília. Cada execução cria um banco próprio em `work/collection-*/collection.db`, reconsulta o histórico e publica somente uma base que passe pelas validações das 24 séries. Esse banco é temporário no runner; não é um banco PostgreSQL hospedado nem uma base SQL consultada pelo visitante.
+O GitHub Actions executa `scripts/update_data.py` diariamente às 19h17 de Brasília. Cada execução cria um banco próprio em `work/collection-*/collection.db`, reconsulta o histórico e publica somente uma base que passe pelas validações de todas as séries esperadas no catálogo. Esse banco é temporário no runner; não é um banco PostgreSQL hospedado nem uma base SQL consultada pelo visitante.
 
-O site lê `data/processed/latest.json` e os CSVs do snapshot indicado. `observatorio/snapshot.py` valida essa leitura; `dashboard/app.py` mantém os dados em cache. Abrir uma página ou mudar um filtro não faz nova chamada ao Bacen nem consulta SQL. A data de coleta não é a data de referência de todos os indicadores: cada série tem sua própria defasagem.
+A versão Streamlit lê `data/processed/latest.json` e os CSVs do snapshot indicado. `observatorio/snapshot.py` valida essa leitura; `dashboard/app.py` mantém os dados em cache. Abrir uma página ou mudar um filtro não faz nova chamada ao Bacen nem consulta SQL. A data de coleta não é a data de referência de todos os indicadores: cada série tem sua própria defasagem.
 
 ## Onde Python é usado
 

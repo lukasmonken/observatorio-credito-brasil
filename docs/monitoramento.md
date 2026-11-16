@@ -8,7 +8,7 @@ O monitoramento distingue três situações: falha da coleta ou publicação, au
 - **GitHub Actions → Atualizar dados do Bacen:** execução diária, resumo operacional e evidências técnicas.
 - **GitHub Actions → Monitorar atualização do Bacen:** verificação independente a cada seis horas.
 
-O painel mostra um aviso global após 30 horas sem atualização validada ou quando o estado registrado indica falha. O aviso é recalculado ao carregar/interagir com a aplicação; uma aba deixada aberta não é um monitor ativo em segundo plano.
+O painel mostra um aviso global após 30 horas sem atualização validada ou quando o estado registrado indica falha. No Pages, o navegador reavalia a idade da coleta enquanto a página está aberta. O workflow de monitoramento também executa com o painel fechado.
 
 ## Registro da tentativa
 
@@ -16,7 +16,7 @@ O painel mostra um aviso global após 30 horas sem atualização validada ou qua
 
 O workflow registra o resultado com `if: always()`. Quando há falha antes da publicação, envia apenas o arquivo de monitoramento, preservando o snapshot publicado. Em caso de sucesso, envia juntos o snapshot validado e o estado operacional. Uma recuperação limpa os códigos de falha anteriores. Não são publicados tokens, caminhos de erro ou stack traces nesse resumo; detalhes ficam nos logs e artifacts por sete dias.
 
-O estado em andamento é local ao runner; o painel recebe a tentativa concluída após o commit. Se o runner for encerrado abruptamente ou o push falhar, esse resumo pode não chegar ao site. Por isso o verificador independente também consulta a conclusão real do workflow na API do GitHub.
+O estado em andamento é local ao runner; o painel recebe a tentativa concluída após a integração da proposta automática na `main`. Se a execução for interrompida ou a publicação da proposta falhar, esse resumo pode não chegar ao site. Por isso o verificador independente também consulta a conclusão real do workflow na API do GitHub.
 
 Antes da primeira execução instrumentada, o painel usa a data de criação do snapshot como referência do último sucesso e informa que os detalhes da tentativa não estão registrados. Não inventa duração ou horário de tentativa.
 
@@ -27,7 +27,7 @@ Antes da primeira execução instrumentada, o painel usa a data de criação do 
 `scripts/monitor_update.py check` verifica:
 
 - Mais de 30 horas sem sucesso registrado na base publicada.
-- Falha ou cancelamento na última execução do job diário, inclusive erro no push.
+- Falha ou cancelamento na última execução do job diário, inclusive falha na integração da proposta.
 - Nenhuma execução do job diário nas últimas 30 horas.
 - Execução pendente ou em andamento há mais de uma hora.
 - Metadados inválidos ou impossibilidade de consultar a API (o verificador termina com erro, sem declarar estado saudável).
@@ -48,7 +48,7 @@ A tabela do painel usa a última referência com valor numérico de cada série 
 
 1. Abra a execução com falha no Actions e identifique a etapa.
 2. Se a falha for de coleta/validação, consulte os códigos no painel e os artifacts da execução. A última base válida deve continuar disponível.
-3. Se for de publicação, confira o erro de push/permissão. O monitor independente detecta a conclusão com falha mesmo quando o painel ainda mostra a tentativa anterior.
+3. Se for de publicação, confira a proposta automática da coleta, seus testes e as permissões do aplicativo. O monitor independente detecta a conclusão com falha mesmo quando o painel ainda mostra a tentativa anterior.
 4. Corrija a causa e execute **Atualizar dados do Bacen → Run workflow**. A nova tentativa continua sujeita às mesmas validações; não edite o snapshot para contorná-las.
 5. Depois do sucesso, execute **Monitorar atualização do Bacen → Run workflow** para confirmar a recuperação.
 

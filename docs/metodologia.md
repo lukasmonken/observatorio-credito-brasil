@@ -40,7 +40,7 @@ Análises principais usam diferenças em p.p. ou crescimento real. Séries em n�
 
 ## Dicionário no painel
 
-A página **Dicionário e metodologia** permite buscar as 24 séries por nome ou
+A página **Dicionário e metodologia** permite buscar as séries do catálogo por nome ou
 código SGS. Cada ficha usa o catálogo do snapshot publicado, preservando o conceito
 oficial, unidade, segmento, modalidade, periodicidade, fonte e limitações. O período
 mostrado considera observações originais não ausentes, não a data da coleta. A data

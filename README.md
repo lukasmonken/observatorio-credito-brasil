@@ -1,84 +1,52 @@
-# Observatório de Crédito do Brasil
+# Observatório Econômico do Brasil
 
-[Abrir painel](https://observatorio-credito-brasil.streamlit.app/)
+Painel público de Lukas Monken para acompanhar a economia brasileira. O **Panorama Brasil** reúne os indicadores mais recentes com o período de referência de cada medida. O menu dá acesso às análises de juros e crédito, composição do crédito, inflação, trabalho e renda, setor externo e atividade econômica.
 
-Dashboard de Lukas Monken com 24 séries oficiais BCB/SGS e nove páginas de análise. Python, Pandas, SQL, Streamlit e uma interface estática para GitHub Pages.
+[Abrir o painel no GitHub Pages](https://lukasmonken.github.io/observatorio-credito-brasil/) · [Abrir a versão Streamlit](https://observatorio-credito-brasil.streamlit.app/)
 
-A versão para GitHub Pages e sua publicação automática estão documentadas em [hospedagem e testes](docs/github-pages.md). O Streamlit permanece disponível durante a transição.
+## Explorar e baixar dados
 
-Consulte o [contrato dos dados públicos, dicionário e exemplo de leitura em Parquet](docs/dados-publicos.md).
+- **Explorador de indicadores** permite escolher a série, o período e a transformação e baixar o recorte em CSV ou Excel.
+- **Dicionário e metodologia** reúne fontes, unidades, fórmulas e limitações. A barra lateral do site mostra o total de séries e observações da versão publicada.
+- **Fontes e qualidade** informa o resultado da última coleta e permite baixar o catálogo principal em Parquet. O manifesto público aponta para os arquivos da publicação. [Dados públicos e exemplo de leitura](docs/dados-publicos.md)
+- **Histórico de revisões** mostra o que mudou entre coletas e permite exportar a comparação. [Regras e limites](docs/revisoes.md)
 
-## Tecnologias utilizadas
+Os guias temáticos descrevem os recortes e cuidados de interpretação. [Composição do crédito](docs/composicao-credito.md) · [Inflação](docs/inflacao.md) · [Trabalho e renda](docs/trabalho-renda.md) · [Setor externo e câmbio](docs/setor-externo.md) · [Crescimento e atividade](docs/crescimento-atividade.md)
 
-| Tecnologia | Uso efetivo |
-|---|---|
-| Python / Pandas / NumPy | Coleta, validação, cálculos e preparação dos dados |
-| SQL / SQLAlchemy | Persistência, revisões, consultas e controles de integridade |
-| SQLite | Banco local padrão e banco temporário do job diário |
-| PostgreSQL | Alternativa suportada e testada na CI; não utilizado pelo site público |
-| Streamlit / Plotly | Interface e gráficos do dashboard publicado |
-| JavaScript / GitHub Pages | Interface estática, filtros no navegador e exportações; ativação em Settings → Pages |
-| GitHub Actions | Atualização diária, testes e publicação automática do site |
-| Power BI | Não implementado neste projeto |
-| Tableau | Exportação CSV preparada; sem workbook criado ou publicado |
+## Atualização e publicação
 
-O painel lê snapshots CSV; o SQL é executado no pipeline. Veja o [mapa das tecnologias e exemplos SQL](docs/tecnologias.md) para os arquivos, responsabilidades e limites de cada ferramenta.
+O GitHub Actions agenda **Atualizar dados do Bacen** para 19h17 e **Atualizar inflação do IBGE** para 19h43, no horário de Brasília. A execução pode começar depois do horário agendado. As séries mantêm a frequência e a defasagem da fonte. Por exemplo, a Selic diária entra no painel após a conclusão do mês, e o PIB conserva o trimestre de referência.
 
-## Atualização diária
+A coleta do catálogo principal usa SQLite temporário e valida todas as séries esperadas e sua cobertura antes de promover uma nova versão. As tabelas detalhadas de inflação do IBGE têm coleta própria. O aplicativo do Observatório abre uma proposta de atualização e a integra à `main` após os testes obrigatórios. Uma falha na coleta principal preserva a última base válida e gera um diagnóstico.
 
-O workflow **Atualizar dados do Bacen** roda todos os dias às **19h17 de Brasília** (22h17 UTC), além de permitir execução manual em Actions → Run workflow. O agendamento do GitHub pode atrasar em períodos de alta demanda.
+O Pages prepara os arquivos públicos a partir da versão validada. O Streamlit lê os arquivos do snapshot apontado por `data/processed/latest.json`. Em **Fontes e qualidade**, o visitante pode conferir a última tentativa, o último sucesso e as séries com falha. [Hospedagem e testes do site](docs/github-pages.md) · [Monitoramento e recuperação](docs/monitoramento.md) · [Backup dos dados](docs/backup.md)
 
-A rotina coleta novamente o histórico desde 2010, incluindo revisões, em um banco SQLite temporário. Séries mensais usam o histórico completo do endpoint oficial; séries diárias usam janelas inferiores a dez anos. Todos os indicadores são recalculados com as regras documentadas em `docs/metodologia.md`.
+## Executar localmente
 
-Somente uma coleta bem-sucedida das 24 séries, sem perda de cobertura da base publicada, pode atualizar o snapshot. Se ocorrer falha, o workflow termina com erro e a última base válida permanece online. Evidências brutas e diagnóstico ficam nos artifacts do Actions por sete dias. O histórico de commits preserva as versões publicadas.
+Para abrir o painel Streamlit com os dados do repositório, use Python 3.14 na raiz do projeto.
 
-O bot publica em `data/processed/<id-da-execução>` e atualiza `latest.json` somente depois da verificação de integridade; o Streamlit acompanha os commits na branch main. A atualização é diária, mas a frequência e a defasagem das observações continuam sendo as do Bacen. A Selic é agregada apenas para meses concluídos neste painel mensal.
+```bash
+python -m pip install -r requirements.txt
+streamlit run dashboard/app.py
+```
 
-Em repositórios públicos, o GitHub pode desativar agendamentos após 60 dias sem atividade. Consulte a aba Actions se a data de coleta deixar de avançar. As notificações de falha dependem das preferências da sua conta GitHub.
+Para executar a coleta principal em um ambiente preparado para atualização, use os comandos abaixo. Para trabalhar na interface estática, siga o [guia de execução local do Pages](docs/github-pages.md#executar-localmente).
 
-## Execução
-
-Interface: `pip install -r requirements.txt` e `streamlit run dashboard/app.py`.
-
-Coleta: `pip install -r requirements-update.txt` e `python scripts/update_data.py`.
-
-Entrypoint no Streamlit: `dashboard/app.py`; Python 3.14. Sem secrets ou banco externo. Não publique `.env`, credenciais ou o diretório temporário `work/`.
+```bash
+python -m pip install -r requirements-update.txt
+python scripts/update_data.py
+```
 
 ## Arquitetura e validação
 
-`observatorio/client.py` coleta e preserva respostas; `transform.py` trata o calendário e calcula indicadores; `db.py` persiste com upsert; `pipeline.py` produz snapshots; `snapshot.py` valida a leitura; `dashboard/app.py` exibe os dados. O job diário usa uma pasta exclusiva dentro de `work/` e nunca sobrescreve o snapshot ativo.
-
-Não há login, dados privados nem uploads de usuários. A aplicação é deliberadamente pública e somente de leitura. `DATABASE_URL` é configuração do pipeline completo; o job diário escolhe seu próprio SQLite isolado. `TEST_DATABASE_URL` é reservado ao banco descartável de testes.
+Python, Pandas e NumPy organizam as séries e calculam os indicadores. O pipeline usa SQLAlchemy com SQLite e tem integração testada com PostgreSQL. O site público usa JavaScript e Plotly para filtros e visualizações. A documentação detalha os arquivos, as consultas e as regras de cálculo. [Tecnologias e exemplos SQL](docs/tecnologias.md) · [Metodologia](docs/metodologia.md)
 
 ```bash
 python -m pip install -r requirements-update.txt -r requirements-dev.txt
-python -m pytest -q
 ruff check observatorio dashboard scripts tests
-mypy observatorio scripts/update_data.py
+mypy observatorio scripts/update_data.py scripts/monitor_update.py scripts/monitor_backup.py scripts/monitor_pages.py
 python -m coverage run -m pytest -q
 python -m coverage report
 ```
 
-O workflow `Verificar aplicação` adiciona um PostgreSQL 17 descartável para a integração. Sem `TEST_DATABASE_URL`, esse teste é ignorado localmente. A coleta diária continua às 19h17 de Brasília.
-
-As correções foram homologadas e publicadas; os links das execuções estão na [auditoria](docs/auditoria.md). A CI validou PostgreSQL e a coleta real, sem certificar disponibilidade contínua da hospedagem. Snapshots por execução crescem no repositório; retenção e arquivamento devem ser definidos antes de operação prolongada.
-
-## Monitoramento operacional
-
-A página **Fontes e qualidade** mostra última tentativa, último sucesso, duração e séries com falha. Há alerta após 30 horas sem atualização validada e um workflow independente verifica a coleta e a publicação a cada seis horas. A defasagem das séries é apresentada separadamente. Veja [funcionamento, alertas e recuperação](docs/monitoramento.md).
-
-## Histórico de revisões
-
-A página **Histórico de revisões** distingue mudanças de valores já publicados, novas referências e preenchimentos históricos. A atualização diária preserva os eventos entre coletas, com valores anterior/novo, diferença, data de detecção e IDs dos snapshots. Inclui filtros e exportação CSV. O acompanhamento começa na primeira publicação após a implantação; consulte [regras e limites](docs/revisoes.md).
-
-### Backup dos dados
-
-Consulte [a rotina de backup](docs/backup.md) para exportar a base validada, o catálogo e o histórico de revisões para um arquivo fora do projeto.
-
-### Setor externo e câmbio
-
-No menu **Setor externo e câmbio** (`#external`): dólar médio mensal, reservas, exportações, importações, saldo comercial e transações correntes. Filtros, acumulados dos fluxos, CSV e Excel pelo Explorador. [Fontes e metodologia](docs/setor-externo.md).
-
-### Crescimento e atividade
-
-Menu **Crescimento e atividade** (`#activity`): PIB trimestral e componentes, IBC-Br, indústria, varejo e serviços. Comparações respeitam frequência e ajuste sazonal; CSV e Excel pelo Explorador. [Metodologia](docs/crescimento-atividade.md).
+O workflow **Verificar aplicação** usa um PostgreSQL descartável para o teste de integração. Em execução local, esse teste usa `TEST_DATABASE_URL`. O histórico de verificações anteriores está na [auditoria técnica](docs/auditoria.md).

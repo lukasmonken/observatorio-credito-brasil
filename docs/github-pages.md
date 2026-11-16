@@ -4,9 +4,9 @@ A interface estática mantém as páginas do Streamlit. Python continua respons�
 
 ## Arquitetura
 
-1. `Atualizar dados do Bacen` coleta diariamente às 19h17 de Brasília e publica o snapshot ou o diagnóstico de falha.
-2. `Publicar dashboard no GitHub Pages` roda após a conclusão dessa rotina, inclusive quando ela falha. O evento `workflow_run` é necessário porque commits feitos pelo `GITHUB_TOKEN` não iniciam outro workflow por `push`.
-3. `scripts/build_pages_data.py` usa os validadores existentes de snapshot e revisões. Gera JSON público com nome e checksum SHA-256, catálogo, metodologia, qualidade e monitoramento.
+1. As coletas do catálogo principal e da inflação detalhada do IBGE validam os dados e abrem propostas automáticas de atualização na `main`. O GitHub exige as verificações `test` e `build` antes de integrá-las.
+2. `Publicar dashboard no GitHub Pages` é acionado ao término de cada coleta, inclusive após falha. Nessa execução, lê a versão atual da `main` para refletir os últimos dados validados e o estado operacional disponível.
+3. `scripts/build_pages_data.py` gera o manifesto público, o JSON principal, as tabelas de inflação disponíveis e o Parquet das séries. Os descritores incluem o checksum SHA-256 dos arquivos.
 4. `web/build.mjs` empacota HTML, CSS e JavaScript. Gráficos e Excel são carregados sob demanda. Não há consulta ao Bacen quando alguém abre ou filtra a página.
 5. O deploy depende de testes de cálculo e navegador. Uma falha no build mantém a publicação anterior.
 
@@ -16,15 +16,21 @@ O site verifica novas versões a cada cinco minutos e verifica a idade da coleta
 
 | Página | Funcionalidades |
 |---|---|
+| Panorama Brasil | Indicadores por tema e referências de cada medida |
 | Visão geral | KPIs, mudanças da última coleta, crescimento real e inadimplência |
 | Juros e crédito | Segmentos, seleção de séries, cores estáveis, comparação com dois eixos e gráficos separados |
+| Composição do crédito | Saldos e participação das modalidades por segmento |
+| Inflação detalhada | Índices, grupos, itens e recortes regionais disponíveis |
+| Trabalho e renda | Ocupação, desocupação e rendimento da PNAD Contínua |
+| Setor externo e câmbio | Dólar, reservas, comércio de bens e transações correntes |
+| Crescimento e atividade | PIB trimestral e indicadores mensais de atividade |
 | Comparação em base 100 | De duas a seis séries, mês-base comum e CSV do recorte |
 | Famílias | Endividamento, comprometimento de renda e inadimplência |
 | Explorador | Transformações permitidas, período, base 100 no recorte, CSV e Excel com quatro abas |
 | Relações | Correlação de Pearson, alinhamento por mês calendário, defasagens de 0 a 24 meses |
 | Revisões | Filtros, histórico completo, comparações sem eventos, comparação líquida entre duas coletas e CSV |
 | Dicionário | Busca, fonte oficial, unidades, fórmulas, limitações e catálogo JSON |
-| Fontes e qualidade | Última tentativa/sucesso/duração, falhas por série, defasagem e validações |
+| Fontes e qualidade | Última tentativa, último sucesso, defasagem, validações e download da base em Parquet |
 
 Os testes comparam resultados JavaScript com o Python. Revisões são mantidas como texto decimal e subtraídas com inteiros de precisão arbitrária; não passam por ponto flutuante. Correlações utilizam tolerância numérica de 1e-12. Valores ausentes continuam ausentes. O Excel contém valores, sem fórmulas executáveis.
 
@@ -53,13 +59,13 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-No Linux/CI, use `npx playwright install --with-deps chromium`. A suíte verifica nove páginas, seleção e legendas, exportações CSV/Excel, busca, responsividade e falhas de integridade/rede. Diagnósticos ficam nos artifacts `pages-qa-*` por sete dias.
+No Linux/CI, use `npx playwright install --with-deps chromium`. A suíte verifica a navegação do painel, seleção e legendas, exportações CSV/Excel, busca, responsividade e falhas de integridade/rede. Diagnósticos ficam nos artifacts `pages-qa-*` por sete dias.
 
 ## Ativar a hospedagem
 
 No repositório, **Settings → Pages → Build and deployment → Source → GitHub Actions**. Depois execute **Actions → Publicar dashboard no GitHub Pages → Run workflow** na branch `main`.
 
-Endereço previsto: https://lukasmonken.github.io/observatorio-credito-brasil/
+[Abrir o painel publicado](https://lukasmonken.github.io/observatorio-credito-brasil/).
 
 Ativar Pages exige administração do repositório. Se `configure-pages` retornar 404, confira essa configuração. Não é necessário criar token ou secret novo. O job de deploy usa apenas `pages: write` e `id-token: write`; pull requests apenas testam e nunca publicam.
 
