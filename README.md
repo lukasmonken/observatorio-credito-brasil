@@ -6,6 +6,8 @@ Dashboard de Lukas Monken com 24 séries oficiais BCB/SGS e nove páginas de an�
 
 A versão para GitHub Pages e sua publicação automática estão documentadas em [hospedagem e testes](docs/github-pages.md). O Streamlit permanece disponível durante a transição.
 
+Consulte o [contrato dos dados públicos, dicionário e exemplo de leitura em Parquet](docs/dados-publicos.md).
+
 ## Tecnologias utilizadas
 
 | Tecnologia | Uso efetivo |

@@ -7,6 +7,9 @@ import json
 from pathlib import Path
 import sys
 
+import pyarrow as pa
+import pyarrow.parquet as pq
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from observatorio.bulletin import build_bulletin
@@ -15,6 +18,32 @@ from observatorio.monitoring import read_status
 from observatorio.revisions import read_history
 from observatorio.snapshot import load_snapshot
 from observatorio.inflation_detail import TABLES, load_detail
+
+
+def write_parquet(output, payload, metrics):
+    rows = payload["rows"]
+    manifest = payload["manifest"]
+    catalog = {s["code"]: s for s in payload["catalog"]}
+    columns = {
+        "code": pa.array([r["code"] for r in rows], type=pa.int64()),
+        "date": pa.array([datetime.fromisoformat(r["date"]).date() for r in rows], type=pa.date32()),
+        "reference_period": pa.array([r["reference_period"] for r in rows], type=pa.string()),
+    }
+    for key in ("name", "unit", "source", "source_url", "frequency"):
+        columns[key] = pa.array([catalog[r["code"]][key] for r in rows], type=pa.string())
+    for key in metrics:
+        columns[key] = pa.array([r[key] for r in rows], type=pa.float64())
+    table = pa.table(columns).replace_schema_metadata({
+        "schema_version": str(payload["schema_version"]), "snapshot_id": manifest["snapshot_id"],
+        "as_of": str(manifest["as_of"]), "price_base_month": str(manifest["price_base_month"]),
+    })
+    buffer = pa.BufferOutputStream()
+    pq.write_table(table, buffer, compression="snappy")
+    content = buffer.getvalue().to_pybytes()
+    digest = hashlib.sha256(content).hexdigest()
+    filename = f"series-{digest[:16]}.parquet"
+    (output / filename).write_bytes(content)
+    return {"file": filename, "sha256": digest}
 
 
 def build_data(root, output):
@@ -60,11 +89,12 @@ def build_data(root, output):
         (output / name).write_bytes(encoded)
         inflation_files[table] = {"file": name, "sha256": digest, "name": details["name"]}
     payload["inflation_files"] = inflation_files
+    payload["parquet"] = write_parquet(output, payload, [m for m in numeric_columns if m in frame])
     content = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), allow_nan=False).encode()
     output.mkdir(parents=True, exist_ok=True)
     filename = f"data-{hashlib.sha256(content).hexdigest()[:16]}.json"
     (output / filename).write_bytes(content)
-    (output / "site.json").write_text(json.dumps({"schema_version": 1, "data": filename, "inflation": list(inflation_files.values()), "sha256": hashlib.sha256(content).hexdigest(), "snapshot_id": manifest["snapshot_id"]}))
+    (output / "site.json").write_text(json.dumps({"schema_version": 1, "data": filename, "parquet": payload["parquet"], "inflation": list(inflation_files.values()), "sha256": hashlib.sha256(content).hexdigest(), "snapshot_id": manifest["snapshot_id"]}))
     return payload
 
 

@@ -1615,6 +1615,14 @@ function brDate(date) {
   return `${get("year")}-${get("month")}-${get("day")}`;
 }
 function quality() {
+  if (/^series-[a-f0-9]{16}\.parquet$/.test(data.parquet?.file)) {
+    main.append(
+      el("h3", {}, "Dados públicos"),
+      el("a", { href: "./" + data.parquet.file, download: true }, "Baixar todas as séries · Parquet"),
+      note("Histórico completo do catálogo na versão exibida. Inclui unidades, fontes e transformações."),
+      link("Consultar o dicionário e exemplos de leitura", "https://github.com/lukasmonken/observatorio-credito-brasil/blob/main/docs/dados-publicos.md"),
+    );
+  }
   const m = data.monitoring || {},
     [status, text] = health(data.monitoring, data.manifest);
   main.append(

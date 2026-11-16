@@ -35,7 +35,9 @@ const html = (await readFile(path.join(root, "index.html"), "utf8"))
   .replace("{{CSS}}", css);
 await writeFile(path.join(dist, "index.html"), html);
 await writeFile(path.join(dist, ".nojekyll"), "");
-for (const name of ["site.json", config.data])
+if (!/^series-[a-f0-9]{16}\.parquet$/.test(config.parquet.file))
+  throw new Error("Nome de arquivo Parquet inválido");
+for (const name of ["site.json", config.data, config.parquet.file])
   await copyFile(path.join(root, "generated", name), path.join(dist, name));
 console.log(`Site gerado: ${dist}`);
 
