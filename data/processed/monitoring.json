@@ -1,12 +1,11 @@
 {
-  "status": "failed",
-  "started_at": "2026-11-16T17:56:50.591752+00:00",
-  "ended_at": "2026-11-16T17:59:20.169814+00:00",
-  "last_success_at": "2026-11-16T13:25:16.937249+00:00",
-  "duration_seconds": 150,
-  "failed_series": [
-    432
-  ],
-  "workflow_run_id": "43923638643",
-  "stage": "coleta_e_validacao"
+  "status": "success",
+  "started_at": "2026-11-16T18:08:50.522480+00:00",
+  "ended_at": "2026-11-16T18:11:39.637063+00:00",
+  "last_success_at": "2026-11-16T18:11:39.637063+00:00",
+  "duration_seconds": 169,
+  "failed_series": [],
+  "workflow_run_id": "43925725368",
+  "stage": "snapshot_validado",
+  "snapshot_id": "8b471949-649e-4a08-bc07-dabaa445b73d"
 }
