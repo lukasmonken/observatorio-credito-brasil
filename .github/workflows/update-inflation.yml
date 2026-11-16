@@ -6,6 +6,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/publish_collection_pr.sh'
       - 'observatorio/inflation_detail.py'
       - 'scripts/update_inflation.py'
       - '.github/workflows/update-inflation.yml'

@@ -17,10 +17,21 @@ gh auth setup-git
 git push origin "HEAD:refs/heads/$branch"
 pr=$(gh pr create --base main --head "$branch" --title "$title" --body "Coleta automática $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID.")
 head=$(git rev-parse HEAD)
+previous_head=""
 # Use the PR checks on this candidate, including before branch protection is enabled.
 for ((attempt=0; attempt<75; attempt++)); do
   info=$(gh pr view "$pr" --json state,headRefOid,mergeStateStatus)
-  [[ $(jq -r .headRefOid <<<"$info") == "$head" ]] || exit 1
+  reported_head=$(jq -r .headRefOid <<<"$info")
+  if [[ "$reported_head" != "$head" ]]; then
+    if [[ -n "$previous_head" && "$reported_head" == "$previous_head" ]]; then
+      # GitHub may briefly return the previous head after our own push.
+      sleep 20
+      continue
+    fi
+    echo 'A proposta foi alterada fora desta coleta.' >&2
+    exit 1
+  fi
+  previous_head=""
   case $(jq -r .state <<<"$info") in MERGED) exit 0 ;; CLOSED) exit 1 ;; esac
   case $(jq -r .mergeStateStatus <<<"$info") in
     DIRTY) echo 'Conflito na coleta' >&2; exit 1 ;;
@@ -33,6 +44,7 @@ for ((attempt=0; attempt<75; attempt++)); do
       fi
       git merge --no-edit origin/main
       git push origin "HEAD:refs/heads/$branch"
+      previous_head=$head
       head=$(git rev-parse HEAD)
       continue ;;
   esac

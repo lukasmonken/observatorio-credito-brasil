@@ -6,6 +6,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/publish_collection_pr.sh'
       - '.github/workflows/update-data.yml'
       - 'scripts/update_data.py'
       - 'scripts/monitor_update.py'
