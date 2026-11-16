@@ -1,6 +1,6 @@
 -r requirements.txt
 requests==2.34.2
-SQLAlchemy==2.1.6
+SQLAlchemy==2.1.8
 pytest==9.1.1
 filelock==4.2.4
 psycopg[binary]==3.3.6
