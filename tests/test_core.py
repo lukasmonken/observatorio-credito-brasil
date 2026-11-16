@@ -119,3 +119,15 @@ def test_quality_keeps_shock_and_rejects_impossible():
     assert any(c[1]=='warning' for c in checks) and not any(c[1]=='error' for c in checks)
     checks=validate_monthly(values([101]),spec(21084),date(2020,2,1))
     assert any(c[1]=='error' for c in checks)
+
+def test_selic_requests_contiguous_calendar_years(tmp_path):
+    session = Mock()
+    session.get.return_value = response()
+    client = SGSClient(tmp_path, "selic", session=session)
+    client.fetch(432, date(2019, 12, 31), date(2021, 1, 1))
+    params = [call.kwargs["params"] for call in session.get.call_args_list]
+    assert [(p["dataInicial"], p["dataFinal"]) for p in params] == [
+        ("31/12/2019", "31/12/2019"),
+        ("01/01/2020", "31/12/2020"),
+        ("01/01/2021", "01/01/2021"),
+    ]
