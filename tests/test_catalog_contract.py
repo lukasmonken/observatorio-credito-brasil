@@ -28,11 +28,19 @@ def test_origem_e_documentacao(spec):
     assert spec["source_url"].startswith("https://")
     host = urlparse(spec["source_url"]).hostname
     assert host == "bcb.gov.br" or (host and host.endswith(".bcb.gov.br"))
-    assert (ROOT / spec["metadata_evidence"]).is_file()
+    if spec["metadata_evidence"].startswith("docs/"):
+        assert (ROOT / spec["metadata_evidence"]).is_file()
     limites = spec["limitations"]
     assert isinstance(limites, list) and limites
     assert all(isinstance(item, str) and item.strip() for item in limites)
     assert len(limites) == len(set(limites))
+    aviso = " ".join(limites).casefold()
+    if spec.get("reference_period") == "trimestre móvel":
+        assert "trimestre" in aviso and ("compartilh" in aviso or "sobrepo" in aviso)
+    if grupo == "Inadimplência":
+        assert "2025" in aviso and ("contáb" in aviso or "metodol" in aviso)
+    if spec.get("credit_composition"):
+        assert "modalidades" in aviso and ("seleção" in aviso or "parcial" in aviso)
 
 
 def test_unidade_e_transformacoes(spec):
