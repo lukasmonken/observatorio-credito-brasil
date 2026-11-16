@@ -6,6 +6,7 @@ on:
   push:
     branches: [main]
     paths:
+      - requirements-http.txt
       - 'scripts/publish_collection_pr.sh'
       - 'observatorio/inflation_detail.py'
       - 'scripts/update_inflation.py'
@@ -21,20 +22,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 55
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
           python-version: '3.14'
-      - run: python -m pip install requests==2.34.2
+      - run: >-
+          python -m pip install --only-binary=:all: --require-hashes -r requirements-http.txt
       - name: Coletar e validar as três tabelas
         run: python scripts/update_inflation.py
       - name: Autorizar publicação da coleta
         if: ${{ !cancelled() }}
         id: publisher
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
         with:
           app-id: ${{ vars.COLLECTOR_APP_ID }}
           private-key: ${{ secrets.COLLECTOR_APP_PRIVATE_KEY }}

@@ -120,3 +120,13 @@ Descrição fiel ao que foi implementado:
 > Pipeline de dados econômicos do Banco Central desenvolvido em Python e SQL, com validação de dados, persistência em SQLite, suporte a PostgreSQL testado em CI, indicadores em Pandas e dashboard interativo em Streamlit/Plotly. Coleta e publicação automatizadas com GitHub Actions, incluindo exportações CSV para ferramentas de BI.
 
 A documentação distingue suporte técnico, testes e uso em produção. Power BI não deve ser incluído entre as tecnologias utilizadas até existir uma implementação validada.
+
+## Dependências das automações
+
+As referências diretas a GitHub Actions nos workflows apontam para commits completos dos repositórios oficiais. O comentário ao lado identifica a versão usada na revisão. O Dependabot verifica semanalmente GitHub Actions, os requisitos Python da raiz e o npm de `web/`. As propostas passam pelas verificações da branch principal.
+
+As rotinas de inflação e de monitoramento do site instalam `requirements-http.txt` com `--require-hashes --only-binary=:all:`. O arquivo cobre Requests e suas dependências transitivas com wheels universais. O teste de CI baixa e verifica o conjunto numa pasta temporária. Ao atualizar uma versão, confira a lista de dependências e o SHA-256 do wheel publicado no PyPI.
+
+Os ambientes de análise, coleta geral e desenvolvimento ainda resolvem dependências transitivas pelo pip. Um lock completo precisa incluir os artefatos compatíveis com os ambientes suportados, em particular os binários de NumPy, PyArrow e psycopg. Um inventário de versões instalado no macOS, sozinho, é insuficiente para reproduzir a instalação no Linux. O frontend usa o lock do npm e `npm ci`.
+
+[Referência do pip sobre instalação com hashes](https://pip.pypa.io/en/stable/topics/secure-installs/) · [Configuração do Dependabot](https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference)
