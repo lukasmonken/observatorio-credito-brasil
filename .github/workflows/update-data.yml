@@ -16,18 +16,21 @@ on:
       - 'tests/**'
       - 'requirements*.txt'
 permissions:
-  contents: write
+  contents: read
 concurrency:
   group: bacen-daily
   cancel-in-progress: false
 jobs:
   update:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v7
         with:
           ref: main
+          fetch-depth: 0
+          persist-credentials: false
       - name: Registrar início da tentativa
         run: python3 scripts/monitor_update.py start
       - uses: actions/setup-python@v7
@@ -62,9 +65,17 @@ jobs:
           fi
           if [ "$JOB_STATUS" = cancelled ]; then status=cancelled; fi
           python3 scripts/monitor_update.py finish --status "$status" --stage "$stage"
+      - name: Autorizar publicação da coleta
+        if: ${{ !cancelled() }}
+        id: publisher
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.COLLECTOR_APP_ID }}
+          private-key: ${{ secrets.COLLECTOR_APP_PRIVATE_KEY }}
       - name: Publicar dados ou diagnóstico de falha
-        if: always()
+        if: ${{ !cancelled() && steps.publisher.outcome == 'success' }}
         env:
+          GH_TOKEN: ${{ steps.publisher.outputs.token }}
           JOB_STATUS: ${{ job.status }}
           COLLECT_STATUS: ${{ steps.collect.outcome }}
         run: |
@@ -75,10 +86,7 @@ jobs:
           else
             git add data/processed/monitoring.json
           fi
-          if ! git diff --cached --quiet; then
-            git commit -m 'Atualizar dados e estado operacional do Bacen'
-            git push origin HEAD:main
-          fi
+          bash scripts/publish_collection_pr.sh bacen
       - name: Gerar boletim da coleta publicada
         if: success() && steps.collect.outcome == 'success'
         run: python scripts/build_bulletin.py
