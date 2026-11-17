@@ -25,7 +25,7 @@ Ausências permanecem ausentes, zeros são preservados, denominadores zero não 
 
 Menu **Trabalho e renda** em ambas as interfaces; no site, rota `#labor`. Filtro de período, referência do resumo, quatro cartões, tabela de variações anuais, seleção de indicador e medida, histórico e CSV. O CSV inclui início/fim no rótulo do trimestre, valor, unidade, comparação anual e sua unidade, base de preços do rendimento, fonte, URL e snapshot. Os indicadores também ficam disponíveis no explorador e em sua exportação Excel.
 
-Recortes regionais, informalidade, subutilização, distribuição de renda e Novo Caged não fazem parte desta entrega.
+Informalidade, subutilização, distribuição de renda e Novo Caged não fazem parte desta entrega.
 
 ## Evidência de metadados — conferida em 05/11/2026
 
@@ -34,3 +34,7 @@ Recortes regionais, informalidade, subutilização, distribuição de renda e No
 - [SGS 24380](https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?hdOidSeriesSelecionadas=24380&method=consultarGraficoPorId): população desocupada, unidades (mil), frequência M, início 01/03/2012.
 - [SGS 24382 — dados básicos e metadados](https://www3.bcb.gov.br/sgspub/consultarmetadados/consultarMetadadosSeries.do?method=consultarMetadadosSeriesInternet&hdOidSerieSelecionada=24382): nome, fonte IBGE, reais, frequência mensal, início 01/03/2012; abas consultadas no navegador, incluindo conceito e base de preços (metadados atualizados em 28/06/2023).
 - [IBGE — PNAD Contínua](https://www.ibge.gov.br/estatisticas/sociais/educacao/17270-pesquisa-nacional-por-amostra-de-domicilios-continua-pnadc.html): referências mensais como trimestres móveis, não medidas isoladas de cada mês.
+
+## Desocupação por estado e região
+
+Em **Trabalho e renda**, selecione **Desocupação por estado e região**. A [tabela 4099 do IBGE](https://sidra.ibge.gov.br/tabela/4099) fornece estimativas trimestrais para o Brasil, as cinco grandes regiões e as 27 UFs. A diferença em pontos percentuais subtrai a taxa nacional oficial da taxa local no mesmo trimestre civil. A janela cobre oito trimestres. O GitHub verifica diariamente se houve divulgação ou revisão e preserva a última coleta completa se a consulta falhar.

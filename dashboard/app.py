@@ -584,6 +584,29 @@ elif page == "Setor externo e câmbio":
 
 elif page == "Trabalho e renda":
     st.caption("Brasil · IBGE / PNAD Contínua, distribuído pelo BCB/SGS. Referências em trimestres móveis, sem ajuste sazonal.")
+    if st.radio("Visão do trabalho e renda", ["Indicadores nacionais", "Desocupação por estado e região"], horizontal=True) == "Desocupação por estado e região":
+        st.subheader("Desocupação por estado e região")
+        regional_file = ROOT / "data/regional/desocupacao.json"
+        if not regional_file.exists():
+            st.info("Dados regionais indisponíveis nesta coleta.")
+            st.stop()
+        regional = json.loads(regional_file.read_text())
+        brazil = next(row["rates"] for row in regional if row["level"] == "N1")
+        quarter = st.selectbox("Trimestre de referência", sorted(brazil, reverse=True),
+                               format_func=lambda q: f"{q[-1]}º trimestre de {q[:4]}")
+        level = st.selectbox("Recorte territorial", ["Grandes regiões", "Unidades da Federação"])
+        national = brazil[quarter]
+        st.caption(f"Brasil: {national:.1f}% no {quarter[-1]}º trimestre de {quarter[:4]}. Percentual da força de trabalho de 14 anos ou mais.".replace(".", ",", 1))
+        rows = [{"Localidade": row["name"], "Desocupação (%)": row["rates"][quarter],
+                 "Diferença para o Brasil (p.p.)": round(row["rates"][quarter] - national, 1)}
+                for row in regional if row["level"] == ("N2" if level == "Grandes regiões" else "N3")]
+        comparison = pd.DataFrame(rows).sort_values(["Desocupação (%)", "Localidade"], ascending=[False, True])
+        st.dataframe(comparison, hide_index=True)
+        source = "https://sidra.ibge.gov.br/tabela/4099"
+        exported = comparison.assign(Trimestre=quarter, Brasil=national, Fonte=source)
+        st.download_button("Baixar comparação territorial · CSV", build_csv(exported, csv_profile), "desocupacao-regional.csv", "text/csv")
+        st.markdown(f"[Fonte: IBGE · PNAD Contínua trimestral · tabela 4099]({source})")
+        st.stop()
     labor_specs = [s for s in specs if s['classification'] == 'Trabalho e renda']
     labor_data = df[df.code.isin([s['code'] for s in labor_specs])]
     if labor_data.empty:

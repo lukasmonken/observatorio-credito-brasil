@@ -786,7 +786,31 @@ function external() {
   main.append(details("Fontes e metodologia — setor externo", note("Valores em dólares correntes, sem deflação pelo IPCA. Reservas não medem apenas compras e vendas de moeda: seus valores também variam com preços dos ativos e taxas de câmbio. Câmbio mensal não representa cotação em tempo real. O histórico é atualizado integralmente para incorporar revisões."), ...specs.map(s => el("p", {}, link(`${s.short_name || s.name} · SGS ${s.code}`, s.source_url)))));
 }
 
+function regionalLabor() {
+  const series = data.regional_labor || [];
+  const brazil = series.find(row => row.level === "N1");
+  main.append(el("h2", {}, "Desocupação por estado e região"));
+  if (!brazil) { main.append(message("Dados regionais indisponíveis nesta coleta.")); return; }
+  const periods = Object.keys(brazil.rates).sort().reverse();
+  const quarter = q => q.slice(-1) + "º trimestre de " + q.slice(0, 4);
+  const controls = el("div", {class: "filters labor-filters"});
+  controls.append(select("regional-quarter", "Trimestre de referência", periods.map(q => [q, quarter(q)]), periods[0]),
+    select("regional-level", "Recorte territorial", [["N2", "Grandes regiões"], ["N3", "Unidades da Federação"]], "N2"));
+  const q = state["regional-quarter"], level = state["regional-level"], national = brazil.rates[q];
+  const source = "https://sidra.ibge.gov.br/tabela/4099";
+  const rows = series.filter(row => row.level === level).map(row => ({
+    localidade: row.name, trimestre: quarter(q), taxa: row.rates[q], brasil: national,
+    diferenca_pp: Number((row.rates[q] - national).toFixed(1)), fonte: source,
+  })).sort((a, b) => b.taxa - a.taxa || a.localidade.localeCompare(b.localidade, "pt-BR"));
+  main.append(controls, note("Brasil: " + number(national) + "% no " + quarter(q) + ". Percentual da força de trabalho de 14 anos ou mais. Cada comparação usa o mesmo trimestre civil."),
+    table(rows, [["localidade", "Localidade"], ["taxa", "Desocupação (%)", number], ["diferenca_pp", "Diferença para o Brasil (p.p.)", number]]),
+    download("Baixar comparação territorial · CSV", rows, "desocupacao-regional.csv"),
+    link("Fonte: IBGE · PNAD Contínua trimestral · tabela 4099", source));
+}
+
 function labor() {
+  main.append(select("labor-view", "Visão do trabalho e renda", [["national", "Indicadores nacionais"], ["regional", "Desocupação por estado e região"]], "national"));
+  if (state["labor-view"] === "regional") { regionalLabor(); return; }
   const specs = data.catalog.filter(s => s.classification === "Trabalho e renda");
   const codes = specs.map(s => s.code), all = data.rows.filter(r => codes.includes(r.code));
   main.append(note("Brasil · IBGE / PNAD Contínua, distribuído pelo BCB/SGS. Cada referência é um trimestre móvel: os três meses terminados no mês indicado. Sem ajuste sazonal."));

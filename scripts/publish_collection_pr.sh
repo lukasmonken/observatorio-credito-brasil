@@ -4,6 +4,7 @@ set -euo pipefail
 case "$1" in
   bacen) scope='data/processed/'; title='Atualizar dados do Banco Central' ;;
   ibge) scope='data/inflation/'; title='Atualizar inflação do IBGE' ;;
+  regional) scope='data/regional/'; title='Atualizar desocupação regional do IBGE' ;;
   *) exit 2 ;;
 esac
 git diff --cached --quiet && exit 0
@@ -38,7 +39,7 @@ for ((attempt=0; attempt<75; attempt++)); do
     BEHIND)
       git fetch origin main
       # If the source code or this collector's output changed, a fresh collection is needed.
-      if ! git diff --quiet HEAD...origin/main -- . ':(exclude)data/processed/**' ':(exclude)data/inflation/**' ||
+      if ! git diff --quiet HEAD...origin/main -- . ':(exclude)data/processed/**' ':(exclude)data/inflation/**' ':(exclude)data/regional/**' ||
          ! git diff --quiet HEAD...origin/main -- "$scope"; then
         echo 'A base da coleta mudou; execute uma nova coleta.' >&2; exit 1
       fi

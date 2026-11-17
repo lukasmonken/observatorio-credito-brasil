@@ -77,6 +77,8 @@ def build_data(root, output):
         "methodology": (root / "docs/metodologia.md").read_text(),
         "built_at": datetime.now(timezone.utc).isoformat(),
     }
+    regional_file = root / "data/regional/desocupacao.json"
+    payload["regional_labor"] = json.loads(regional_file.read_text()) if regional_file.exists() else []
     inflation_files = {}
     output.mkdir(parents=True, exist_ok=True)
     for table in TABLES:
