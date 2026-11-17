@@ -2631,7 +2631,7 @@
     "official_unit": "Percentual",
     "frequency": "M",
     "classification": "Crédito/PIB",
-    "measure_type": "ratio",
+    "measure_type": "rate",
     "segment": "Total",
     "modality": "Agregado",
     "resources": "Livres e direcionados",
