@@ -91,3 +91,27 @@ def test_ibge_package_is_separate_and_hash_verified(source):
     config = json.loads((source / 'output/site.json').read_text())
     assert config['inflation'] == [descriptor]
     assert all('location' not in row for row in result['rows'])
+
+
+def test_public_data_hash_changes_only_with_content(source):
+    output = source / 'output'
+    regional = source / 'data/regional/desocupacao.json'
+    regional.parent.mkdir()
+    rows = [{'level': 'N1', 'name': 'Brasil', 'rates': {'202602': 5.4}}]
+    regional.write_text(json.dumps(rows))
+
+    def build_pointer():
+        build_data(source, output)
+        return json.loads((output / 'site.json').read_text())
+
+    first = build_pointer()
+    second = build_pointer()
+    assert first['built_at'] != second['built_at']
+    assert first['sha256'] == second['sha256']
+    assert first['data'] == second['data']
+
+    rows[0]['rates']['202602'] = 5.5
+    regional.write_text(json.dumps(rows))
+    revised = build_pointer()
+    assert revised['sha256'] != first['sha256']
+    assert revised['data'] != first['data']
