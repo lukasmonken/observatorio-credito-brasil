@@ -20,7 +20,7 @@ O estado em andamento é local ao runner; o painel recebe a tentativa concluída
 
 Antes da primeira execução instrumentada, o painel usa a data de criação do snapshot como referência do último sucesso e informa que os detalhes da tentativa não estão registrados. Não inventa duração ou horário de tentativa.
 
-## Verificação independente
+## Verificação no GitHub Actions
 
 `.github/workflows/monitor-data.yml` executa às **21h47, 03h47, 09h47 e 15h47 de Brasília** (cron UTC `47 0,6,12,18 * * *`). Também é acionado após a conclusão do workflow diário, para detectar falhas sem esperar a próxima janela de seis horas. O workflow diário permanece às 19h17 de Brasília.
 
@@ -112,3 +112,18 @@ mostram referência, valores inicial/final, diferença, unidades e identificador
 das duas coletas. O CSV mantém precisão decimal e pode ser exportado mesmo sem
 alterações, nesse caso apenas com o cabeçalho. O horário de consulta não é
 registrado como nova detecção da fonte. Nenhum dado publicado é alterado.
+
+## Monitor externo no Codex
+
+A automação **Monitor externo do Observatório Brasil** está vinculada ao chat do projeto no Codex. Seu agendador verifica o painel a cada seis horas, em paralelo aos monitores internos. A execução depende da disponibilidade do Codex, da conexão de rede e do acesso ao navegador e ao repositório. Um intervalo sem execução deixa a disponibilidade daquele período desconhecida.
+
+A verificação abre **Fontes e qualidade** e aguarda a renderização dos dados. Consulta também a versão de `main` e lê, no mesmo commit, o ponteiro `data/processed/latest.json`, o manifesto do diretório indicado e `data/processed/monitoring.json`. Compara o ID da versão e as contagens de séries e observações com o site. A idade da base usa `created_at` e a idade da última coleta bem-sucedida usa `last_success_at`.
+
+| Resultado | Interpretação |
+| --- | --- |
+| Saudável | O painel carregou a versão esperada, a coleta teve sucesso e as idades estão dentro de 30 horas. |
+| Publicação em andamento | A versão publicada ainda diverge durante a primeira hora após uma coleta nova. |
+| Alerta | Falha observada no painel ou na coleta, dados com mais de 30 horas ou divergência persistente após a tolerância. |
+| Inconclusivo | O monitor não conseguiu verificar parte da evidência. O relatório identifica a consulta afetada. |
+
+Consulte as verificações e mudanças de estado no chat vinculado. Para pausar ou ajustar a frequência, abra a automação pelo nome no Codex. O monitor consulta os dados em modo de leitura. Uma falha de coleta pode ser investigada seguindo o procedimento de recuperação acima.

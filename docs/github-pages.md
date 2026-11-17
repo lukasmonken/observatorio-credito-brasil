@@ -96,7 +96,7 @@ Relatório JSON, trace e captura de tela quando houver falha ficam no artifact `
 
 Teste local: `python -m pytest -q tests/test_pages_monitor.py`. Consulta real: `python scripts/monitor_pages.py`. Navegador: dentro de `web`, execute `npx playwright test --config playwright.live.config.mjs` após instalar dependências e Chromium.
 
-Este monitor roda no GitHub Actions: uma indisponibilidade do próprio Actions pode atrasar tanto o deploy quanto a checagem. Não é um serviço externo de disponibilidade contínua.
+Este monitor roda no GitHub Actions: uma indisponibilidade do próprio Actions pode atrasar tanto o deploy quanto a checagem. O [monitor externo no Codex](monitoramento.md#monitor-externo-no-codex) verifica a publicação por outro agendador.
 
 ## Comparação em base 100
 
