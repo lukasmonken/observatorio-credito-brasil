@@ -13,6 +13,12 @@ Painel público de Lukas Monken para acompanhar a economia brasileira. O **Panor
 
 Os guias temáticos descrevem os recortes e cuidados de interpretação. [Composição do crédito](docs/composicao-credito.md) · [Inflação](docs/inflacao.md) · [Trabalho e renda](docs/trabalho-renda.md) · [Setor externo e câmbio](docs/setor-externo.md) · [Crescimento e atividade](docs/crescimento-atividade.md)
 
+## Direitos de uso
+
+Lukas Monken reserva os direitos sobre o código de sua autoria. Para reutilizá-lo em outro projeto, consulte o [aviso de direitos do código](LICENSE).
+
+Para redistribuir séries ou arquivos exportados, consulte as condições de cada produtor e mantenha a atribuição da fonte. [Condições de reutilização dos dados](docs/dados-publicos.md#reutilização-e-redistribuição)
+
 ## Atualização e publicação
 
 O GitHub Actions agenda **Atualizar dados do Bacen** para 19h17 e **Atualizar inflação do IBGE** para 19h43, no horário de Brasília. A execução pode começar depois do horário agendado. As séries mantêm a frequência e a defasagem da fonte. Por exemplo, a Selic diária entra no painel após a conclusão do mês, e o PIB conserva o trimestre de referência.
