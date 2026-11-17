@@ -2,7 +2,7 @@
 
 Painel público de Lukas Monken para acompanhar a economia brasileira. O **Panorama Brasil** reúne os indicadores mais recentes com o período de referência de cada medida. O menu dá acesso às análises de juros e crédito, composição do crédito, inflação, trabalho e renda, setor externo e atividade econômica.
 
-[Abrir o painel no GitHub Pages](https://lukasmonken.github.io/observatorio-credito-brasil/) · [Abrir a versão Streamlit](https://observatorio-credito-brasil.streamlit.app/)
+[Abrir o painel no GitHub Pages](https://lukasmonken.github.io/observatorio-credito-brasil/)
 
 ## Explorar e baixar dados
 
@@ -25,7 +25,7 @@ O GitHub Actions agenda **Atualizar dados do Bacen** para 19h17 e **Atualizar in
 
 A coleta do catálogo principal usa SQLite temporário e valida todas as séries esperadas e sua cobertura antes de promover uma nova versão. As tabelas detalhadas de inflação do IBGE têm coleta própria. O aplicativo do Observatório abre uma proposta de atualização e a integra à `main` após os testes obrigatórios. Uma falha na coleta principal preserva a última base válida e gera um diagnóstico.
 
-O Pages prepara os arquivos públicos a partir da versão validada. O Streamlit lê os arquivos do snapshot apontado por `data/processed/latest.json`. Em **Fontes e qualidade**, o visitante pode conferir a última tentativa, o último sucesso e as séries com falha. [Hospedagem e testes do site](docs/github-pages.md) · [Monitoramento e recuperação](docs/monitoramento.md) · [Backup dos dados](docs/backup.md) · [Retenção dos snapshots](docs/retencao-snapshots.md)
+O Pages prepara os arquivos públicos a partir da versão validada. O painel local opcional em Streamlit lê os arquivos do snapshot apontado por `data/processed/latest.json`. Em **Fontes e qualidade**, o visitante pode conferir a última tentativa, o último sucesso e as séries com falha. [Hospedagem e testes do site](docs/github-pages.md) · [Monitoramento e recuperação](docs/monitoramento.md) · [Backup dos dados](docs/backup.md) · [Retenção dos snapshots](docs/retencao-snapshots.md)
 
 ## Executar localmente
 
