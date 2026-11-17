@@ -2619,5 +2619,81 @@
     },
     "max_lag_days": 190,
     "refresh_full_history": true
+  },
+  {
+    "code": 20622,
+    "official_name": "Saldo da carteira de crédito em relação ao PIB",
+    "name": "Crédito/PIB — SFN",
+    "description": "Saldo de crédito do Sistema Financeiro Nacional em relação ao PIB acumulado nos últimos doze meses a valores correntes.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/20622-saldo-da-carteira-de-credito-em-relacao-ao-pib",
+    "unit": "%",
+    "official_unit": "Percentual",
+    "frequency": "M",
+    "classification": "Crédito/PIB",
+    "measure_type": "ratio",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Perímetro do SFN. O denominador é o PIB nominal acumulado em 12 meses, sujeito a revisões.",
+      "A relação oficial acompanha mudanças tanto do saldo de crédito quanto do PIB."
+    ],
+    "metadata_verified_at": "2026-11-17",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/credito-pib-icc.md",
+    "max_lag_days": 90,
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "short_name": "Crédito/PIB — SFN",
+    "refresh_full_history": true
+  },
+  {
+    "code": 25351,
+    "official_name": "Indicador de Custo do Crédito - ICC",
+    "name": "ICC — custo da carteira",
+    "description": "Custo médio das operações da carteira ativa do SFN, incluindo contratos firmados em períodos anteriores.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/25351-indicador-de-custo-do-credito---icc",
+    "unit": "% a.a.",
+    "official_unit": "Percentual ao ano",
+    "frequency": "M",
+    "classification": "Custo do crédito",
+    "measure_type": "rate",
+    "segment": "Total",
+    "modality": "Agregado",
+    "resources": "Livres e direcionados",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "ma3",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "O ICC considera a carteira ativa, incluindo contratos de períodos anteriores. Juros de novas concessões medem as operações contratadas no período.",
+      "A composição da carteira, modalidades e prazos influencia o custo médio."
+    ],
+    "metadata_verified_at": "2026-11-17",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/credito-pib-icc.md",
+    "max_lag_days": 90,
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "short_name": "ICC — custo da carteira",
+    "refresh_full_history": true
   }
 ]
