@@ -59,4 +59,4 @@ A proteção existente contra perda de cobertura continua ativa: retirar um valo
 
 A CLI local `python -m observatorio collect` mantém seu mecanismo SQL de revisões quando reutiliza o banco. O histórico aqui documentado é o do publicador diário `scripts/update_data.py`; ambos têm escopos distintos.
 
-Os arquivos acumulados crescem com o número de eventos e comparações. A política futura de retenção dos snapshots deve preservar o histórico contido na versão ativa; esta entrega não remove versões antigas.
+Os arquivos acumulados crescem com o número de eventos e comparações. O [plano de retenção dos snapshots](retencao-snapshots.md) define como conservar esse histórico na versão ativa e verificar as versões arquivadas.
