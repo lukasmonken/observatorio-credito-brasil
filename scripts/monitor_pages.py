@@ -44,7 +44,7 @@ class Assets(HTMLParser):
 
 def fetch(session, relative):
     # All destinations are fixed or validated relative filenames; never send credentials.
-    if relative and not re.fullmatch(r'(?:assets/[A-Za-z0-9_-]+\.(?:js|css)|site\.json|data-[a-f0-9]{16}\.json)', relative):
+    if relative and not re.fullmatch(r'(?:assets/[A-Za-z0-9_-]+\.(?:js|css)|site\.json|(?:data|inflation)-[a-f0-9]{16}\.json|series-[a-f0-9]{16}\.parquet)', relative):
         raise CheckError('Caminho público inválido.')
     with session.get(urljoin(SITE, relative), timeout=(10, 30), allow_redirects=False,
                      stream=True, headers={'Cache-Control': 'no-cache'}) as response:
@@ -67,6 +67,25 @@ def parse_json(raw):
     if not isinstance(result, dict):
         raise CheckError('JSON público deve ser um objeto.')
     return result
+
+
+def check_download(session, descriptor, prefix, extension):
+    if not isinstance(descriptor, dict):
+        raise CheckError(f'Descritor de {prefix} inválido.')
+    digest = descriptor.get('sha256')
+    if not isinstance(digest, str) or not re.fullmatch(r'[a-f0-9]{64}', digest):
+        raise CheckError(f'Checksum declarado de {prefix} inválido.')
+    filename = f'{prefix}-{digest[:16]}.{extension}'
+    if descriptor.get('file') != filename:
+        raise CheckError(f'Nome do arquivo de {prefix} incompatível com o checksum.')
+    try:
+        raw = fetch(session, filename)
+    except requests.RequestException:
+        raise CheckError(f'Falha de conexão ao verificar {filename}.') from None
+    except CheckError as error:
+        raise CheckError(f'{filename}: {error}') from error
+    if hashlib.sha256(raw).hexdigest() != digest:
+        raise CheckError(f'Checksum divergente em {filename}.')
 
 
 def stamp(value):
@@ -101,6 +120,19 @@ def inspect_site(session, expected, now):
     codes = {item['code'] for item in catalog}
     if len(codes) != len(catalog) or {row['code'] for row in rows} != codes:
         raise CheckError('Catálogo e séries publicadas não correspondem.')
+    if config.get('parquet') != data.get('parquet'):
+        raise CheckError('Descritores Parquet divergentes entre a base e o ponteiro.')
+    check_download(session, config.get('parquet'), 'series', 'parquet')
+    inflation = data.get('inflation_files')
+    published = config.get('inflation')
+    if not isinstance(inflation, dict) or not isinstance(published, list):
+        raise CheckError('Lista de arquivos de inflação inválida.')
+    if sorted(json.dumps(d, sort_keys=True) for d in published) != sorted(
+        json.dumps(d, sort_keys=True) for d in inflation.values()
+    ):
+        raise CheckError('Descritores de inflação divergentes entre a base e o ponteiro.')
+    for descriptor in published:
+        check_download(session, descriptor, 'inflation', 'json')
     age = (now - stamp(manifest['created_at'])).total_seconds()
     expected_age = (now - stamp(expected['created_at'])).total_seconds()
     if min(age, expected_age) < -3600:

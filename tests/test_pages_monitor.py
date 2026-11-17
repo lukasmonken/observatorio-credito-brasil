@@ -44,13 +44,21 @@ def site(tmp_path):
     (directory / 'manifest.json').write_text(json.dumps(manifest))
     (directory.parent / 'latest.json').write_text(json.dumps({'path': 'data/processed/current'}))
     payload = dict(schema_version=1, manifest=manifest, rows=[dict(code=1, date='2026-01-01', original=0)], catalog=[dict(code=1)])
+    files = {}
+    for name, prefix, extension, body in [('parquet', 'series', 'parquet', b'Parquet'),
+                                          ('IPCA', 'inflation', 'json', b'{"table":"7060"}')]:
+        digest = hashlib.sha256(body).hexdigest()
+        files[name] = {'file': f'{prefix}-{digest[:16]}.{extension}', 'sha256': digest}
+    payload.update(parquet=files['parquet'], inflation_files={'7060': files['IPCA']})
     raw = json.dumps(payload).encode()
     sha = hashlib.sha256(raw).hexdigest()
     filename = f'data-{sha[:16]}.json'
-    config = dict(schema_version=1, data=filename, sha256=sha, snapshot_id='current')
+    config = dict(schema_version=1, data=filename, sha256=sha, snapshot_id='current', parquet=files['parquet'], inflation=[files['IPCA']])
     responses = {'': Response(b'<main id="content"></main><script type="module" src="assets/app-123.js"></script><link rel="stylesheet" href="assets/app-123.css">'),
                  'assets/app-123.js': Response(b'let app=1;'), 'assets/app-123.css': Response(b'body{}'),
                  'site.json': Response(json.dumps(config).encode()), filename: Response(raw)}
+    responses[files['parquet']['file']] = Response(b'Parquet')
+    responses[files['IPCA']['file']] = Response(b'{"table":"7060"}')
     return tmp_path, Session(responses), config, manifest
 
 
@@ -59,7 +67,7 @@ def test_healthy_publication_and_assets(site):
     result = monitor.check(root, session, NOW)
     assert result['status'] == 'ok'
     assert result['rows'] == 1 and result['errors'] == []
-    assert len(session.urls) == 5
+    assert len(session.urls) == 7
 
 
 @pytest.mark.parametrize('resource,status', [('', 404), ('site.json', 503), ('assets/app-123.js', 404), ('assets/app-123.css', 302)])
@@ -147,3 +155,21 @@ def test_missing_html_shell_alerts(site):
     root, session, _, _ = site
     session.responses[''].body = b'<html>Not the dashboard</html>'
     assert 'estrutura' in monitor.check(root, session, NOW)['errors'][0]
+
+
+@pytest.mark.parametrize('kind', ['parquet', 'inflation'])
+@pytest.mark.parametrize('failure', ['missing', 'corrupt'])
+def test_secondary_file_failure_identifies_filename(site, kind, failure):
+    root, session, config, _ = site
+    descriptor = config['parquet'] if kind == 'parquet' else config['inflation'][0]
+    filename = descriptor['file']
+    session.responses[filename] = Response(b'broken', 404 if failure == 'missing' else 200)
+    report = monitor.check(root, session, NOW)
+    assert report['status'] == 'alert'
+    assert filename in report['errors'][0]
+
+
+def test_omitted_inflation_descriptor_alerts(site):
+    root, session, config, _ = site
+    session.responses['site.json'].body = json.dumps({**config, 'inflation': []}).encode()
+    assert 'inflação' in monitor.check(root, session, NOW)['errors'][0]
