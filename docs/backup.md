@@ -60,6 +60,8 @@ não fornece a credencial do runner.
 
 Referências: https://rclone.org/drive/ e https://rclone.org/commands/rclone_check/.
 
+A retenção das versões publicadas na branch e o arquivo histórico de longo prazo estão no [plano de retenção dos snapshots](retencao-snapshots.md).
+
 ## Retenção aprovada
 
 Depois de um novo backup conferido, a rotina preserva todas as cópias dos últimos
