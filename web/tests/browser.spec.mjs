@@ -679,3 +679,24 @@ for (const [route, filter, value] of [
     await expect(page).toHaveURL(previous);
   });
 }
+
+test("Link de Trabalho e renda restaura o trimestre e o território", async ({ page, context }) => {
+  await page.goto("#labor?v=1&labor-code=24382");
+  await expect(page.locator("#labor-view")).toHaveValue("national");
+  await expect(page.locator("#labor-code")).toHaveValue("24382");
+  await page.locator("#labor-view").selectOption("regional");
+  await page.locator("#regional-quarter").selectOption({ index: 1 });
+  const quarter = await page.locator("#regional-quarter").inputValue();
+  const other = await context.newPage();
+  for (const [level, count] of [["N2", 5], ["N3", 27]]) {
+    await page.locator("#regional-level").selectOption(level);
+    await page.getByText("Compartilhar análise", { exact: true }).click();
+    const url = await page.locator("#share-url").inputValue();
+    await other.goto(url);
+    await other.reload();
+    await expect(other.locator("#labor-view")).toHaveValue("regional");
+    await expect(other.locator("#regional-quarter")).toHaveValue(quarter);
+    await expect(other.locator("#regional-level")).toHaveValue(level);
+    await expect(other.locator("main tbody tr")).toHaveCount(count);
+  }
+});

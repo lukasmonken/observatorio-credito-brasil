@@ -5,7 +5,7 @@ export const pageKeys = {
   overview: [],
   activity: ["activity-code", "activity-metric", "activity-quarter", ...periods("activity")],
   external: ["external-code", "external-metric", "external-reference", ...periods("external")],
-  labor: ["labor-reference", "labor-code", "labor-metric", ...periods("labor")],
+  labor: ["labor-view", "regional-quarter", "regional-level", "labor-reference", "labor-code", "labor-metric", ...periods("labor")],
   composition: ["composition-segment", "composition-month", "composition-metric", "composition-PF", "composition-PJ", ...periods("composition")],
   inflation: ["inflation-view", "ibge-index", "ibge-location", "ibge-level", "ibge-category", "ibge-month", "ibge-metric", "inflation-codes", "inflation-groups", "inflation-metric", "inflation-group-month", ...periods("inflation")],
   credit: ["segment", "credit-view", "credit-Total", "credit-PF", "credit-PJ", ...periods("credit")],
