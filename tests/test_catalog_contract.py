@@ -129,3 +129,19 @@ def test_cobertura_publicada_reconcilia_com_as_observacoes():
         else:
             assert (summary.observed_months, summary.missing_months) == (observed, missing), code
         assert summary.unit == item["unit"] and rows.unit.eq(item["unit"]).all(), code
+
+
+def test_ultima_observacao_publicada_de_cada_serie():
+    pointer = (ROOT / "data/processed/latest.json").read_text()
+    frame, _, _, manifest = load_snapshot(ROOT, pointer=pointer)
+    path = ROOT / json.loads(pointer)["path"] / "latest.csv"
+    latest = pd.read_csv(path, parse_dates=["date"]).set_index("code", verify_integrity=True)
+    expected = (frame.dropna(subset=["original"]).sort_values("date")
+                .drop_duplicates("code", keep="last").set_index("code"))
+    assert set(latest.index) == set(expected.index) == set(frame.code)
+    for code, row in expected.iterrows():
+        exported = latest.loc[code]
+        assert exported.date == row.date, code
+        assert exported.unit == row.unit, code
+        assert exported.run_id == manifest["snapshot_id"], code
+        assert exported.value == pytest.approx(row.original, rel=1e-12, abs=1e-12), code
