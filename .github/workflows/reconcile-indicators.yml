@@ -1,0 +1,32 @@
+name: Conferir indicadores com o SGS
+on:
+  schedule:
+    - cron: '47 3 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/reconcile_indicators.py
+      - .github/workflows/reconcile-indicators.yml
+permissions:
+  contents: read
+jobs:
+  conferir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: '3.14'
+      - run: python -m pip install --only-binary=:all: --require-hashes -r requirements-http.txt
+      - run: python -m scripts.reconcile_indicators
+      - name: Guardar resultado por série
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: conferencia-${{ github.run_id }}-${{ github.run_attempt }}
+          path: work/reconciliation.json
+          retention-days: 30

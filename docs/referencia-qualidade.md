@@ -36,3 +36,16 @@ Os resultados automatizados não substituem uma revisão visual em aparelho fís
 ## Conferência das interfaces públicas
 
 Em 17/11/2026, Pages e Streamlit exibiram o identificador 410070be, 67 séries e 11.806 observações. A hospedagem do Streamlit estava suspensa por inatividade; após a reativação, carregou o Panorama Brasil com os dados esperados. Essa espera inicial faz parte da referência operacional.
+
+## Conferência diária de indicadores
+
+O GitHub Actions executa **Conferir indicadores com o SGS** diariamente às 00h47 de Brasília e sob demanda. O monitor lê a base servida pelo Pages e consulta novamente o SGS para o último período publicado de cada série. Compara o valor original, a unidade, a frequência e o período exibido. A API de observações fornece data e valor. As unidades e frequências de referência estão registradas separadamente do catálogo publicado.
+
+| Série SGS | Indicador | Unidade | Período |
+|---|---|---|---|
+| 20539 | Saldo total de crédito, estoque ao fim do mês | R$ milhões | Mês |
+| 20631 | Concessões totais, novas operações no mês | R$ milhões | Mês |
+| 3698 | Dólar de venda, média do mês | R$/US$ | Mês |
+| 22099 | PIB observado, índice de volume do IBGE distribuído pelo SGS | Índice | Trimestre |
+
+O resumo da execução apresenta os dois valores, seus períodos e a consulta oficial. O arquivo `reconciliation.json` fica disponível por 30 dias. Uma divergência pode indicar revisão oficial posterior à coleta. Uma consulta sem resposta válida aparece como inconclusiva. Ambos os casos sinalizam falha na conferência e preservam o site publicado. A amostra verifica o último ponto publicado de cada série. Os alertas de defasagem e a auditoria das observações históricas são controles separados.
