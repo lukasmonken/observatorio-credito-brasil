@@ -113,3 +113,17 @@ Critérios de aceite: reconciliar amostras com o IFData oficial; validar unidade
 ## Panorama Brasil — implementado
 
 Seis cartões com referências próprias: PIB trimestral com ajuste sazonal (variação trimestral), IPCA em 12 meses, Meta Selic no fim do mês concluído, desocupação no trimestre móvel, dólar médio mensal e saldo mensal de bens do balanço de pagamentos. Inclui histórico selecionável, exportação de imagem, resumo CSV com medida, unidade e fonte, e atalhos aos módulos. Não recua para uma referência anterior quando o cálculo da última observação estiver ausente. Rotas antigas preservadas.
+
+## Revisão de qualidade proposta
+
+O trabalho começa pela investigação de possíveis erros silenciosos nas séries. As seis hipóteses do levantamento precisam de evidência no código e nos dados. Preservar números, filtros, arquivos exportados, URLs e apresentação de ambas as interfaces. Usar branch dedicada e commits pequenos. Mudanças visíveis, dependências, renomeações e cada fase ou lote dependem de aprovação. Registrar código aparentemente obsoleto para decisão posterior.
+
+1. **Mapear o projeto e verificar as seis hipóteses.** Inventariar arquivos, funcionalidades, dependências e versões. Diagramar o fluxo da fonte à tela e mapear acoplamentos entre Pages e Streamlit. Verificar conteúdo sem JS, prévias sociais, rotas #panorama e #overview, falhas de carregamento e última atualização, impacto do nome histórico do repositório e integridade das séries. Registrar evidências e perguntas.
+2. **Registrar a referência de testes e dados.** Reaproveitar os testes atuais. Caracterizar transformações, valores de referência e contratos JSON/CSV. Conferir tipos, escala, unidade, frequência, código SGS, datas, lacunas, duplicatas e séries vazias. Registrar resultados em ambas as interfaces, inclusive filtros, downloads, console, mobile, links diretos, rede indisponível e JavaScript desativado.
+3. **Priorizar achados da revisão técnica.** Produzir tabela com arquivo e linha, evidência, severidade, esforço e risco. Cobrir dados e metodologia, erros silenciosos, carregamento, segurança, dependências, acessibilidade, SEO, desempenho, qualidade do código, documentação e CI. Relacionar achados às tarefas já abertas.
+4. **Planejar lotes de correção para aprovação.** Para os achados escolhidos, formar lotes de até três mudanças relacionadas. Listar arquivos atingidos, testes, riscos e como desfazer cada lote. Aguardar aprovação.
+5. **Executar os lotes aprovados e comparar resultados.** Usar branch dedicada e commits atômicos. Aplicar apenas o escopo autorizado. Comparar com a referência, registrar diff, testes e lacunas de verificação. Pausar em falha e entre lotes. Considerar testes e CI, erro e atualização, roteamento, SEO e conteúdo estático, organização, acessibilidade, desempenho e documentação.
+6. **Revisar o conjunto das mudanças nas duas interfaces.** Comparar o diff completo com a referência. Procurar regressões em números, URLs, downloads e Streamlit. Repetir casos de borda com série vazia, API indisponível, mobile e JS desativado. Submeter correções adicionais à aprovação.
+7. **Documentar resultados e manutenção.** Atualizar o README com instruções de coleta e testes. Registrar por commit as evidências de preservação do comportamento, pendências, motivos e riscos residuais.
+
+Aproveitar as tarefas existentes de fontes e unidades, auditoria, paridade e prévias sociais. [Acompanhar as sete fases no Todoist](https://app.todoist.com/app/task/6j33xhgvfHW3FpX6).
