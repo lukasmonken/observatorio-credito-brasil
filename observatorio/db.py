@@ -93,7 +93,9 @@ def register_catalog(engine, specs):
             conn.execute(
                 text("""INSERT INTO series(code,name,unit,frequency,measure_type,segment,classification,metadata_json)
               VALUES(:code,:name,:unit,:frequency,:measure_type,:segment,:classification,:metadata_json)
-              ON CONFLICT(code) DO UPDATE SET name=excluded.name,metadata_json=excluded.metadata_json"""),
+              ON CONFLICT(code) DO UPDATE SET name=excluded.name,
+                measure_type=excluded.measure_type, segment=excluded.segment,
+                classification=excluded.classification, metadata_json=excluded.metadata_json"""),
                 {**s, "metadata_json": json.dumps(s, ensure_ascii=False)},
             )
 
