@@ -716,3 +716,18 @@ test.describe("Acesso público sem JavaScript", () => {
     expect(await response.json()).toBeTruthy();
   });
 });
+
+test("Crédito/PIB e ICC disponíveis em crédito e no explorador", async ({ page }) => {
+  await page.goto("#credit");
+  await page.locator("#credit-Total-toggle").click();
+  await page.getByLabel("Crédito/PIB — SFN", { exact: true }).check();
+  await page.getByLabel("ICC — custo da carteira", { exact: true }).check();
+  await expect(page.locator(".js-plotly-plot")).toHaveCount(5);
+  for (const [code, unit] of [["20622", "%"], ["25351", "% a.a."]]) {
+    await page.goto("#explorer");
+    await page.locator("#explorer-code").selectOption(code);
+    await page.locator("#explorer-metric").selectOption("original");
+    await expect.poll(() => page.locator(".js-plotly-plot").evaluate(n => n.layout.yaxis.title.text)).toBe(unit);
+    await expect.poll(() => page.locator(".js-plotly-plot").evaluate(n => n.data[0].y.some(v => Number.isFinite(v)))).toBe(true);
+  }
+});
