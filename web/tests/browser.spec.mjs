@@ -706,7 +706,9 @@ test.describe("Acesso público sem JavaScript", () => {
   test("oferece apresentação e acesso à versão Streamlit", async ({ page }) => {
     await page.goto("");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Observatório Econômico do Brasil");
-    await expect(page.getByText(/Ative o JavaScript para utilizar os filtros e gráficos/)).toBeVisible();
+    // Playwright text locators skip noscript elements. innerText reads the rendered page.
+    await expect.poll(() => page.locator("body").innerText())
+      .toContain("Ative o JavaScript para utilizar os filtros e gráficos");
     await expect(page.getByRole("link", { name: "Versão Streamlit" }))
       .toHaveAttribute("href", "https://observatorio-credito-brasil.streamlit.app/");
   });
