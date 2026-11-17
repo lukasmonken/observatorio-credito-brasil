@@ -12,7 +12,7 @@ CSV, Excel, JSON e Parquet podem reunir séries de produtores diferentes. Ao com
 | IBGE | Identifique a pesquisa, a tabela SIDRA ou a série, o recorte e o período. Quando a distribuição ocorre pelo SGS, credite também esse canal. Consulte a documentação do produto para as condições de reutilização. Nas fontes consultadas, não identificamos uma licença única expressa para todas as tabelas e séries do IBGE usadas aqui. [SIDRA](https://sidra.ibge.gov.br/) · [Termos do portal do IBGE](https://www.ibge.gov.br/acesso-informacao/acoes-e-programas/politica-de-privacidade.html) |
 | FGV IBRE | O IGP-M (SGS 189) e o INCC-M (SGS 7456) são produzidos pela FGV IBRE. A instituição distingue consulta gratuita e produtos licenciados e informa restrições contratuais à disseminação de dados licenciados. Não identificamos autorização geral para redistribuir as séries completas obtidas via SGS. Para republicar esses históricos, confirme a permissão aplicável com a FGV IBRE ou exclua essas séries do material redistribuído. [FGV Dados](https://portalibre.fgv.br/fgv-dados) · [Orientação oficial sobre as séries institucionais](https://portalibre.fgv.br/sites/default/files/users/user1816/tutorial-series-institucionais.pdf) |
 
-Os direitos concedidos pelo titular do software abrangem o código de sua autoria. As séries econômicas e as bibliotecas incorporadas ou instaladas conservam os termos dos respectivos titulares.
+O [aviso de direitos reservados](../LICENSE) abrange o código de autoria de Lukas Monken. As séries econômicas e as bibliotecas incorporadas ou instaladas conservam os termos dos respectivos titulares.
 
 ## Onde encontrar os arquivos
 

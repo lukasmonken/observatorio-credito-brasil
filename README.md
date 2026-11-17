@@ -13,6 +13,10 @@ Painel público de Lukas Monken para acompanhar a economia brasileira. O **Panor
 
 Os guias temáticos descrevem os recortes e cuidados de interpretação. [Composição do crédito](docs/composicao-credito.md) · [Inflação](docs/inflacao.md) · [Trabalho e renda](docs/trabalho-renda.md) · [Setor externo e câmbio](docs/setor-externo.md) · [Crescimento e atividade](docs/crescimento-atividade.md)
 
+## Direitos de uso
+
+Lukas Monken reserva os direitos sobre o código de sua autoria. Para reutilizá-lo em outro projeto, consulte o [aviso de direitos do código](LICENSE).
+
 Para redistribuir séries ou arquivos exportados, consulte as condições de cada produtor e mantenha a atribuição da fonte. [Condições de reutilização dos dados](docs/dados-publicos.md#reutilização-e-redistribuição)
 
 ## Atualização e publicação
