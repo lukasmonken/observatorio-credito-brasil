@@ -584,7 +584,7 @@ elif page == "Setor externo e câmbio":
 
 elif page == "Trabalho e renda":
     st.caption("Brasil · IBGE / PNAD Contínua, distribuído pelo BCB/SGS. Referências em trimestres móveis, sem ajuste sazonal.")
-    if st.selectbox("Visão do trabalho e renda", ["Indicadores nacionais", "Desocupação por estado e região"]) == "Desocupação por estado e região":
+    if st.radio("Visão do trabalho e renda", ["Indicadores nacionais", "Desocupação por estado e região"], horizontal=True) == "Desocupação por estado e região":
         st.subheader("Desocupação por estado e região")
         regional_file = ROOT / "data/regional/desocupacao.json"
         if not regional_file.exists():
