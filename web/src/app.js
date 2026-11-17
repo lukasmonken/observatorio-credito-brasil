@@ -641,7 +641,7 @@ function credit() {
   const available = data.catalog.filter(
     (s) =>
       s.segment === state.segment &&
-      ["Juros", "Spread", "Estoque", "Concessões"].includes(s.classification),
+      ["Juros", "Spread", "Estoque", "Concessões", "Crédito/PIB", "Custo do crédito"].includes(s.classification),
   );
   const palette = Object.fromEntries(
       available.map((s, i) => [s.code, colors[i % colors.length]]),
@@ -652,10 +652,13 @@ function credit() {
       key,
       "Indicadores",
       available.map((s) => [s.code, s.name, palette[s.code]]),
-      available.slice(0, 3).map((s) => String(s.code)),
+      available.filter((s, i) => i < 3 || [20622, 25351].includes(s.code)).map((s) => String(s.code)),
     ),
     period("credit"),
   );
+  if (state.segment === "Total") {
+    main.append(note("Crédito/PIB relaciona o saldo do SFN ao PIB nominal acumulado em 12 meses. O ICC mede o custo da carteira ativa, incluindo contratos anteriores; juros de novas concessões medem os contratos do período."));
+  }
   const rows = filtered("credit", data.rows),
     selected = state[key].map(Number);
   if (!rows.length) {
