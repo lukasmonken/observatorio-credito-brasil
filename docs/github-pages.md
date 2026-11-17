@@ -1,6 +1,6 @@
 # Dashboard no GitHub Pages
 
-A interface estática mantém as páginas do Streamlit. Python continua responsável pela coleta, SQL, validação, inflação, médias e variações. O navegador recebe somente dados públicos do snapshot validado. O Streamlit permanece disponível durante a migração.
+A interface estática mantém as páginas do Streamlit. Python continua responsável pela coleta, SQL, validação, inflação, médias e variações. O navegador recebe somente dados públicos do snapshot validado. A interface pública é o GitHub Pages. Sem JavaScript, a página oferece o download direto da base validada em JSON. O Streamlit pode ser executado localmente.
 
 ## Arquitetura
 
@@ -76,7 +76,7 @@ Ativar Pages exige administração do repositório. Se `configure-pages` retorna
 - Indisponibilidade geral do GitHub também pode afetar publicação e monitoramento; o backup externo existente continua necessário.
 - GitHub Actions pode atrasar agendamentos. A frequência diária não muda a periodicidade econômica das séries.
 - O frontend usa Plotly basic e o bundle de navegador do ExcelJS. `npm audit` apontou avisos moderados nas dependências transitivas de ferramentas Node do ExcelJS (glob/minimatch e uuid); glob/minimatch pertencem ao writer de streams Node, que não faz parte da interface de navegador. O aviso de uuid afeta v3/v5/v6 com buffer; o ExcelJS referencia v4 na formatação condicional, recurso que esta exportação não utiliza. O build não recebe padrões glob enviados por usuários. Não foram aplicados overrides de versões principais incompatíveis. Reavaliar ao atualizar ExcelJS; não interpretar os testes como certificação de segurança.
-- Streamlit e Pages compartilham os dados e fórmulas Python, mas têm camadas de apresentação distintas. Mudanças de regras ou novas páginas devem atualizar os testes de equivalência e ambas as interfaces durante a transição.
+- Streamlit e Pages compartilham os dados e fórmulas Python, mas têm camadas de apresentação distintas. Os novos recursos públicos são implementados no Pages. Mudanças nas fórmulas compartilhadas devem preservar os testes de equivalência.
 
 ## Monitoramento da publicação
 
