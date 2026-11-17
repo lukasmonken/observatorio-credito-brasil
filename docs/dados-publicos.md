@@ -2,6 +2,18 @@
 
 Em **Fontes e qualidade**, use **Baixar todas as séries · Parquet** para obter a base do catálogo principal. O arquivo cobre todos os indicadores e períodos do snapshot exibido, independentemente dos filtros da tela. As tabelas detalhadas de inflação do IBGE têm arquivos JSON próprios.
 
+## Reutilização e redistribuição
+
+CSV, Excel, JSON e Parquet podem reunir séries de produtores diferentes. Ao compartilhar um recorte, identifique o produtor, a pesquisa ou série, o distribuidor, a referência e a versão da coleta. Os campos `producer`, `distributor`, `code` e `source_url` estão no catálogo do JSON principal. Identifique também cálculos feitos pelo Observatório, como deflação ou médias móveis.
+
+| Origem | Como verificar as condições |
+| --- | --- |
+| Banco Central do Brasil | Consulte a licença da ficha oficial de cada conjunto. Por exemplo, a ficha da meta Selic (SGS 432) indica ODbL. Para essa base, mantenha a atribuição e os avisos de licença e observe as condições de compartilhamento aplicáveis a bases derivadas. [Ficha da Selic](https://dadosabertos.bcb.gov.br/dataset/432-taxa-de-juros---meta-selic-definida-pelo-copom) · [Texto da ODbL](https://opendatacommons.org/licenses/odbl/1-0/) |
+| IBGE | Identifique a pesquisa, a tabela SIDRA ou a série, o recorte e o período. Quando a distribuição ocorre pelo SGS, credite também esse canal. Consulte a documentação do produto para as condições de reutilização. Nas fontes consultadas, não identificamos uma licença única expressa para todas as tabelas e séries do IBGE usadas aqui. [SIDRA](https://sidra.ibge.gov.br/) · [Termos do portal do IBGE](https://www.ibge.gov.br/acesso-informacao/acoes-e-programas/politica-de-privacidade.html) |
+| FGV IBRE | O IGP-M (SGS 189) e o INCC-M (SGS 7456) são produzidos pela FGV IBRE. A instituição distingue consulta gratuita e produtos licenciados e informa restrições contratuais à disseminação de dados licenciados. Não identificamos autorização geral para redistribuir as séries completas obtidas via SGS. Para republicar esses históricos, confirme a permissão aplicável com a FGV IBRE ou exclua essas séries do material redistribuído. [FGV Dados](https://portalibre.fgv.br/fgv-dados) · [Orientação oficial sobre as séries institucionais](https://portalibre.fgv.br/sites/default/files/users/user1816/tutorial-series-institucionais.pdf) |
+
+Os direitos concedidos pelo titular do software abrangem o código de sua autoria. As séries econômicas e as bibliotecas incorporadas ou instaladas conservam os termos dos respectivos titulares.
+
 ## Onde encontrar os arquivos
 
 O ponto de entrada estável é o [manifesto público site.json](https://lukasmonken.github.io/observatorio-credito-brasil/site.json). Resolva os nomes dos arquivos em relação ao endereço do manifesto.
