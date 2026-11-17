@@ -15,16 +15,14 @@ FROM series s LEFT JOIN monthly_observations o ON o.code=s.code GROUP BY s.code,
 
 DROP VIEW IF EXISTS v_monthly_changes;
 CREATE VIEW v_monthly_changes AS
-WITH windows AS (
- SELECT o.*,LAG(value) OVER(PARTITION BY code ORDER BY date) AS previous,
- LAG(value,12) OVER(PARTITION BY code ORDER BY date) AS previous_year,
- AVG(value) OVER(PARTITION BY code ORDER BY date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS average3,
- COUNT(value) OVER(PARTITION BY code ORDER BY date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS count3
- FROM monthly_observations o WHERE code IN (SELECT code FROM series WHERE frequency <> 'Q')
-)
-SELECT w.code,s.name,s.unit,w.date,w.value,
- CASE WHEN s.measure_type IN ('stock','flow','index') THEN 100.0*(w.value/NULLIF(w.previous,0)-1) END AS mom_pct,
- CASE WHEN s.measure_type IN ('stock','flow','index') THEN 100.0*(w.value/NULLIF(w.previous_year,0)-1) END AS yoy_pct,
- CASE WHEN s.measure_type='rate' THEN w.value-w.previous END AS diff_pp,
- CASE WHEN w.count3=3 THEN w.average3 END AS ma3
-FROM windows w JOIN series s ON s.code=w.code;
+SELECT o.code, s.name, s.unit, o.date, o.value,
+       MAX(CASE WHEN d.metric = 'mom_pct' THEN d.value END) AS mom_pct,
+       MAX(CASE WHEN d.metric = 'yoy_pct' THEN d.value END) AS yoy_pct,
+       MAX(CASE WHEN d.metric = 'diff_pp' THEN d.value END) AS diff_pp,
+       MAX(CASE WHEN d.metric = 'ma3' THEN d.value END) AS ma3
+FROM monthly_observations o
+JOIN series s ON s.code = o.code
+LEFT JOIN derived_indicators d ON d.code = o.code AND d.date = o.date
+    AND d.run_id = o.run_id AND d.metric IN ('mom_pct', 'yoy_pct', 'diff_pp', 'ma3')
+WHERE s.frequency <> 'Q'
+GROUP BY o.code, s.name, s.unit, o.date, o.value;
