@@ -150,7 +150,9 @@ def build_snapshot(engine, specs, run_id, as_of, summary, output_root=ROOT):
             params={"run": run_id},
         )
         latest = pd.read_sql(text("SELECT * FROM v_latest"), conn)
-        coverage = pd.read_sql(text("SELECT * FROM v_coverage"), conn)
+        coverage = pd.read_sql(text("SELECT * FROM v_coverage"), conn).astype(
+            {"observed_months": "Int64", "missing_months": "Int64"}
+        )
     target = output_root / "data/processed" / run_id
     target.mkdir(parents=True, exist_ok=False)
     result.to_csv(target / "analytics.csv", index=False, date_format="%Y-%m-%d")

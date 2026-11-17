@@ -39,6 +39,8 @@ def test_vertical_pipeline_partial_idempotence_sql_and_export(tmp_path):
         assert c.execute(text('SELECT count(*) FROM v_latest')).scalar()==2
         assert c.execute(text("SELECT yoy_pct FROM v_monthly_changes WHERE code=20539 AND date='2021-01-01'")).scalar()==pytest.approx(12)
     sid=second['run_id']
+    coverage = pd.read_csv(tmp_path / 'data/processed' / sid / 'coverage.csv', dtype=str).set_index('code')
+    assert coverage.loc['20539', 'observed_months'] == '24'
     assert (tmp_path/f'data/processed/{sid}/analytics.csv').read_bytes()==(tmp_path/f'exports/tableau/{sid}/analytics.csv').read_bytes()
     pointer=(tmp_path/'data/processed/latest.json').read_text()
     # Total collection failure must keep the previous known snapshot.
