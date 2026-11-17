@@ -20,13 +20,6 @@
       <a class="brand" href="#panorama">OBSERVATÓRIO / BRASIL</a>
       <nav aria-label="Navegação principal" id="nav"></nav>
       <div id="sidebar-meta"></div>
-      <a
-        class="secondary"
-        href="https://observatorio-credito-brasil.streamlit.app/"
-        target="_blank"
-        rel="noopener"
-        >Versão Streamlit</a
-      >
     </aside>
     <div class="workspace">
       <header>
@@ -36,15 +29,14 @@
       </header>
       <div id="health" role="status"></div>
       <main id="content" tabindex="-1" aria-live="polite">
-        <p>Carregando a base validada…</p>
+        <noscript>
+          <p>Ative o JavaScript para utilizar os filtros e gráficos ou
+            <a href="{{DATA}}" download>baixe a base de dados em JSON</a>.</p>
+        </noscript>
       </main>
       <footer>
         Fontes oficiais · BCB / SGS · Análise descritiva, sem inferência causal.
       </footer>
     </div>
-    <noscript
-      >Ative o JavaScript para utilizar os filtros e gráficos. A versão
-      Streamlit permanece disponível no link acima.</noscript
-    >
   </body>
 </html>

@@ -703,13 +703,16 @@ test("Link de Trabalho e renda restaura o trimestre e o território", async ({ p
 
 test.describe("Acesso público sem JavaScript", () => {
   test.use({ javaScriptEnabled: false });
-  test("oferece apresentação e acesso à versão Streamlit", async ({ page }) => {
+  test("oferece acesso direto à base publicada", async ({ page }) => {
     await page.goto("");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Observatório Econômico do Brasil");
     // Playwright text locators skip noscript elements. innerText reads the rendered page.
     await expect.poll(() => page.locator("body").innerText())
       .toContain("Ative o JavaScript para utilizar os filtros e gráficos");
-    await expect(page.getByRole("link", { name: "Versão Streamlit" }))
-      .toHaveAttribute("href", "https://observatorio-credito-brasil.streamlit.app/");
+    const link = page.getByRole("link", { name: "baixe a base de dados em JSON" });
+    await expect(link).toHaveAttribute("href", /^data-[a-f0-9]{16}\.json$/);
+    const response = await page.request.get(new URL(await link.getAttribute("href"), page.url()).href);
+    expect(response.ok()).toBeTruthy();
+    expect(await response.json()).toBeTruthy();
   });
 });

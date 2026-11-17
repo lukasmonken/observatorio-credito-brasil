@@ -32,7 +32,8 @@ const js = path.relative("dist", entry[0]),
   css = path.relative("dist", entry[1].cssBundle);
 const html = (await readFile(path.join(root, "index.html"), "utf8"))
   .replace("{{JS}}", js)
-  .replace("{{CSS}}", css);
+  .replace("{{CSS}}", css)
+  .replace("{{DATA}}", config.data);
 await writeFile(path.join(dist, "index.html"), html);
 await writeFile(path.join(dist, ".nojekyll"), "");
 if (!/^series-[a-f0-9]{16}\.parquet$/.test(config.parquet.file))
