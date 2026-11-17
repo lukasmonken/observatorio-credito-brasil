@@ -652,7 +652,7 @@ function credit() {
       key,
       "Indicadores",
       available.map((s) => [s.code, s.name, palette[s.code]]),
-      available.filter((s, i) => i < 3 || [20622, 25351].includes(s.code)).map((s) => String(s.code)),
+      available.slice(0, 3).map((s) => String(s.code)),
     ),
     period("credit"),
   );
