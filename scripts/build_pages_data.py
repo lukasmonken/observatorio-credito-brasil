@@ -75,7 +75,6 @@ def build_data(root, output):
         "monitoring": monitoring, "monitoring_error": monitoring_error,
         "labels": METRIC_LABELS, "formulas": METRIC_FORMULAS,
         "methodology": (root / "docs/metodologia.md").read_text(),
-        "built_at": datetime.now(timezone.utc).isoformat(),
     }
     regional_file = root / "data/regional/desocupacao.json"
     payload["regional_labor"] = json.loads(regional_file.read_text()) if regional_file.exists() else []
@@ -96,7 +95,7 @@ def build_data(root, output):
     output.mkdir(parents=True, exist_ok=True)
     filename = f"data-{hashlib.sha256(content).hexdigest()[:16]}.json"
     (output / filename).write_bytes(content)
-    (output / "site.json").write_text(json.dumps({"schema_version": 1, "data": filename, "parquet": payload["parquet"], "inflation": list(inflation_files.values()), "sha256": hashlib.sha256(content).hexdigest(), "snapshot_id": manifest["snapshot_id"]}))
+    (output / "site.json").write_text(json.dumps({"schema_version": 1, "built_at": datetime.now(timezone.utc).isoformat(), "data": filename, "parquet": payload["parquet"], "inflation": list(inflation_files.values()), "sha256": hashlib.sha256(content).hexdigest(), "snapshot_id": manifest["snapshot_id"]}))
     return payload
 
 
