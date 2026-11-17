@@ -81,3 +81,9 @@ print(selic.select(["date", "original", "unit"]).to_pandas().tail())
 Na versão 1, leitores devem aceitar novos campos, métricas e séries. A remoção de campos obrigatórios ou mudanças incompatíveis de tipo ou significado exigem nova versão do contrato. O descritor Parquet é uma adição à versão 1 e pode estar ausente em cópias anteriores do manifesto.
 
 Os arquivos são estáticos e acompanham as publicações do GitHub Pages, sem garantia de horário ou disponibilidade contínua. Se uma coleta falhar, o site pode continuar servindo o último snapshot validado. Consulte `monitoring` e as datas de referência antes de avaliar a atualidade dos números. Uma publicação pode substituir arquivos antigos. Para reproduzir uma análise, guarde o manifesto e os arquivos correspondentes. Se um arquivo desaparecer durante o download, releia o manifesto e reinicie a leitura da mesma versão publicada.
+
+## Cobertura por período
+
+Em `coverage.csv`, `observed_periods` conta referências com valor, inclusive zero, e `missing_periods` conta referências sem valor entre a primeira e a última data da série. Leia essas colunas junto com `period_unit`, que informa `mês` ou `trimestre`. Séries diárias agregadas por mês têm cobertura mensal. As colunas históricas `observed_months` e `missing_months` continuam disponíveis para séries mensais e ficam vazias nas trimestrais.
+
+Em arquivos anteriores a essa mudança, use as duas colunas históricas e consulte `frequency` no catálogo da mesma coleta para interpretar a contagem. O código `Q` indica trimestres. A coluna `unit` identifica a unidade econômica do indicador.

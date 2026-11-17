@@ -10,8 +10,12 @@ FROM ranked r JOIN series s ON s.code=r.code WHERE rn=1;
 DROP VIEW IF EXISTS v_coverage;
 CREATE VIEW v_coverage AS
 SELECT s.code,s.name,s.unit,MIN(o.date) AS first_date,MAX(o.date) AS last_date,
- COUNT(o.value) AS observed_months,COUNT(o.date)-COUNT(o.value) AS missing_months
-FROM series s LEFT JOIN monthly_observations o ON o.code=s.code GROUP BY s.code,s.name,s.unit;
+ CASE WHEN s.frequency <> 'Q' THEN COUNT(o.value) END AS observed_months,
+ CASE WHEN s.frequency <> 'Q' THEN COUNT(o.date)-COUNT(o.value) END AS missing_months,
+ CASE WHEN s.frequency = 'Q' THEN 'trimestre' ELSE 'mês' END AS period_unit,
+ COUNT(o.value) AS observed_periods, COUNT(o.date)-COUNT(o.value) AS missing_periods
+FROM series s LEFT JOIN monthly_observations o ON o.code=s.code
+GROUP BY s.code,s.name,s.unit,s.frequency;
 
 DROP VIEW IF EXISTS v_monthly_changes;
 CREATE VIEW v_monthly_changes AS

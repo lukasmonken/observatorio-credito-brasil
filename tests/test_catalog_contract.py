@@ -118,6 +118,14 @@ def test_cobertura_publicada_reconcilia_com_as_observacoes():
         start, end = first.date().isoformat(), last.date().isoformat()
         assert (summary.first_date, summary.last_date) == (start, end), code
         assert item["coverage_observed"] == {"start": start, "end": end}, code
-        assert item["months"] == summary.observed_months == rows.original.count(), code
-        assert summary.missing_months == rows.original.isna().sum(), code
+        observed, missing = rows.original.count(), rows.original.isna().sum()
+        assert item["months"] == observed, code  # Historical catalog key counts observations.
+        if "period_unit" in coverage.columns:
+            quarterly = item["frequency"] == "Q"
+            assert summary.period_unit == ("trimestre" if quarterly else "mês"), code
+            assert (summary.observed_periods, summary.missing_periods) == (observed, missing), code
+        if "period_unit" in coverage.columns and item["frequency"] == "Q":
+            assert pd.isna(summary.observed_months) and pd.isna(summary.missing_months), code
+        else:
+            assert (summary.observed_months, summary.missing_months) == (observed, missing), code
         assert summary.unit == item["unit"] and rows.unit.eq(item["unit"]).all(), code
