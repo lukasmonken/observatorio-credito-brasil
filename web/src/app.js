@@ -1909,6 +1909,12 @@ themeButton.addEventListener("click", () => {
 });
 for (const [key, label] of pages)
   document.getElementById("nav").append(el("a", { href: "#" + key, "data-page": key }, label));
+document.querySelector(".skip").addEventListener("click", (event) => {
+  // The hash stores the analysis and its filters. Move focus within this page.
+  event.preventDefault();
+  main.focus();
+  main.scrollIntoView({ block: "start" });
+});
 window.addEventListener("hashchange", () => {
   const restored = readShare(location.hash);
   for (const key of pageKeys[restored.page]) delete state[key];
