@@ -657,3 +657,25 @@ test('Inflação ampliada: índices, subitens, localidades e CSV oficial', async
   await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
   expect(errors).toEqual([]);
 });
+
+for (const [route, filter, value] of [
+  ["labor", "#labor-view", "regional"],
+  ["inflation", "#inflation-metric", "inflation12"],
+]) {
+  test("Ir para os dados preserva foco, análise e histórico em " + route, async ({ page }) => {
+    await page.goto("#panorama");
+    await expect(page.locator("main h2").first()).toHaveText("Panorama Brasil");
+    const previous = page.url();
+    await page.locator('nav a[data-page="' + route + '"]').click();
+    await page.locator(filter).selectOption(value);
+    const selected = page.url();
+    const skip = page.getByRole("link", { name: "Ir para os dados" });
+    await skip.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("main")).toBeFocused();
+    await expect(page).toHaveURL(selected);
+    await expect(page.locator(filter)).toHaveValue(value);
+    await page.goBack();
+    await expect(page).toHaveURL(previous);
+  });
+}
