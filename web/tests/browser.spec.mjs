@@ -700,3 +700,14 @@ test("Link de Trabalho e renda restaura o trimestre e o território", async ({ p
     await expect(other.locator("main tbody tr")).toHaveCount(count);
   }
 });
+
+test.describe("Acesso público sem JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+  test("oferece apresentação e acesso à versão Streamlit", async ({ page }) => {
+    await page.goto("");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Observatório Econômico do Brasil");
+    await expect(page.getByText(/Ative o JavaScript para utilizar os filtros e gráficos/)).toBeVisible();
+    await expect(page.getByRole("link", { name: "Versão Streamlit" }))
+      .toHaveAttribute("href", "https://observatorio-credito-brasil.streamlit.app/");
+  });
+});
