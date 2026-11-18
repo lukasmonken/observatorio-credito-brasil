@@ -271,17 +271,17 @@ for (const width of [1440, 390]) test("Tema escuro preserva filtros e preferênc
   await expect(page.locator("#theme-toggle")).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("#comparisonstart")).toHaveValue("2020-01-01");
   expect(page.url()).toBe(url);
-  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#151515");
+  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#202220");
   await page.locator("#comparison-codes-toggle").click();
   await page.screenshot({ path: `test-results/dark-picker-${width}.png`, fullPage: true });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.getByRole("link", {name: "Relações e defasagens", exact: true}).click();
-  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#151515");
+  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#202220");
   await page.getByRole("button", { name: "Ativar modo claro" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#fff");
+  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#ffffff");
   expect(await page.evaluate(() => localStorage.getItem("observatorio-theme"))).toBe("light");
 });
 test("Tema funciona com armazenamento bloqueado", async ({ page }) => {
