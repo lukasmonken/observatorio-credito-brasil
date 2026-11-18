@@ -271,17 +271,17 @@ for (const width of [1440, 390]) test("Tema escuro preserva filtros e preferênc
   await expect(page.locator("#theme-toggle")).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("#comparisonstart")).toHaveValue("2020-01-01");
   expect(page.url()).toBe(url);
-  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#151515");
+  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#202220");
   await page.locator("#comparison-codes-toggle").click();
   await page.screenshot({ path: `test-results/dark-picker-${width}.png`, fullPage: true });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.getByRole("link", {name: "Relações e defasagens", exact: true}).click();
-  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#151515");
+  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#202220");
   await page.getByRole("button", { name: "Ativar modo claro" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#fff");
+  await expect.poll(() => page.locator(".js-plotly-plot").evaluateAll(nodes => nodes[0]?.layout?.paper_bgcolor)).toBe("#ffffff");
   expect(await page.evaluate(() => localStorage.getItem("observatorio-theme"))).toBe("light");
 });
 test("Tema funciona com armazenamento bloqueado", async ({ page }) => {
@@ -731,3 +731,26 @@ test("Crédito/PIB e ICC disponíveis em crédito e no explorador", async ({ pag
     await expect.poll(() => page.locator(".js-plotly-plot").evaluate(n => n.data[0].y.some(v => Number.isFinite(v)))).toBe(true);
   }
 });
+
+for (const width of [390, 1440]) for (const theme of ["light", "dark"])
+  test("Sistema visual " + width + " " + theme, async ({page}) => {
+    await page.setViewportSize({width, height:900});
+    await page.emulateMedia({reducedMotion:"reduce"});
+    await page.addInitScript(theme => localStorage.setItem("observatorio-theme", theme), theme);
+    await page.goto("#panorama");
+    await expect(page.locator(".panorama-kpis .kpi")).toHaveCount(6);
+    await expect(page.locator(".js-plotly-plot")).toHaveCount(1);
+    await expect(page.locator(".panorama-links")).toHaveCount(6);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({path:"test-results/panorama-"+width+"-"+theme+".png",fullPage:true});
+    await page.getByRole("link", {name:"Inflação detalhada", exact:true}).click();
+    await expect(page.locator("main h2")).toHaveText("Inflação detalhada");
+    await expect(page.locator("main .error")).toHaveCount(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({path:"test-results/inflacao-"+width+"-"+theme+".png",fullPage:true});
+    await page.getByRole("link", {name:"Panorama Brasil", exact:true}).click();
+    await page.locator(".skip").focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("main")).toBeFocused();
+    await expect(page.locator("main h2")).toHaveText("Panorama Brasil");
+  });

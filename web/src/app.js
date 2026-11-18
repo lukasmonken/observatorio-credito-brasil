@@ -517,9 +517,11 @@ function panorama() {
   const cards = el("div", {class:"kpis panorama-kpis"});
   for (const row of rows) {
     const card = metric(row.label, finite(row.value) ? `${number(row.value, row.code === 3698 ? 4 : 2)} ${row.unit}` : "Indisponível", referenceLabel(row.date,row.period));
-    card.append(note(row.description), note(`${row.source} · SGS ${row.code}`));
-    if (row.source_url) card.append(link("Consultar fonte",row.source_url));
-    card.append(el("p",{},el("a",{href:`#${row.page}`},`Abrir ${row.module}`)));
+    card.append(el("p", {class:"note panorama-description"}, row.description), el("p", {class:"panorama-source"}, `${row.source} · SGS ${row.code}`));
+    const links = el("div", {class:"panorama-links"});
+    if (row.source_url) links.append(link("Consultar fonte", row.source_url));
+    links.append(el("a", {href:`#${row.page}`}, `Abrir ${row.module}`));
+    card.append(links);
     cards.append(card);
   }
   main.append(cards, note(`Data-base da coleta: ${data.manifest.as_of.slice(0,10).split("-").reverse().join("/")}. Data de coleta e período de referência são informações diferentes.`));
@@ -1910,8 +1912,12 @@ themeButton.addEventListener("click", () => {
   syncThemeButton();
   render();
 });
-for (const [key, label] of pages)
-  document.getElementById("nav").append(el("a", { href: "#" + key, "data-page": key }, label));
+const navSections = {panorama: "Visão do Brasil", credit: "Indicadores", comparison: "Análises", revisions: "Sobre os dados"};
+for (const [key, label] of pages) {
+  const nav = document.getElementById("nav");
+  if (navSections[key]) nav.append(el("span", {class:"nav-section", "aria-hidden":"true"}, navSections[key]));
+  nav.append(el("a", { href: "#" + key, "data-page": key }, label));
+}
 document.querySelector(".skip").addEventListener("click", (event) => {
   // The hash stores the analysis and its filters. Move focus within this page.
   event.preventDefault();
