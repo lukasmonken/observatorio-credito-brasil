@@ -731,3 +731,26 @@ test("Crédito/PIB e ICC disponíveis em crédito e no explorador", async ({ pag
     await expect.poll(() => page.locator(".js-plotly-plot").evaluate(n => n.data[0].y.some(v => Number.isFinite(v)))).toBe(true);
   }
 });
+
+for (const width of [390, 1440]) for (const theme of ["light", "dark"])
+  test("Sistema visual " + width + " " + theme, async ({page}) => {
+    await page.setViewportSize({width, height:900});
+    await page.emulateMedia({reducedMotion:"reduce"});
+    await page.addInitScript(theme => localStorage.setItem("observatorio-theme", theme), theme);
+    await page.goto("#panorama");
+    await expect(page.locator(".panorama-kpis .kpi")).toHaveCount(6);
+    await expect(page.locator(".js-plotly-plot")).toHaveCount(1);
+    await expect(page.locator(".panorama-links")).toHaveCount(6);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({path:"test-results/panorama-"+width+"-"+theme+".png",fullPage:true});
+    await page.getByRole("link", {name:"Inflação detalhada", exact:true}).click();
+    await expect(page.locator("main h2")).toHaveText("Inflação detalhada");
+    await expect(page.locator("main .error")).toHaveCount(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({path:"test-results/inflacao-"+width+"-"+theme+".png",fullPage:true});
+    await page.getByRole("link", {name:"Panorama Brasil", exact:true}).click();
+    await page.locator(".skip").focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("main")).toBeFocused();
+    await expect(page.locator("main h2")).toHaveText("Panorama Brasil");
+  });
