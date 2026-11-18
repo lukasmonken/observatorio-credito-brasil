@@ -141,3 +141,18 @@ Revisão do código que entrou na [PR 71](https://github.com/lukasmonken/observa
 - **Implementado — Evitar novo download da base quando só muda o horário de geração.** O horário de geração entra no conteúdo que determina o nome e o hash do JSON. Duas publicações dos mesmos dados em horários distintos recebem hashes diferentes e o navegador baixa a base novamente. Gerar duas vezes com os mesmos insumos e verificar que o identificador dos dados é estável. Uma alteração real dos dados deve continuar sendo detectada. [Código](https://github.com/lukasmonken/observatorio-credito-brasil/blob/328102351d6a7860d1131a9dc48343f96b2d9de0/scripts/build_pages_data.py#L78) · [Todoist](https://app.todoist.com/app/task/6j342QRr2VvcPhgc)
 
 O carregamento inicial já tem mensagem de falha e opção de tentar novamente. Panorama e Visão geral têm rotas próprias. Conteúdo sem JavaScript e prévias sociais seguem na tarefa existente. A revisão não reconciliou todas as observações históricas com as fontes externas.
+
+
+## Redesign visual minimalista — inspiração Notion e transparência sutil do iOS (planejado em 18/11/2026)
+
+**Estado:** planejado; não implementado. Atualiza a proposta de redesign já existente, sem alterar coleta, cálculos ou conteúdo dos módulos atuais.
+
+**Identidade:** estética clean, elegante e funcional; princípio "menos é mais"; tipografia limpa (avaliar Inter), espaçamentos generosos, fundos neutros, modo claro/escuro, detalhes verdes/vermelhos apenas quando necessários para sinais econômicos, sem depender só da cor.
+
+**Navegação:** Panorama Brasil conciso e módulos acessados individualmente por menu responsivo, mantendo Crédito, Inflação, Atividade, Setor Externo, Trabalho/Renda e áreas futuras separados. Evitar acúmulo de gráficos em uma única página. Preservar rotas, filtros e links compartilháveis.
+
+**Vidro translúcido e animações:** CSS moderno com fundo semitransparente, borda fina, sombra leve e backdrop-filter: blur moderado somente em menus, barras e pequenos overlays. Manter tabelas, números e gráficos legíveis sobre fundos sólidos. Usar transições leves opacity/transform; evitar gradientes intensos, efeitos contínuos, bibliotecas pesadas e blur generalizado. Respeitar prefers-reduced-motion, foco visível, navegação por teclado, contraste e fallback sem backdrop-filter. Testar mobile/iPhone e desktop.
+
+**Plano de execução:** 1) auditar o CSS/JS atual e comportamento das duas interfaces (Pages e Streamlit); 2) padronizar tokens de cores, tipografia, espaçamentos, sombras, raios e movimento; 3) componentes reutilizáveis de menu, filtros e botões; 4) migrar visualmente um módulo por vez, começando pelo Panorama; 5) comparar capturas antes/depois e executar testes de regressão de valores, gráficos, filtros, URLs, exports, performance e acessibilidade. Evolução incremental da stack atual; não exigir migração completa para React. Implementação requer branch/PR dedicada e validação, sem impactar o site em produção até aprovada.
+
+**Rastreamento:** [Todoist — Redesign e organização visual do site](https://app.todoist.com/app/task/6hxQrXVqG8363wH6).
