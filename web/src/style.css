@@ -610,7 +610,7 @@ summary { font-size: 13px; font-weight: 600; }
 th, [data-theme="dark"] th { background: var(--surface-soft); color: var(--muted); font-size: 12px; font-weight: 600; }
 td, th, [data-theme="dark"] td, [data-theme="dark"] th { border-color: var(--border); padding: 12px 14px; }
 tbody tr:hover { background: var(--surface-soft); }
-th button { min-height: 0; border: 0; border-radius: 0; background: transparent; color: inherit; font-size: inherit; }
+th button, [data-theme="dark"] th button { min-height: 0; border: 0; border-radius: 0; background: transparent; color: inherit; font-size: inherit; }
 .picker-menu, .picker-panel, [data-theme="dark"] .picker-menu, [data-theme="dark"] .picker-panel { border-color: var(--border); background: var(--surface); border-radius: var(--radius); }
 .picker-option:hover, .picker-option:has(input:checked), [data-theme="dark"] .picker-option:hover, [data-theme="dark"] .picker-option:has(input:checked) { background: var(--surface-soft); color: var(--ink); }
 .picker-tag, [data-theme="dark"] .picker-tag { background: var(--surface-soft); border-color: var(--border); color: var(--ink); }
