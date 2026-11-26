@@ -141,3 +141,8 @@ Revisão do código que entrou na [PR 71](https://github.com/lukasmonken/observa
 - **Implementado — Evitar novo download da base quando só muda o horário de geração.** O horário de geração entra no conteúdo que determina o nome e o hash do JSON. Duas publicações dos mesmos dados em horários distintos recebem hashes diferentes e o navegador baixa a base novamente. Gerar duas vezes com os mesmos insumos e verificar que o identificador dos dados é estável. Uma alteração real dos dados deve continuar sendo detectada. [Código](https://github.com/lukasmonken/observatorio-credito-brasil/blob/328102351d6a7860d1131a9dc48343f96b2d9de0/scripts/build_pages_data.py#L78) · [Todoist](https://app.todoist.com/app/task/6j342QRr2VvcPhgc)
 
 O carregamento inicial já tem mensagem de falha e opção de tentar novamente. Panorama e Visão geral têm rotas próprias. Conteúdo sem JavaScript e prévias sociais seguem na tarefa existente. A revisão não reconciliou todas as observações históricas com as fontes externas.
+
+
+## Contas públicas — primeira entrega BCB (26/11/2026)
+
+Implementação dos indicadores DBGG (13762), DLSP (4513), primário (5793), nominal (5727) e juros nominais (5760), todos em % do PIB. Página própria com referência comum, histórico, diferenças em p.p., exportação identificada e fontes. [Definições e critérios](contas-publicas.md). Publicação depende da coleta completa e dos testes. Receitas e despesas do Tesouro permanecem pendentes.
