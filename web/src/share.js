@@ -3,6 +3,7 @@ const periods = (prefix) => [prefix + "start", prefix + "end"];
 export const pageKeys = {
   panorama: ["panorama-code"],
   overview: [],
+  fiscal: ["fiscal-code", "fiscal-metric", "fiscal-reference", ...periods("fiscal")],
   activity: ["activity-code", "activity-metric", "activity-quarter", ...periods("activity")],
   external: ["external-code", "external-metric", "external-reference", ...periods("external")],
   labor: ["labor-view", "regional-quarter", "regional-level", "labor-reference", "labor-code", "labor-metric", ...periods("labor")],
