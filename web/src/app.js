@@ -30,6 +30,7 @@ const pages = [
   ["labor", "Trabalho e renda"],
   ["external", "Setor externo e câmbio"],
   ["activity", "Crescimento e atividade"],
+  ["fiscal", "Contas públicas"],
   ["comparison", "Comparação em base 100"],
   ["family", "Famílias e inadimplência"],
   ["explorer", "Explorador de indicadores"],
@@ -755,6 +756,48 @@ function activity() {
   main.append(download("Baixar crescimento e atividade · CSV",exported,"crescimento-atividade.csv"));
   main.append(note("Excel disponível no Explorador. Índices já medem volume; não aplicamos nova deflação pelo IPCA. Histórico reconsultado integralmente para incorporar revisões."));
   main.append(details("Fontes — crescimento e atividade",...specs.map(s=>el("p",{},link(`${s.short_name||s.name} · SGS ${s.code}`,s.source_url)))));
+}
+
+
+function fiscal() {
+  const specs = data.catalog.filter(s => s.classification === "Contas públicas");
+  const codes = specs.map(s => s.code), all = data.rows.filter(r => codes.includes(r.code));
+  main.append(note("Banco Central do Brasil · Todos os níveis estão em % do PIB. Dívidas são estoques; resultados e juros são fluxos acumulados em 12 meses."));
+  if (!all.length) { main.append(message("Contas públicas ainda indisponíveis nesta coleta. Aguarde a atualização dos dados.")); return; }
+  main.append(period("fiscal", all));
+  const rows = filtered("fiscal", all);
+  if (!rows.length) { main.append(message("Não há observações no intervalo selecionado.")); return; }
+  const months = [...new Set(rows.map(r => r.date))].sort().reverse();
+  main.append(select("fiscal-reference", "Referência do resumo", months.map(d => [d, month(d)]), months[0]));
+  const ref = state["fiscal-reference"];
+  for (const [basis, title, className] of [["stock", "Dívidas · estoque na referência", "grid2"], ["flow12", "Resultados e juros · acumulados em 12 meses", "external-kpis"]]) {
+    main.append(el("h3", {}, title));
+    const cards = el("div", {class:"kpis fiscal-kpis " + className});
+    for (const s of specs.filter(s => s.fiscal_basis === basis)) {
+      const r = rows.find(r => r.code === s.code && r.date === ref);
+      const valid = finite(r?.original);
+      const sign = valid && [5793,5727].includes(s.code) ? (r.original > 0 ? " · Déficit" : r.original < 0 ? " · Superávit" : " · Equilíbrio") : "";
+      cards.append(metric(s.short_name, valid ? number(r.original) + " % do PIB" : "—", month(ref) + " · " + s.segment + sign + (valid ? "" : " · Indisponível nesta referência")));
+    }
+    main.append(cards);
+  }
+  main.append(note("Nos resultados primário e nominal, positivo indica déficit e negativo indica superávit. Os sinais do BCB são preservados. — indica ausência de dado, não zero."),
+    note("DBGG e DLSP têm abrangências diferentes. Sua diferença não representa diretamente os ativos públicos. Juros em % do PIB não são uma taxa de juros em % ao ano."));
+  const controls = el("div", {class:"filters labor-filters"});
+  controls.append(select("fiscal-code", "Indicador do histórico", specs.map(s => [s.code, s.short_name]), 13762));
+  const code = Number(state["fiscal-code"]), spec = byCode.get(code);
+  controls.append(select("fiscal-metric", "Medida do histórico", spec.allowed_transforms.map(m => [m, m === "original" ? "Nível (% do PIB)" : data.labels[m]]), "original"));
+  main.append(controls);
+  const measure = state["fiscal-metric"];
+  chart(main, [code], measure, rows, spec.short_name + " · " + (measure === "original" ? "% do PIB" : "Variação em p.p. do PIB"));
+  main.append(note(spec.description), note("Diferenças em pontos percentuais comparam o nível com o mês anterior ou com 12 meses antes. As janelas de 12 meses se sobrepõem; não são resultados isolados de cada mês."));
+  main.append(details("Ver histórico em tabela", table(rows.filter(r => r.code === code), [["date","Referência",month],[measure,measure === "original" ? "% do PIB" : "p.p. do PIB",number]])));
+  const exported = rows.map(r => {
+    const s = byCode.get(r.code);
+    return {date:r.date,code:r.code,indicator:s.short_name,value:r.original,unit:"% do PIB",reference_basis:s.fiscal_basis === "stock" ? "Estoque na referência" : "Fluxo acumulado em 12 meses",scope:s.segment,monthly_change_pp:r.diff_pp ?? null,annual_change_pp:r.diff12_pp ?? null,change_unit:"p.p. do PIB",sign_convention:[5793,5727].includes(s.code) ? "Positivo: déficit; negativo: superávit" : "Valor original BCB",source:s.source,source_url:s.source_url,snapshot_id:data.manifest.snapshot_id};
+  });
+  main.append(download("Baixar contas públicas · CSV", exported, "contas-publicas.csv"),
+    details("Fontes e metodologia — contas públicas", note("Histórico oficial atualizado integralmente para incorporar revisões. Resultado primário pelo critério de caixa; juros por competência. Resultado nominal inclui primário e juros. Receitas e despesas do Governo Central serão integradas em uma etapa posterior, com fonte e abrangência próprias."), ...specs.map(s => el("p",{},link(s.short_name + " · SGS " + s.code,s.source_url))), link("Manual de Estatísticas Fiscais do BCB","https://www.bcb.gov.br/content/estatisticas/Documents/notas_metodologicas/estatisticas-fiscais/estatisticasfiscais.pdf")));
 }
 
 function external() {
@@ -1778,6 +1821,7 @@ function render() {
       labor,
       external,
       activity,
+      fiscal,
       comparison,
       credit,
       composition,

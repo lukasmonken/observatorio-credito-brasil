@@ -7,6 +7,7 @@ const pages = [
   "labor",
   "external",
   "activity",
+  "fiscal",
   "credit",
   "composition",
   "comparison",
@@ -754,3 +755,54 @@ for (const width of [390, 1440]) for (const theme of ["light", "dark"])
     await expect(page.locator("main")).toBeFocused();
     await expect(page.locator("main h2")).toHaveText("Panorama Brasil");
   });
+
+test("Contas públicas: sinais, referências, unidades e exportação", async ({page}) => {
+  const {readFile} = await import("node:fs/promises"), {createHash} = await import("node:crypto");
+  const config = JSON.parse(await readFile(new URL("../generated/site.json",import.meta.url),"utf8"));
+  const payload = JSON.parse(await readFile(new URL("../generated/"+config.data,import.meta.url),"utf8"));
+  payload.catalog = JSON.parse(await readFile(new URL("../../catalog.json",import.meta.url),"utf8"));
+  const specs = payload.catalog.filter(s=>s.classification==="Contas públicas");
+  payload.rows = payload.rows.filter(r=>!specs.some(s=>s.code===r.code));
+  for (const s of specs) for (const [i,date] of ["2025-01-01","2025-02-01"].entries())
+    payload.rows.push({code:s.code,date,original:s.code===5760 && i===1?null:s.code===5793?(i===0?-2:3):s.fiscal_basis==="stock"?75:8,diff_pp:i===1?5:null,diff12_pp:null});
+  payload.manifest.rows=payload.rows.length;payload.manifest.series=payload.catalog.length;
+  const body=JSON.stringify(payload),hash=createHash("sha256").update(body).digest("hex"),file="data-"+hash.slice(0,16)+".json";
+  await page.route("**/site.json",r=>r.fulfill({json:{...config,data:file,sha256:hash}}));
+  await page.route("**/"+file,r=>r.fulfill({body,contentType:"application/json"}));
+  await page.goto("#fiscal");
+  await expect(page.locator(".fiscal-kpis .kpi")).toHaveCount(5);
+  const primary=page.locator(".fiscal-kpis .kpi").filter({hasText:"Resultado primário"});
+  await expect(primary).toContainText("3,00 % do PIB");
+  await expect(primary).toContainText("Déficit");
+  await expect(page.locator(".fiscal-kpis .kpi").last()).toContainText("Indisponível nesta referência");
+  await page.locator("#fiscal-reference").selectOption("2025-01-01");
+  await expect(primary).toContainText("-2,00 % do PIB");
+  await expect(primary).toContainText("Superávit");
+  await page.locator("#fiscal-code").selectOption("5793");
+  await expect(page.locator("#fiscal-metric option")).toHaveCount(3);
+  await expect(page.locator("#fiscal-metric option[value=sum12]")).toHaveCount(0);
+  await page.locator("#fiscal-metric").selectOption("diff_pp");
+  await expect.poll(()=>page.locator(".js-plotly-plot").evaluate(n=>n.layout.yaxis.title.text)).toBe("p.p.");
+  await page.reload();
+  await expect(page.locator("#fiscal-reference")).toHaveValue("2025-01-01");
+  await expect(page.locator("#fiscal-code")).toHaveValue("5793");
+  await expect(page.locator("#fiscal-metric")).toHaveValue("diff_pp");
+  const downloading=page.waitForEvent("download");
+  await page.getByRole("button",{name:"Baixar contas públicas · CSV",exact:true}).click();
+  const csvText=await readFile(await(await downloading).path(),"utf8");
+  expect(csvText).toContain("-2");
+  expect(csvText).toContain("% do PIB");
+  expect(csvText).toContain("Fluxo acumulado em 12 meses");
+  expect(csvText).toContain("Governo geral");
+  expect(csvText).toContain(payload.manifest.snapshot_id);
+  await page.locator("#fiscal-metric").selectOption("original");
+  await expect(page.locator(".js-plotly-plot")).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  await page.screenshot({path:"test-results/contas-publicas-desktop.png",fullPage:true});
+  await page.locator("#theme-toggle").click();
+  await expect(page.locator("main .error")).toHaveCount(0);
+  await page.screenshot({path:"test-results/contas-publicas-dark.png",fullPage:true});
+  await page.locator("#fiscalstart").fill("2025-02-01");
+  await page.locator("#fiscalend").fill("2025-01-01");
+  await expect(page.getByRole("alert")).toContainText("Selecione um período válido");
+});

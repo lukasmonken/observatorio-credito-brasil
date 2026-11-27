@@ -2695,5 +2695,203 @@
     "distributor": "BCB/SGS",
     "short_name": "ICC — custo da carteira",
     "refresh_full_history": true
+  },
+  {
+    "code": 13762,
+    "official_name": "Dívida bruta do governo geral (% PIB) - Metodologia utilizada a partir de 2008",
+    "name": "Dívida bruta — DBGG (% do PIB)",
+    "short_name": "Dívida bruta — DBGG",
+    "description": "Dívida bruta do Governo Federal, estados e municípios, incluindo operações compromissadas do BCB, em relação ao PIB.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/13762-divida-bruta-do-governo-geral--pib---metodologia-utilizada-a-partir-de-2008",
+    "unit": "%",
+    "official_unit": "Percentual",
+    "frequency": "M",
+    "classification": "Contas públicas",
+    "measure_type": "rate",
+    "segment": "Governo geral",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Relação com o PIB calculada pelo BCB; revisões do numerador e do PIB podem alterar o histórico.",
+      "Estoque na referência. DBGG e DLSP têm abrangências diferentes; sua diferença não representa uma medida direta dos ativos públicos.",
+      "A DBGG não inclui as dívidas das empresas estatais; inclui operações compromissadas do BCB."
+    ],
+    "metadata_verified_at": "2026-11-26",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/contas-publicas.md",
+    "max_lag_days": 90,
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "refresh_full_history": true,
+    "fiscal_basis": "stock"
+  },
+  {
+    "code": 4513,
+    "official_name": "Dívida Líquida do Setor Público (% PIB) - Total - Setor público consolidado",
+    "name": "Dívida líquida — DLSP (% do PIB)",
+    "short_name": "Dívida líquida — DLSP",
+    "description": "Dívidas menos créditos do setor público não financeiro e do Banco Central, em relação ao PIB.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/4513-divida-liquida-do-setor-publico--pib---total---setor-publico-consolidado",
+    "unit": "%",
+    "official_unit": "Percentual",
+    "frequency": "M",
+    "classification": "Contas públicas",
+    "measure_type": "rate",
+    "segment": "Setor público consolidado",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Relação com o PIB calculada pelo BCB; revisões do numerador e do PIB podem alterar o histórico.",
+      "Estoque na referência. DBGG e DLSP têm abrangências diferentes; sua diferença não representa uma medida direta dos ativos públicos.",
+      "Setor público consolidado, excluindo Petrobras e Eletrobras."
+    ],
+    "metadata_verified_at": "2026-11-26",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/contas-publicas.md",
+    "max_lag_days": 90,
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "refresh_full_history": true,
+    "fiscal_basis": "stock"
+  },
+  {
+    "code": 5793,
+    "official_name": "NFSP sem desvalorização cambial (% PIB) - Fluxo acumulado em 12 meses - Resultado primário - Total - Setor público consolidado",
+    "name": "Resultado primário — 12 meses (% do PIB)",
+    "short_name": "Resultado primário — 12 meses",
+    "description": "Componente não financeiro do resultado fiscal, apurado pelo critério de caixa e acumulado em 12 meses, em relação ao PIB.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/5793-nfsp-sem-desvalorizacao-cambial--pib---fluxo-acumulado-em-12-meses---resultado-primario---tota",
+    "unit": "%",
+    "official_unit": "Percentual",
+    "frequency": "M",
+    "classification": "Contas públicas",
+    "measure_type": "rate",
+    "segment": "Setor público consolidado",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Relação com o PIB calculada pelo BCB; revisões do numerador e do PIB podem alterar o histórico.",
+      "Fluxo já acumulado em 12 meses: não somar as observações mensais nem acumular novamente.",
+      "Setor público consolidado, excluindo Petrobras e Eletrobras.",
+      "Convenção NFSP: positivo indica déficit e negativo indica superávit; o sinal original é preservado."
+    ],
+    "metadata_verified_at": "2026-11-26",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/contas-publicas.md",
+    "max_lag_days": 90,
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "refresh_full_history": true,
+    "fiscal_basis": "flow12"
+  },
+  {
+    "code": 5727,
+    "official_name": "NFSP sem desvalorização cambial (% PIB) - Fluxo acumulado em 12 meses - Resultado nominal - Total - Setor público consolidado",
+    "name": "Resultado nominal — 12 meses (% do PIB)",
+    "short_name": "Resultado nominal — 12 meses",
+    "description": "Resultado fiscal incluindo juros nominais, acumulado em 12 meses, em relação ao PIB.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/5727-nfsp-sem-desvalorizacao-cambial--pib---fluxo-acumulado-em-12-meses---resultado-nominal---total",
+    "unit": "%",
+    "official_unit": "Percentual",
+    "frequency": "M",
+    "classification": "Contas públicas",
+    "measure_type": "rate",
+    "segment": "Setor público consolidado",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Relação com o PIB calculada pelo BCB; revisões do numerador e do PIB podem alterar o histórico.",
+      "Fluxo já acumulado em 12 meses: não somar as observações mensais nem acumular novamente.",
+      "Setor público consolidado, excluindo Petrobras e Eletrobras.",
+      "Convenção NFSP: positivo indica déficit e negativo indica superávit; o sinal original é preservado."
+    ],
+    "metadata_verified_at": "2026-11-26",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/contas-publicas.md",
+    "max_lag_days": 90,
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "refresh_full_history": true,
+    "fiscal_basis": "flow12"
+  },
+  {
+    "code": 5760,
+    "official_name": "NFSP sem desvalorização cambial (% PIB) - Fluxo acumulado em 12 meses - Juros nominais - Total - Setor público consolidado",
+    "name": "Juros nominais — 12 meses (% do PIB)",
+    "short_name": "Juros nominais — 12 meses",
+    "description": "Juros apropriados por competência, acumulados em 12 meses, em relação ao PIB. É um fluxo fiscal, não uma taxa anual de juros.",
+    "source": "Banco Central do Brasil — BCB/SGS",
+    "source_url": "https://dadosabertos.bcb.gov.br/dataset/5760-nfsp-sem-desvalorizacao-cambial--pib---fluxo-acumulado-em-12-meses---juros-nominais---total---",
+    "unit": "%",
+    "official_unit": "Percentual",
+    "frequency": "M",
+    "classification": "Contas públicas",
+    "measure_type": "rate",
+    "segment": "Setor público consolidado",
+    "modality": "Agregado",
+    "resources": "Não se aplica",
+    "aggregation": "identity_month",
+    "allowed_transforms": [
+      "original",
+      "diff_pp",
+      "diff12_pp"
+    ],
+    "limitations": [
+      "Relação com o PIB calculada pelo BCB; revisões do numerador e do PIB podem alterar o histórico.",
+      "Fluxo já acumulado em 12 meses: não somar as observações mensais nem acumular novamente.",
+      "Setor público consolidado, excluindo Petrobras e Eletrobras.",
+      "Não confundir o percentual do PIB com uma taxa de juros em % ao ano."
+    ],
+    "metadata_verified_at": "2026-11-26",
+    "coverage_observed": {
+      "start": null,
+      "end": null
+    },
+    "metadata_evidence": "docs/contas-publicas.md",
+    "max_lag_days": 90,
+    "producer": "Banco Central do Brasil",
+    "distributor": "BCB/SGS",
+    "refresh_full_history": true,
+    "fiscal_basis": "flow12"
   }
 ]
